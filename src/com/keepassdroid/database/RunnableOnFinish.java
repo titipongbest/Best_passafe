@@ -19,10 +19,13 @@
  */
 package com.keepassdroid.database;
 
+import com.keepassdroid.UpdateStatus;
+
 
 public abstract class RunnableOnFinish implements Runnable {
 	
 	public OnFinish mFinish;
+	public UpdateStatus mStatus;
 	
 	public RunnableOnFinish(OnFinish finish) {
 		mFinish = finish;
@@ -40,6 +43,10 @@ public abstract class RunnableOnFinish implements Runnable {
 			mFinish.setResult(result);
 			mFinish.run();
 		}
+	}
+	
+	public void setStatus(UpdateStatus status) {
+		mStatus = status;
 	}
 	
 	@Override
