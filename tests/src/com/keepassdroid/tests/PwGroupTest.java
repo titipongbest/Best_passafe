@@ -19,15 +19,15 @@
  */
 package com.keepassdroid.tests;
 
-import org.phoneid.keepassj2me.PwGroup;
 
 import android.test.AndroidTestCase;
 
+import com.keepassdroid.database.PwGroupV3;
 import com.keepassdroid.tests.database.TestData;
 
 public class PwGroupTest extends AndroidTestCase {
 
-	PwGroup mPG;
+	PwGroupV3 mPG;
 	
 	@Override
 	protected void setUp() throws Exception {
