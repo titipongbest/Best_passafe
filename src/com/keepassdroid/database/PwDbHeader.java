@@ -22,5 +22,11 @@ package com.keepassdroid.database;
 public abstract class PwDbHeader {
 
 	public static final int PWM_DBSIG_1 = 0x9AA2D903;
+
+	/** Seed that gets hashed with the userkey to form the final key */
+	public byte mMasterSeed[];
+
+	/** Used for the dwKeyEncRounds AES transformations */
+	public byte mTransformSeed[];
 	
 }
