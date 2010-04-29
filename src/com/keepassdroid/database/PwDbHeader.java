@@ -28,5 +28,8 @@ public abstract class PwDbHeader {
 
 	/** Used for the dwKeyEncRounds AES transformations */
 	public byte mTransformSeed[];
+
+	/** IV used for content encryption */
+	public byte mEncryptionIV[];
 	
 }
