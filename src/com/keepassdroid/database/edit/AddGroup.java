@@ -19,67 +19,31 @@
  */
 package com.keepassdroid.database.edit;
 
-import java.lang.ref.WeakReference;
-
-
 import com.keepassdroid.Database;
-import com.keepassdroid.database.PwDatabaseV3;
+import com.keepassdroid.database.PwGroup;
 import com.keepassdroid.database.PwGroupV3;
 
-public class AddGroup extends RunnableOnFinish {
-	private Database mDb;
-	private String mName;
-	private PwGroupV3 mParent;
-	private PwGroupV3 mGroup;
-	private boolean mDontSave;
+public abstract class AddGroup extends RunnableOnFinish {
+	protected Database mDb;
+	protected boolean mDontSave;
 	
-	public AddGroup(Database db, String name, PwGroupV3 parent, OnFinish finish, boolean dontSave) {
+	public static AddGroup getInstance(Database db, String name, PwGroup parent, OnFinish finish, boolean dontSave) {
+		if ( parent instanceof PwGroupV3 ) {
+			return new AddGroupV3(db, name, (PwGroupV3) parent, finish, dontSave);
+		} else {
+			throw new RuntimeException("Not yet implemented");
+		}
+	}
+	
+	protected AddGroup(Database db, OnFinish finish, boolean dontSave) {
 		super(finish);
 		
 		mDb = db;
-		mName = name;
-		mParent = parent;
 		mDontSave = dontSave;
 		
-		mFinish = new AfterAdd(mFinish);
 	}
+
+	public abstract void run();
 	
-	@Override
-	public void run() {
-		PwDatabaseV3 pm = mDb.pm;
-		
-		// Generate new group
-		mGroup = pm.newGroup(mName, mParent);
-		
-		mParent.sortGroupsByName();
-		
-		// Commit to disk
-		SaveDB save = new SaveDB(mDb, mFinish, mDontSave);
-		save.run();
-	}
-	
-	private class AfterAdd extends OnFinish {
-
-		public AfterAdd(OnFinish finish) {
-			super(finish);
-		}
-
-		@Override
-		public void run() {
-			
-			if ( mSuccess ) {
-				// Mark parent group dirty
-				mDb.dirty.put(mParent, new WeakReference<PwGroupV3>(mParent));
-				
-				// Add group to global list
-				mDb.groups.put(mGroup.groupId, new WeakReference<PwGroupV3>(mGroup));
-			} else {
-				mDb.pm.removeGroup(mGroup);
-			}
-			
-			super.run();
-		}
-
-	}
 
 }
