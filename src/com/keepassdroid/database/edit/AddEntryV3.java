@@ -20,15 +20,15 @@
 package com.keepassdroid.database.edit;
 
 import com.keepassdroid.Database;
-import com.keepassdroid.database.PwDatabaseV3;
-import com.keepassdroid.database.PwEntryV3;
+import com.keepassdroid.database.PwDatabase;
+import com.keepassdroid.database.PwEntry;
 import com.keepassdroid.database.PwGroupV3;
 
 public class AddEntryV3 extends AddEntry {
 	
-	private PwEntryV3 mEntry;
+	private PwEntry mEntry;
 	
-	protected AddEntryV3(Database db, PwEntryV3 entry, OnFinish finish) {
+	protected AddEntryV3(Database db, PwEntry entry, OnFinish finish) {
 		super(db, entry, finish);
 		
 		mEntry = entry;
@@ -36,13 +36,13 @@ public class AddEntryV3 extends AddEntry {
 	
 	
 	public void addEntry() {
-		PwGroupV3 parent = mEntry.getParent();
+		PwGroupV3 parent = (PwGroupV3) mEntry.getParent();
 		
 		// Add entry to group
 		parent.childEntries.add(mEntry);
 		
 		// Add entry to PwDatabaseV3
-		PwDatabaseV3 pm = (PwDatabaseV3) mDb.pm;
+		PwDatabase pm = (PwDatabase) mDb.pm;
 		pm.getEntries().add(mEntry);
 		
 		// Sort entries
