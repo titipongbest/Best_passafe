@@ -21,6 +21,7 @@ package com.keepassdroid;
 
 import android.content.Intent;
 
+import com.keepassdroid.app.App;
 import com.keepassdroid.database.PwGroupIdV3;
 
 public class GroupActivityV3 extends GroupActivity {
@@ -36,5 +37,14 @@ public class GroupActivityV3 extends GroupActivity {
 		return new PwGroupIdV3(id);
 	}
 
+	@Override
+	protected void setupButtons() {
+		if ( mGroup == App.getDB().root ) {
+			addGroupEnabled = true;
+		} else {
+			addGroupEnabled = true;
+			addEntryEnabled = true;
+		}
+	}
 
 }
