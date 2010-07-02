@@ -74,7 +74,7 @@ public class Kdb4 extends AndroidTestCase {
 			if ( read == -1 ) {
 				break;
 			} else {
-				keyFile.write(buf);
+				keyFile.write(buf, 0, read);
 			}
 		}
 		
