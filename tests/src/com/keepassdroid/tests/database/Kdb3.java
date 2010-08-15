@@ -19,51 +19,37 @@
  */
 package com.keepassdroid.tests.database;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.test.AndroidTestCase;
 
-import com.keepassdroid.database.exception.InvalidDBException;
 import com.keepassdroid.database.load.ImporterV3;
+import com.keepassdroid.tests.TestUtil;
 
 public class Kdb3 extends AndroidTestCase {
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		
-		InputStream key = getContext().getAssets().open("keyfile.key", AssetManager.ACCESS_STREAMING);
-		
-		FileOutputStream keyFile = new FileOutputStream("/sdcard/key");
-		while (true) {
-			byte[] buf = new byte[1024];
-			int read = key.read(buf);
-			if ( read == -1 ) {
-				break;
-			} else {
-				keyFile.write(buf, 0, read);
-			}
-		}
-		
-		keyFile.close();
-
-	}
 	
-	public void testKeyfile() throws IOException, InvalidDBException {
+	private void testKeyfile(String dbAsset, String keyAsset, String password) throws Exception {
 		Context ctx = getContext();
 		
+		TestUtil.extractKey(ctx, keyAsset, "/sdcard/key");
+		
 		AssetManager am = ctx.getAssets();
-		InputStream is = am.open("kdb_with_xml_keyfile.kdb", AssetManager.ACCESS_STREAMING);
+		InputStream is = am.open(dbAsset, AssetManager.ACCESS_STREAMING);
 		
 		ImporterV3 importer = new ImporterV3();
-		importer.openDatabase(is, "12345", "/sdcard/key");
+		importer.openDatabase(is, password, "/sdcard/key");
 		
 		is.close();
-		
-		
+	}
+	
+	public void testXMLKeyFile() throws Exception {
+		testKeyfile("kdb_with_xml_keyfile.kdb", "keyfile.key", "12345");
+	}
+	
+	public void testBinary64KeyFile() throws Exception {
+		testKeyfile("binary-key.kdb", "binary.key", "12345");
 	}
 
 }
