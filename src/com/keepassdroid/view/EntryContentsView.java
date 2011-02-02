@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Brian Pellin.
+ * Copyright 2010-2011 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -22,16 +22,14 @@ package com.keepassdroid.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.TableLayout;
+import android.widget.LinearLayout;
 
 import com.android.keepass.R;
 
-public class EntryContentsView extends TableLayout {
+public class EntryContentsView extends LinearLayout {
 	
 	public EntryContentsView(Context context) {
-		super(context);
-		
-		inflate(context);
+		this(context, null);
 	}
 	
 	public EntryContentsView(Context context, AttributeSet attrs) {
@@ -43,6 +41,11 @@ public class EntryContentsView extends TableLayout {
 	private void inflate(Context context) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.entry_view_contents, this);
+	}
+
+	@Override
+	protected LayoutParams generateDefaultLayoutParams() {
+		return new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 	}
 
 }
