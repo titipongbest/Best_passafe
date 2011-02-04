@@ -30,12 +30,8 @@ public abstract class PwDbOutput {
 	public abstract void output() throws PwDbOutputException;
 	
 	public static PwDbOutput getInstance(PwDatabase pm, OutputStream os) {
-		return getInstance(pm, os, false);
-	}
-	
-	public static PwDbOutput getInstance(PwDatabase pm, OutputStream os, boolean debug) {
 		if ( pm instanceof PwDatabaseV3 ) {
-			return new PwDbV3Output((PwDatabaseV3)pm, os, debug);
+			return new PwDbV3Output((PwDatabaseV3)pm, os);
 		} else if ( pm instanceof PwDatabaseV4 ) {
 			// TODO: Implement me
 			throw new RuntimeException(".kdbx output not yet supported.");
