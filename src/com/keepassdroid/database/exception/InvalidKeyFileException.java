@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Brian Pellin.
+ * Copyright 2009-2012 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -24,7 +24,7 @@ public class InvalidKeyFileException extends InvalidDBException {
 	 */
 	private static final long serialVersionUID = 5540694419562294464L;
 
-	public InvalidKeyFileException(String str) {
-		super(str);
+	public InvalidKeyFileException() {
+		super();
 	}
 }
