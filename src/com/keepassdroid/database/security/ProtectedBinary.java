@@ -19,6 +19,8 @@
  */
 package com.keepassdroid.database.security;
 
+import java.util.Arrays;
+
 public class ProtectedBinary {
 	
 	public final static ProtectedBinary EMPTY = new ProtectedBinary();
@@ -47,6 +49,14 @@ public class ProtectedBinary {
 		protect = enableProtection;
 		this.data = data;
 		
+	}
+	
+	public byte[] getData() {
+		return data;
+	}
+	
+	public boolean equals(ProtectedBinary rhs) {
+		return (protect == rhs.protect) && Arrays.equals(data, rhs.data);
 	}
 
 }
