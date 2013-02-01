@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Brian Pellin.
+ * Copyright 2011-2013 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -40,13 +40,16 @@ public class EntrySection extends LinearLayout {
 	public EntrySection(Context context, AttributeSet attrs, String title, String value) {
 		super(context, attrs);
 		
-		inflate(context, title, value);
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		inflate(inflater, context, title, value);
 	}
 
+	protected int getLayout() {
+		return R.layout.entry_section;
+	}
 
-	private void inflate(Context context, String title, String value) {
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.entry_section, this);
+	protected void inflate(LayoutInflater inflater, Context context, String title, String value) {
+		inflater.inflate(getLayout(), this);
 		
 		setText(R.id.title, title);
 		setText(R.id.value, value);
