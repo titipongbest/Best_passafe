@@ -25,6 +25,6 @@ package com.keepassdroid.database;
  * @author bpellin
  *
  */
-public abstract class GroupHandler {
-	public abstract boolean operate(PwGroupV4 entry);
+public abstract class GroupHandler<T> {
+	public abstract boolean operate(T entry);
 }
