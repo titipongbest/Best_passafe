@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Brian Pellin.
+ * Copyright 2013-2014 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -19,49 +19,13 @@
  */
 package com.keepassdroid.dialog;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 import com.android.keepass.R;
 
-public class BetaWarningDialog extends AlertDialog {
+public class BetaWarningDialog extends WarningDialog {
 
 	public BetaWarningDialog(Context context) {
-		super(context);
+		super(context, R.string.beta_warning, R.string.show_beta_warning);
 	}
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		Context ctx = getContext();
-		setMessage(ctx.getText(R.string.beta_warning));
-		
-		setButton(AlertDialog.BUTTON1, ctx.getText(android.R.string.ok), new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dismiss();
-			}
-		});
-		
-		setButton(AlertDialog.BUTTON2, ctx.getText(R.string.beta_dontask), new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				Context ctx = getContext();
-				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-				SharedPreferences.Editor edit = prefs.edit();
-				edit.putBoolean(ctx.getString(R.string.show_beta_warning), false);
-				edit.commit();
-				
-				dismiss();
-			}
-		});
-		
-		super.onCreate(savedInstanceState);
-	}
-
 }
