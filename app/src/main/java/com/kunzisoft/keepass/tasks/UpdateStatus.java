@@ -23,16 +23,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Handler;
 
-public class UpdateStatus {
+public class UpdateStatus implements ProgressTaskUpdater {
 	private ProgressDialog mPD;
 	private Context mCtx;
 	private Handler mHandler;
 	
-	public UpdateStatus() {
-		
-	}
-	
-	public UpdateStatus(Context ctx, Handler handler, ProgressDialog pd) {
+	UpdateStatus(Context ctx, Handler handler, ProgressDialog pd) {
 		mCtx = ctx;
 		mPD = pd;
 		mHandler = handler;
@@ -47,7 +43,7 @@ public class UpdateStatus {
 	private class UpdateMessage implements Runnable {
 		private int mResId;
 		
-		public UpdateMessage(int resId) {
+		UpdateMessage(int resId) {
 			mResId = resId;
 		}
 		
