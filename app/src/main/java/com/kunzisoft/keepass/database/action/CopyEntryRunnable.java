@@ -57,7 +57,6 @@ public class CopyEntryRunnable extends RunnableOnFinish {
 	public void run() {
 		// Update entry with new values
         mEntryCopied = mDb.copyEntry(mEntryToCopy, mNewParent);
-        mDb.addEntryTo(mEntryCopied, mNewParent);
 
         if (mEntryCopied != null) {
             mEntryCopied.touch(true, true);
