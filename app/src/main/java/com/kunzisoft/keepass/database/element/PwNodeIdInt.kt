@@ -46,6 +46,10 @@ class PwNodeIdInt : PwNodeId<Int> {
     }
 
     override fun equals(other: Any?): Boolean {
+        if (this === other)
+            return true
+        if (other == null)
+            return false
         if (other !is PwNodeIdInt) {
             return false
         }
