@@ -31,15 +31,14 @@ class MemoryUsagePreferenceDialogFragmentCompat : InputDatabaseSavePreferenceDia
         super.onBindDialogView(view)
 
         setExplanationText(R.string.memory_usage_explanation)
-        inputText = database?.memoryUsageAsString ?: ""
+        inputText = database?.memoryUsage?.toString()?: "0"
     }
 
     override fun onDialogClosed(positiveResult: Boolean) {
         if (database != null && positiveResult) {
             var memoryUsage: Long
             try {
-                val stringMemory = inputText
-                memoryUsage = java.lang.Long.parseLong(stringMemory)
+                memoryUsage = inputText.toLong()
             } catch (e: NumberFormatException) {
                 Toast.makeText(context, R.string.error_rounds_not_number, Toast.LENGTH_LONG).show() // TODO change error
                 return
