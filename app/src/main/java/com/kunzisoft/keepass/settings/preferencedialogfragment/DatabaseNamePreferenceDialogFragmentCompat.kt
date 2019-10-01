@@ -36,7 +36,7 @@ class DatabaseNamePreferenceDialogFragmentCompat : DatabaseSavePreferenceDialogF
             database?.let { database ->
                 val newName = inputText
                 val oldName = database.name
-                database.assignName(newName)
+                database.name = newName
 
                 actionInUIThreadAfterSaveDatabase = AfterNameSave(newName, oldName)
             }
@@ -54,7 +54,7 @@ class DatabaseNamePreferenceDialogFragmentCompat : DatabaseSavePreferenceDialogF
                     if (result.isSuccess) {
                         mNewName
                     } else {
-                        database?.assignName(mOldName)
+                        database?.name = mOldName
                         mOldName
                     }
             preference.summary = nameToShow
