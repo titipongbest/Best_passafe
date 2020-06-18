@@ -19,7 +19,8 @@
 -->
 <resources>
     <attr name="toolbarAppearance" format="reference" />
-    <attr name="toolbarBottomAppearance" format="reference" />
+    <attr name="specialToolbarAppearance" format="reference" />
+    <attr name="actionToolbarAppearance" format="reference" />
     <attr name="toolbarPopupAppearance" format="reference" />
 
     <attr name="colorAccentLight" format="reference|color" />
