@@ -19,6 +19,7 @@
  */
 package com.kunzisoft.encrypt
 
+import com.kunzisoft.encrypt.aes.NativeAESCipherSpi
 import java.security.Provider
 
 class AESProvider : Provider("AESProvider", 1.0, "") {
