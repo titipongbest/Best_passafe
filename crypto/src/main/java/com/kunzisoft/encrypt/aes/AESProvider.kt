@@ -27,7 +27,6 @@ class AESProvider : Provider("AESProvider", 1.0, "") {
     }
 
     companion object {
-
         private const val serialVersionUID = -3846349284296062658L
     }
 
