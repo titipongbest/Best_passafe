@@ -753,4 +753,10 @@
     <string name="menu_user_verification_disabled">Weryfikacja użytkownika wyłączona</string>
     <string name="education_user_verification_title">Weryfikacja działań wrażliwych</string>
     <string name="education_user_verification_summary">Zmień tryb weryfikacji użytkownika w sesji.\n\nOpcja „Weryfikacja użytkownika włączona” weryfikuje działania dotyczące pól chronionych i ustawień bazy danych.\nOpcja „Weryfikacja użytkownika wyłączona” umożliwia zmianę dowolnych danych w bazie danych bez weryfikacji.</string>
+    <string name="content_description_share_url">Udostępnij adres URL</string>
+    <string name="show_tags_title">Pokaż etykiety</string>
+    <string name="show_tags_summary">Wyświetla etykiety na liście wpisów</string>
+    <string name="benchmark_calculation">Oblicz dla %1$s s</string>
+    <string name="benchmarking">Testowanie wydajności…</string>
+    <string name="keyboard_share_browser">Udostępnij z %1$s do KeePassDX</string>
 </resources>
