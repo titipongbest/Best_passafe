@@ -764,4 +764,10 @@
     <string name="menu_user_verification_disabled">Ověření uživatele zakázáno</string>
     <string name="education_user_verification_title">Ověření u citlivých akcí</string>
     <string name="education_user_verification_summary">Změnit režim ověření uživatele pro relaci.\n\n„Ověření uživatele povoleno“ ověří akci u chráněných polí a nastavení databáze.\n„Ověření uživatele zakázáno“ vám umožní změnit jakákoli data ve vaší databázi bez ověření.</string>
+    <string name="content_description_share_url">Sdílet adresu URL</string>
+    <string name="show_tags_title">Zobrazit štítky</string>
+    <string name="show_tags_summary">Zobrazit štítky v seznamu položek</string>
+    <string name="benchmark_calculation">Vypočítat po dobu %1$s s</string>
+    <string name="benchmarking">Měření…</string>
+    <string name="keyboard_share_browser">Sdílet z aplikace %1$s do KeePassDX</string>
 </resources>
