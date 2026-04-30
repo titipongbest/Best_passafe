@@ -761,4 +761,7 @@
     <string name="user_verification_device_credential_title">Benutzerüberprüfungsdaten</string>
     <string name="content_description_user_verification_information">Informationen zur Benutzerüberprüfung</string>
     <string name="error_passkey_credential_id">Kein Passkey für Vertrauensstelle %1$s und Anmeldeinformationen %2$s gefunden</string>
+    <string name="content_description_share_url">URL teilen</string>
+    <string name="show_tags_summary">Tags in der Liste der Einträge anzeigen</string>
+    <string name="show_tags_title">Tags anzeigen</string>
 </resources>
