@@ -62,12 +62,15 @@ class Field : Parcelable {
         if (other !is Field) return false
 
         if (name != other.name) return false
+        if (protectedValue != other.protectedValue) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return name.hashCode()
+        var result = name.hashCode()
+        result = 31 * result + protectedValue.hashCode()
+        return result
     }
 
     companion object {
