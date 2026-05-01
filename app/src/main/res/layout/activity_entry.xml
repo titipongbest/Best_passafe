@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/activity_entry_footer">
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/app_bar"
@@ -184,6 +184,21 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/screenshot_mode_banner" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/entry_edit_fab"
+                style="@style/KeepassDXStyle.Fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/screenshot_mode_banner"
+                app:layout_anchor="@+id/entry_scroll"
+                app:layout_anchorGravity="end|bottom"
+                android:layout_marginBottom="16dp"
+                android:layout_marginHorizontal="12dp"
+                android:visibility="gone"
+                android:contentDescription="@string/menu_edit"
+                android:src="@drawable/ic_mode_edit_white_24dp" />
 
             <include layout="@layout/view_screenshot_mode_banner" />
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -48,6 +48,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.tabs.TabLayout
 import com.kunzisoft.keepass.R
@@ -106,6 +107,7 @@ class EntryActivity : DatabaseLockActivity() {
     private var lockView: View? = null
     private var toolbar: Toolbar? = null
     private var loadingView: ProgressBar? = null
+    private var editFab: FloatingActionButton? = null
 
     private val mEntryViewModel: EntryViewModel by viewModels()
     private val mUserVerificationViewModel: UserVerificationViewModel by viewModels()
@@ -156,6 +158,7 @@ class EntryActivity : DatabaseLockActivity() {
         entryProgress = findViewById(R.id.entry_progress)
         lockView = findViewById(R.id.lock_button)
         loadingView = findViewById(R.id.loading)
+        editFab = findViewById(R.id.entry_edit_fab)
 
         // To apply fit window with transparency
         setTransparentNavigationBar {
@@ -242,6 +245,10 @@ class EntryActivity : DatabaseLockActivity() {
             lockAndExit()
         }
 
+        editFab?.setOnClickListener {
+            requestEdition()
+        }
+
         mEntryViewModel.sectionSelected.observe(this) { entrySection ->
             entryContentTab?.getTabAt(entrySection.position)?.select()
         }
@@ -251,6 +258,10 @@ class EntryActivity : DatabaseLockActivity() {
                 // Manage history position
                 val historyPosition = entryInfoHistory.historyPosition
                 val entryIsHistory = historyPosition > -1
+
+                // Manage FAB visibility
+                editFab?.visibility = if (!mDatabaseReadOnly && !entryIsHistory) View.VISIBLE else View.GONE
+
                 // Assign history dedicated view
                 historyView?.visibility = if (entryIsHistory) View.VISIBLE else View.GONE
                 // TODO History badge
@@ -518,8 +529,6 @@ class EntryActivity : DatabaseLockActivity() {
         super.onCreateOptionsMenu(menu)
         if (mEntryViewModel.entryLoaded) {
             val inflater = menuInflater
-
-            inflater.inflate(R.menu.entry, menu)
             inflater.inflate(R.menu.database, menu)
 
             if (mEntryViewModel.entryIsHistory && !mDatabaseReadOnly) {
@@ -538,7 +547,6 @@ class EntryActivity : DatabaseLockActivity() {
         if (mEntryViewModel.entryIsHistory || mDatabaseReadOnly) {
             menu?.findItem(R.id.menu_save_database)?.isVisible = false
             menu?.findItem(R.id.menu_merge_database)?.isVisible = false
-            menu?.findItem(R.id.menu_edit)?.isVisible = false
         }
         if (!mMergeDataAllowed) {
             menu?.findItem(R.id.menu_merge_database)?.isVisible = false
@@ -566,17 +574,34 @@ class EntryActivity : DatabaseLockActivity() {
                 })
 
         if (!entryCopyEducationPerformed) {
-            val menuEditView = toolbar?.findViewById<View>(R.id.menu_edit)
+            val menuEditView = editFab
             // entryEditEducationPerformed
             menuEditView != null && mEntryActivityEducation.checkAndPerformedEntryEditEducation(
                     menuEditView,
                     {
-                        onOptionsItemSelected(menu.findItem(R.id.menu_edit))
+                        requestEdition()
                     },
                     {
                         performedNextEducation(menu)
                     }
             )
+        }
+    }
+
+    private fun requestEdition() {
+        if (mDatabaseAllowUserVerification) {
+            mDatabase?.let { database ->
+                checkUserVerification(
+                    userVerificationViewModel = mUserVerificationViewModel,
+                    dataToVerify = UserVerificationData(
+                        actionType = UserVerificationActionType.EDIT_ENTRY,
+                        database = database,
+                        entryId = mEntryViewModel.mainEntryId
+                    )
+                )
+            }
+        } else {
+            editEntry(mDatabase, mEntryViewModel.mainEntryId)
         }
     }
 
@@ -596,23 +621,6 @@ class EntryActivity : DatabaseLockActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_edit -> {
-                if (mDatabaseAllowUserVerification) {
-                    mDatabase?.let { database ->
-                        checkUserVerification(
-                            userVerificationViewModel = mUserVerificationViewModel,
-                            dataToVerify = UserVerificationData(
-                                actionType = UserVerificationActionType.EDIT_ENTRY,
-                                database = database,
-                                entryId = mEntryViewModel.mainEntryId
-                            )
-                        )
-                    }
-                } else {
-                    editEntry(mDatabase, mEntryViewModel.mainEntryId)
-                }
-                return true
-            }
             R.id.menu_restore_entry_history -> {
                 mEntryViewModel.mainEntryId?.let { mainEntryId ->
                     restoreEntryHistory(
