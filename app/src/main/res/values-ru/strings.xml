@@ -108,7 +108,7 @@
     <string name="minus">-Дефис-</string>
     <string name="never">Никогда</string>
     <string name="no_results">Совпадения не найдены</string>
-    <string name="no_url_handler">Установите браузер, чтобы открыть этот URL.</string>
+    <string name="no_url_handler">Установите браузер, чтобы открыть эту ссылку.</string>
     <string name="progress_create">Создание новой базы…</string>
     <string name="progress_title">Обработка…</string>
     <string name="protection">Защита</string>
@@ -763,4 +763,10 @@
     <string name="menu_user_verification_disabled">Проверка пользователя отключена</string>
     <string name="education_user_verification_title">Проверяйте действия с конфиденциальными данными</string>
     <string name="education_user_verification_summary">Измените режим проверки пользователя для сеанса. \n \n\"Проверка пользователя включена\": запрашивается проверка для действий в защищённых полях и настройках базы. \n\"Проверка пользователя отключена\": можно изменять любые данные в базе без проверки.</string>
+    <string name="content_description_share_url">Поделиться ссылкой</string>
+    <string name="show_tags_title">Показывать метки</string>
+    <string name="show_tags_summary">Показывать метки в списке записей</string>
+    <string name="benchmarking">Тестирование…</string>
+    <string name="keyboard_share_browser">Поделиться из %1$s в KeePassDX</string>
+    <string name="benchmark_calculation">Вычислено за %1$s сек.</string>
 </resources>
