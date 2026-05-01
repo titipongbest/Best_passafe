@@ -764,4 +764,6 @@
     <string name="content_description_share_url">URL teilen</string>
     <string name="show_tags_summary">Tags in der Liste der Einträge anzeigen</string>
     <string name="show_tags_title">Tags anzeigen</string>
+    <string name="benchmark_calculation">Für %1$s s berechnen</string>
+    <string name="benchmarking">Wird berechnet …</string>
 </resources>
