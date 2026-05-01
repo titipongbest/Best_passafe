@@ -406,7 +406,7 @@ class EntryActivity : DatabaseLockActivity() {
                     when (uVState) {
                         is UserVerificationViewModel.UVState.Loading -> {}
                         is UserVerificationViewModel.UVState.OnUserVerificationCanceled -> {
-                            coordinatorLayout?.showError(uVState.error)
+                            coordinatorLayout?.showError(uVState.error, R.id.activity_entry_footer)
                             mUserVerificationViewModel.onUserVerificationReceived()
                         }
                         is UserVerificationViewModel.UVState.OnUserVerificationSucceeded -> {

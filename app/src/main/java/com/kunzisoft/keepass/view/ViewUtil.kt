@@ -257,12 +257,15 @@ fun Context.showActionErrorIfNeeded(result: ActionRunnable.Result) {
     }
 }
 
-fun CoordinatorLayout.showError(error: Throwable?) {
+fun CoordinatorLayout.showError(error: Throwable?, anchorViewId: Int? = null) {
     val message = if (error is LocalizedException) {
         error.getLocalizedMessage(resources) ?: error.message
     } else error?.message
     message?.let {
-        Snackbar.make(this, message, Snackbar.LENGTH_LONG).asError().show()
+        Snackbar.make(this, message, Snackbar.LENGTH_LONG).asError()
+            .apply {
+                anchorViewId?.let { setAnchorView(it) }
+            }.show()
     }
 }
 
