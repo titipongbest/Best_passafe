@@ -125,7 +125,7 @@ import com.kunzisoft.keepass.view.setTransparentNavigationBar
 import com.kunzisoft.keepass.view.showActionErrorIfNeeded
 import com.kunzisoft.keepass.view.showError
 import com.kunzisoft.keepass.view.toastError
-import com.kunzisoft.keepass.view.updateLockPaddingStart
+import com.kunzisoft.keepass.view.updateButtonPaddingStart
 import com.kunzisoft.keepass.viewmodels.GroupEditViewModel
 import com.kunzisoft.keepass.viewmodels.GroupViewModel
 import com.kunzisoft.keepass.viewmodels.MainCredentialViewModel
@@ -1261,7 +1261,7 @@ class GroupActivity : DatabaseLockActivity(),
             View.GONE
         }
         // Padding if lock button visible
-        toolbarAction?.updateLockPaddingStart()
+        toolbarAction?.updateButtonPaddingStart()
 
         loadGroup()
     }

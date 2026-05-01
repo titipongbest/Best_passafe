@@ -35,10 +35,11 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.appbar.MaterialToolbar
 import com.kunzisoft.keepass.R
 
-class ToolbarAction @JvmOverloads constructor(context: Context,
-                                              attrs: AttributeSet? = null,
-                                              defStyle: Int = R.attr.toolbarActionStyle)
-    : MaterialToolbar(context, attrs, defStyle) {
+class ToolbarAction @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = R.attr.toolbarActionStyle
+) : MaterialToolbar(context, attrs, defStyle) {
 
     private var mActionModeCallback: ActionMode.Callback? = null
     private val actionMode = NodeActionMode(this)

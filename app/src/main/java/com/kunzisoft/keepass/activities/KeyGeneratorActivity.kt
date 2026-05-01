@@ -17,7 +17,7 @@ import com.kunzisoft.keepass.R
 import com.kunzisoft.keepass.activities.fragments.KeyGeneratorFragment
 import com.kunzisoft.keepass.activities.legacy.DatabaseLockActivity
 import com.kunzisoft.keepass.settings.PreferencesUtil
-import com.kunzisoft.keepass.view.updateLockPaddingStart
+import com.kunzisoft.keepass.view.updateButtonPaddingStart
 import com.kunzisoft.keepass.viewmodels.KeyGeneratorViewModel
 
 class KeyGeneratorActivity : DatabaseLockActivity() {
@@ -85,7 +85,7 @@ class KeyGeneratorActivity : DatabaseLockActivity() {
         }
 
         // Padding if lock button visible
-        toolbar.updateLockPaddingStart()
+        toolbar.updateButtonPaddingStart()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

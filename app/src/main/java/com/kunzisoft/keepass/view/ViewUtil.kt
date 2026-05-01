@@ -226,16 +226,21 @@ fun View.showByFading() {
     }
 }
 
-fun View.updateLockPaddingStart() {
+fun View.updateButtonPaddingStart() {
     resources.getDimensionPixelSize(
         if (PreferencesUtil.showLockDatabaseButton(context)) {
-            R.dimen.lock_button_size
+            R.dimen.actionbar_button_size
         } else {
-            R.dimen.hidden_lock_button_size
+            R.dimen.hidden_actionbar_button_size
         }
     ).let { lockPadding ->
-        updatePaddingRelative(lockPadding)
+        updatePaddingRelative(start = lockPadding)
     }
+}
+
+fun View.updateButtonPaddingEnd() {
+    updatePaddingRelative(end = resources.getDimensionPixelSize(
+        R.dimen.actionbar_button_big_size))
 }
 
 fun Context.toastError(e: Throwable?) {

@@ -111,8 +111,8 @@
                     app:layout_constraintTop_toTopOf="@+id/entry_edit_bottom_bar"
                     app:layout_constraintBottom_toBottomOf="@+id/entry_edit_bottom_bar"
                     android:layout_marginBottom="6dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    android:layout_marginHorizontal="12dp"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <include
                     layout="@layout/view_button_lock"
