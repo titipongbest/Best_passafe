@@ -80,7 +80,6 @@
 
             <com.kunzisoft.keepass.view.ToolbarAction
                 android:id="@+id/entry_edit_bottom_bar"
-                app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
