@@ -766,4 +766,5 @@
     <string name="show_tags_title">Tags anzeigen</string>
     <string name="benchmark_calculation">Für %1$s s berechnen</string>
     <string name="benchmarking">Wird berechnet …</string>
+    <string name="keyboard_share_browser">Von %1$s mit KeePassDX teilen</string>
 </resources>
