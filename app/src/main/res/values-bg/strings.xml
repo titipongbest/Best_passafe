@@ -740,4 +740,10 @@
     <string name="menu_user_verification_disabled">Проверката на потребителя е изключена</string>
     <string name="education_user_verification_title">Проверяване при чувствителни действия</string>
     <string name="education_user_verification_summary">Промяна на режима на проверяване на потребителя за сеанса.\n\n„Проверката на потребителя е включена“ проверява действията върху защитените полета и хранилището.\n„Проверката на потребителя е изключена“ дава възможност за променяне на всички данни на хранилището без проверка.</string>
+    <string name="content_description_share_url">Сподели URL</string>
+    <string name="show_tags_title">Покажи етикети</string>
+    <string name="show_tags_summary">Показва етикетите в списъка с записи</string>
+    <string name="benchmark_calculation">Изчислете за %1$s с</string>
+    <string name="benchmarking">Бенчмаркинг…</string>
+    <string name="keyboard_share_browser">Сподели от %1$s към KeePassDX</string>
 </resources>
