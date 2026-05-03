@@ -112,7 +112,7 @@ class FieldReferencesEngine(private val mDatabase: DatabaseKDBX) {
                             }
                         }
                     }
-                    refsCache[fullReference] = data ?: CharArray(0)
+                    refsCache[fullReference] = data?.copyOf() ?: CharArray(0)
                     
                     val updatedTextValue = fillReferencesUsingCache(currentEntry, textValue)
                     if (textValue !== textReference) {
