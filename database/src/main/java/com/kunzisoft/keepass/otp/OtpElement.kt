@@ -22,10 +22,9 @@ package com.kunzisoft.keepass.otp
 import com.kunzisoft.keepass.model.OtpModel
 import com.kunzisoft.keepass.utils.CharArrayUtil.removeSpaceChars
 import com.kunzisoft.keepass.utils.CharArrayUtil.toUtf8ByteArray
+import com.kunzisoft.keepass.utils.CodecUtil
+import android.util.Base64
 import com.kunzisoft.keepass.utils.clear
-import org.apache.commons.codec.binary.Base32
-import org.apache.commons.codec.binary.Base64
-import org.apache.commons.codec.binary.Hex
 import java.nio.CharBuffer
 import java.util.Locale
 import java.util.regex.Pattern
@@ -140,14 +139,14 @@ data class OtpElement(var otpModel: OtpModel = OtpModel()) {
     @Throws(IllegalArgumentException::class)
     fun setHexSecret(secret: CharArray) {
         if (secret.isNotEmpty())
-            otpModel.secret = Hex.decodeHex(secret)
+            otpModel.secret = CodecUtil.decodeHex(secret)
         else
             throw IllegalArgumentException()
     }
 
     fun getBase32Secret(): CharArray {
         return otpModel.secret?.let {
-            Base32().encode(it).map { b -> b.toInt().toChar() }.toCharArray()
+            CodecUtil.encodeBase32(it)
         } ?: charArrayOf()
     }
 
@@ -155,9 +154,7 @@ data class OtpElement(var otpModel: OtpModel = OtpModel()) {
     fun setBase32Secret(secret: CharArray) {
         if (isValidBase32(secret)) {
             val secretChars = replaceBase32Chars(secret)
-            val secretBytes = secretChars.toUtf8ByteArray()
-            otpModel.secret = Base32().decode(secretBytes)
-            secretBytes.clear()
+            otpModel.secret = CodecUtil.decodeBase32(secretChars)
         } else
             throw IllegalArgumentException()
     }
@@ -166,7 +163,7 @@ data class OtpElement(var otpModel: OtpModel = OtpModel()) {
     fun setBase64Secret(secret: CharArray) {
         if (isValidBase64(secret)) {
             val secretBytes = secret.toUtf8ByteArray()
-            otpModel.secret = Base64.decodeBase64(secretBytes)
+            otpModel.secret = Base64.decode(secretBytes, Base64.DEFAULT)
             secretBytes.clear()
         } else
             throw IllegalArgumentException()

@@ -162,7 +162,6 @@ dependencies {
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.13.3'
     // Apache Commons
     implementation "commons-io:commons-io:$commons_io_version"
-    implementation "commons-codec:commons-codec:$commons_codec_version"
     // Password generator
     implementation 'me.gosimple:nbvcxz:1.5.1'
 

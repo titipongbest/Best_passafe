@@ -8,7 +8,6 @@ buildscript {
     ext.android_material_version = '1.9.0'
     ext.android_test_version = '1.7.0'
     ext.commons_io_version = '2.21.0'
-    ext.commons_codec_version = '1.21.0'
     ext.joda_time_version = '2.14.1'
     repositories {
         mavenCentral()
