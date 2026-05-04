@@ -6,6 +6,5 @@
  * Improved security #2481 #2482 #2483 #2484 #2485 #2487 #2488 #2489 #2480
  * V2 KeyFile generation #1934
  * Filter browser appId in Magikeyboard #2466 #2394 #2400 #2317
- * Fix history save #2471
- * Fix screenshot mode #2407
+ * Fix screenshot mode and history save #2407 #2471
  * Small fixes #2476 #2369 #1911 #2469 #2477 #2512 #2511 #2515
