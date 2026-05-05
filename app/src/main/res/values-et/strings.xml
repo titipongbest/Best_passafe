@@ -553,7 +553,7 @@
     <string name="education_create_database_summary">Loo oma esimene andmebaasifail, mis on mõeldud salasõnade halduseks.</string>
     <string name="education_select_database_summary">Ava varemloodud andmebaasifail, mis on mõeldud salasõnade halduseks.</string>
     <string name="device_unlock_prompt_store_credential_title">Link seadme lukustuse eemaldamisele</string>
-    <string name="unlock">Eemalda lukustus</string>
+    <string name="unlock">Ava lukustus</string>
     <string name="device_unlock_tap_delete">Seadme lukustuse eemaldamise võtmete kustutamiseks klõpsi</string>
     <string name="device_unlock_explanation_summary">Andmebaasi mugavamaks avamiseks kasuta nutiseadme lukustuse eemaldamise võimalusi</string>
     <string name="device_credential_unlock_enable_title">Lukustuse eemaldamine nutiseadme autentimisega</string>
@@ -717,10 +717,14 @@
     <string name="error_passkey_credential_id">Pääsuvõtit ei leidu edastava osapoole „%1$s“ ja tuvastustunnuse (credentialId) „%2$s“ jaoks</string>
     <string name="user_verification_required_description_precise">%1$s eeldab tuvastamist, et tõesti on tegemist sinuga.</string>
     <string name="user_verification">Kasutaja verifitseerimine</string>
-    <string name="user_verification_mode_title">Kasutaja verifitseerimise režiim</string>
-    <string name="user_verification_mode_summary">Andmebaasi avamisel käivitab vaikimisi kasutaja verifitseerimise režiimi</string>
     <string name="menu_user_verification_enabled">Kasutaja verifitseerimine on lülitatud sisse</string>
     <string name="menu_user_verification_disabled">Kasutaja verifitseerimine on lülitatud välja</string>
     <string name="education_user_verification_title">Verifitseerimine turvatundlike toimingute puhul</string>
     <string name="education_user_verification_summary">Saad muuta kasutaja verifitseerimist sessioonikohaselt.\n\n„Kasutaja verifitseerimine on lülitatud sisse“ - kaitstud väljade ja andmebaasiseadistuste puhul on vajalik täiendav tuvastus.\n„Kasutaja verifitseerimine on lülitatud välja“ - saad muuta kõiki andmebaasis olevaid andmeid ilma täiendava tuvastuseta.</string>
+    <string name="content_description_share_url">Jagamise aadress</string>
+    <string name="show_tags_title">Näita silte</string>
+    <string name="show_tags_summary">Sildid on kuvatud kirjete loendis</string>
+    <string name="benchmark_calculation">Arvutamise kestus: %1$s sek</string>
+    <string name="benchmarking">Arvutan võrdlusanalüüsi jaoks…</string>
+    <string name="keyboard_share_browser">Jaga %1$s brauserist KeePassDX-i</string>
 </resources>

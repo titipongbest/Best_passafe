@@ -22,6 +22,7 @@ package com.kunzisoft.keepass.database.element
 import android.util.Log
 import com.kunzisoft.keepass.database.crypto.EncryptionAlgorithm
 import com.kunzisoft.keepass.database.crypto.kdf.KdfEngine
+import com.kunzisoft.keepass.database.crypto.kdf.KdfParameters
 import com.kunzisoft.keepass.database.element.binary.AttachmentPool
 import com.kunzisoft.keepass.database.element.binary.BinaryCache
 import com.kunzisoft.keepass.database.element.binary.BinaryData
@@ -66,6 +67,8 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.InputStream
 import java.io.OutputStream
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 import java.util.UUID
 
 
@@ -283,7 +286,7 @@ open class Database {
         get() = mDatabaseKDBX != null
 
     val availableCompressionAlgorithms: List<CompressionAlgorithm>
-        get() = mDatabaseKDBX?.availableCompressionAlgorithms ?: ArrayList()
+        get() = mDatabaseKDBX?.availableCompressionAlgorithms ?: emptyList()
 
     var compressionAlgorithm: CompressionAlgorithm?
         get() = mDatabaseKDBX?.compressionAlgorithm
@@ -316,6 +319,11 @@ open class Database {
     val allowNoMasterKey: Boolean
         get() = mDatabaseKDBX != null
 
+    val passwordEncoding: Charset
+        get() = mDatabaseKDB?.passwordEncoding
+            ?: mDatabaseKDBX?.passwordEncoding
+            ?: DEFAULT_PASSWORD_ENCODING
+
     fun getEncryptionAlgorithmName(): String {
         return mDatabaseKDB?.encryptionAlgorithm?.toString()
                 ?: mDatabaseKDBX?.encryptionAlgorithm?.toString()
@@ -323,7 +331,7 @@ open class Database {
     }
 
     val availableEncryptionAlgorithms: List<EncryptionAlgorithm>
-        get() = mDatabaseKDB?.availableEncryptionAlgorithms ?: mDatabaseKDBX?.availableEncryptionAlgorithms ?: ArrayList()
+        get() = mDatabaseKDB?.availableEncryptionAlgorithms ?: mDatabaseKDBX?.availableEncryptionAlgorithms ?: listOf()
 
     var encryptionAlgorithm: EncryptionAlgorithm?
         get() = mDatabaseKDB?.encryptionAlgorithm ?: mDatabaseKDBX?.encryptionAlgorithm
@@ -334,7 +342,7 @@ open class Database {
         }
 
     val availableKdfEngines: List<KdfEngine>
-        get() = mDatabaseKDB?.kdfAvailableList ?: mDatabaseKDBX?.kdfAvailableList ?: ArrayList()
+        get() = mDatabaseKDB?.kdfAvailableList ?: mDatabaseKDBX?.kdfAvailableList ?: listOf()
 
     val allowKdfModification: Boolean
         get() = availableKdfEngines.size > 1
@@ -391,6 +399,9 @@ open class Database {
 
     val transformSeed: ByteArray?
         get() = mDatabaseKDB?.transformSeed ?: mDatabaseKDBX?.transformSeed
+
+    val kdfParameters: KdfParameters?
+        get() = mDatabaseKDBX?.kdfParameters
 
     private val checkKey: ByteArray
         get() = mDatabaseKDB?.checkKey ?: mDatabaseKDBX?.checkKey ?: ByteArray(32)
@@ -539,7 +550,7 @@ open class Database {
 
     val groupNamesNotAllowed: List<String>
         get() {
-            return mDatabaseKDB?.groupNamesNotAllowed ?: ArrayList()
+            return mDatabaseKDB?.groupNamesNotAllowed ?: listOf()
         }
 
     private fun setDatabaseKDB(databaseKDB: DatabaseKDB) {
@@ -796,7 +807,7 @@ open class Database {
                     else -> throw SignatureDatabaseException()
                 }
             }
-        } catch (fileNotFoundException : FileNotFoundException) {
+        } catch (_ : FileNotFoundException) {
             throw FileNotFoundDatabaseException()
         }
     }
@@ -911,14 +922,13 @@ open class Database {
     }
 
     val tagPool: Tags
-        get() {
-            return mDatabaseKDBX?.tagPool ?: Tags()
-        }
+        get() = mDatabaseKDBX?.tagPool ?: Tags()
+
+    val tagPoolWithoutHistory: Tags
+        get() = mDatabaseKDBX?.getTagPoolWithoutHistory() ?: Tags()
 
     val attachmentPool: AttachmentPool
-        get() {
-            return mDatabaseKDB?.attachmentPool ?: mDatabaseKDBX?.attachmentPool ?: AttachmentPool()
-        }
+        get() = mDatabaseKDB?.attachmentPool ?: mDatabaseKDBX?.attachmentPool ?: AttachmentPool()
 
     val allowMultipleAttachments: Boolean
         get() {
@@ -973,6 +983,8 @@ open class Database {
 
     open fun clearAndClose(filesDirectory: File? = null) {
         clearIndexesAndBinaries(filesDirectory)
+        this.mDatabaseKDB?.clearSensitiveData()
+        this.mDatabaseKDBX?.clearSensitiveData()
         this.mDatabaseKDB = null
         this.mDatabaseKDBX = null
         this.loaded = false
@@ -1033,7 +1045,7 @@ open class Database {
             }
         }
         if (virtual)
-            group?.isVirtual = virtual
+            group?.isVirtual = true
 
         return group
     }
@@ -1071,8 +1083,8 @@ open class Database {
         entry.afterAssignNewParent()
     }
 
-    fun updateEntry(entry: Entry) {
-        dataModifiedSinceLastLoading = true
+    fun updateEntry(entry: Entry, dataModified: Boolean = true) {
+        dataModifiedSinceLastLoading = dataModified
         entry.entryKDB?.let { entryKDB ->
             mDatabaseKDB?.updateEntry(entryKDB)
         }
@@ -1346,5 +1358,7 @@ open class Database {
 
     companion object : SingletonHolder<Database>(::Database) {
         private val TAG = Database::class.java.name
+
+        val DEFAULT_PASSWORD_ENCODING: Charset = StandardCharsets.UTF_8
     }
 }

@@ -758,10 +758,14 @@
     <string name="check">检查</string>
     <string name="user_verification_required_description_precise">%1$s 需要验证您的身份。</string>
     <string name="user_verification">用户验证</string>
-    <string name="user_verification_mode_title">用户验证模式</string>
-    <string name="user_verification_mode_summary">打开数据库时默认启用用户验证模式</string>
     <string name="menu_user_verification_enabled">用户验证已启用</string>
     <string name="menu_user_verification_disabled">用户验证已禁用</string>
     <string name="education_user_verification_title">敏感操作验证</string>
     <string name="education_user_verification_summary">更改会话的用户验证模式。\n\n“启用用户验证”会对受保护的字段和数据库设置的操作进行验证。\n“禁用用户验证”允许您在不进行验证的情况下更改数据库中的任何数据。</string>
+    <string name="content_description_share_url">分享网址</string>
+    <string name="show_tags_title">显示标签</string>
+    <string name="show_tags_summary">在条目列表中显示标签</string>
+    <string name="keyboard_share_browser">从 %1$s 分享到 KeePassDX</string>
+    <string name="benchmarking">正在进行基准测试…</string>
+    <string name="benchmark_calculation">计算 %1$s 秒</string>
 </resources>

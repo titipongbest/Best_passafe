@@ -39,6 +39,7 @@ import com.kunzisoft.keepass.timeout.ClipboardHelper
 import com.kunzisoft.keepass.utils.IOActionTask
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import java.util.UUID
 
 
@@ -78,7 +79,7 @@ class EntryViewModel(application: Application): AndroidViewModel(application) {
     private val _historySelected = SingleLiveEvent<EntryHistory>()
 
     private val mEntryState = MutableStateFlow<EntryState>(EntryState.Loading)
-    val entryState: StateFlow<EntryState> = mEntryState
+    val entryState: StateFlow<EntryState> = mEntryState.asStateFlow()
 
     fun loadDatabase(database: ContextualDatabase?) {
         loadEntry(database, mainEntryId, historyPosition)
@@ -92,6 +93,11 @@ class EntryViewModel(application: Application): AndroidViewModel(application) {
             IOActionTask(
                 {
                     val mainEntry = database.getEntryById(mainEntryId)
+                    // To sort by access
+                    mainEntry?.let {
+                        it.touch(modified = false, touchParents = false)
+                        database.updateEntry(entry = it, dataModified = false)
+                    }
                     val currentEntry = if (historyPosition > -1) {
                         mainEntry?.getHistory()?.get(historyPosition)
                     } else {
@@ -180,7 +186,7 @@ class EntryViewModel(application: Application): AndroidViewModel(application) {
     fun copyToClipboard(field: Field) {
         mClipboardHelper.timeoutCopyToClipboard(
             TemplateField.getLocalizedName(getApplication(), field.name),
-            field.protectedValue.stringValue,
+            field.protectedValue.toString(),
             field.protectedValue.isProtected
         )
     }

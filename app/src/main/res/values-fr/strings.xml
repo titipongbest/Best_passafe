@@ -353,7 +353,7 @@
     <string name="entry_history">Historique</string>
     <string name="entry_setup_otp">Configuration d’un mot de passe à usage unique</string>
     <string name="otp_type">Type MDP à usage unique</string>
-    <string name="otp_secret">Secret</string>
+    <string name="otp_secret">Mot de passe</string>
     <string name="otp_period">Période (secondes)</string>
     <string name="otp_counter">Compteur</string>
     <string name="otp_digits">Chiffres</string>
@@ -694,7 +694,7 @@
     <string name="hide_templates_title">Cacher les gabarits</string>
     <string name="hide_templates_summary">Les gabarits ne sont pas affichés</string>
     <string name="error_otp_secret_length">La clé secrète doit avoir ai moins %1$d caractères.</string>
-    <string name="entry_application_id">ID d\'application</string>
+    <string name="entry_application_id">ID d\'Application</string>
     <string name="warning_overwrite_data_title">Écraser les données existantes ?</string>
     <string name="warning_overwrite_data_description">Cette action va remplacer la donnée existante de cette entrée, vous pourrez récupérer l\'ancienne donnée si l\'historique est activé.</string>
     <string name="passkeys">Clé d\'accès</string>
@@ -757,10 +757,14 @@
     <string name="check">Vérifier</string>
     <string name="user_verification_required_description_precise">%1$s doit s\'assurer qu\'il s\'agit bien de vous.</string>
     <string name="user_verification">Vérification Utilisateur</string>
-    <string name="user_verification_mode_title">Mode de Vérification Utilisateur</string>
-    <string name="user_verification_mode_summary">Activer le mode de Vérification Utilisateur par défaut lors de l\'ouverture d\'une base de données</string>
     <string name="menu_user_verification_enabled">Vérification Utilisateur activé</string>
     <string name="menu_user_verification_disabled">Vérification Utilisateur désactivé</string>
     <string name="education_user_verification_title">Vérification pour les actions sensibles</string>
     <string name="education_user_verification_summary">Changer le mode de vérification de l\'utilisateur pour cette session\n\n\"Vérification Utilisateur activé\" vérifie l\'action pour les champs protégés et les paramètres de base de données.\n\"Vérification Utilisateur désactivé\" vous permet de changer toute donnée dans votre base de données sans vérification.</string>
+    <string name="content_description_share_url">Partager l\'URL</string>
+    <string name="show_tags_title">Afficher les balises</string>
+    <string name="show_tags_summary">Affiche les balises dans la liste des entrées</string>
+    <string name="benchmark_calculation">Calculer pour %1$s s</string>
+    <string name="benchmarking">Analyse en cours…</string>
+    <string name="keyboard_share_browser">Partager depuis %1$s vers KeePassDX</string>
 </resources>

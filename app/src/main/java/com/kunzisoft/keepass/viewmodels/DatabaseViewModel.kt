@@ -22,18 +22,19 @@ import com.kunzisoft.keepass.services.DatabaseTaskNotificationService
 import com.kunzisoft.keepass.tasks.ActionRunnable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import java.util.UUID
 
 class DatabaseViewModel(application: Application): AndroidViewModel(application) {
 
     private val mDatabaseState = MutableStateFlow<ContextualDatabase?>(null)
-    val databaseState: StateFlow<ContextualDatabase?> = mDatabaseState
+    val databaseState: StateFlow<ContextualDatabase?> = mDatabaseState.asStateFlow()
 
     val database: ContextualDatabase?
         get() = databaseState.value
 
     private val mActionState = MutableStateFlow<ActionState>(ActionState.Wait)
-    val actionState: StateFlow<ActionState> = mActionState
+    val actionState: StateFlow<ActionState> = mActionState.asStateFlow()
 
     private var mDatabaseTaskProvider: DatabaseTaskProvider = DatabaseTaskProvider(
         context = application
@@ -107,7 +108,7 @@ class DatabaseViewModel(application: Application): AndroidViewModel(application)
         readOnly: Boolean,
         allowUserVerification: Boolean,
         cipherEncryptDatabase: CipherEncryptDatabase?,
-        fixDuplicateUuid: Boolean
+        fixDuplicateUuid: Boolean = false
     ) {
         mDatabaseTaskProvider.startDatabaseLoad(
             databaseUri,
@@ -184,6 +185,8 @@ class DatabaseViewModel(application: Application): AndroidViewModel(application)
         entryToUpdate: Entry,
         save: Boolean
     ) {
+        // Remove the history to keep memory
+        entryToUpdate.clearHistory()
         mDatabaseTaskProvider.startDatabaseUpdateEntry(
             oldEntry,
             entryToUpdate,
@@ -456,6 +459,10 @@ class DatabaseViewModel(application: Application): AndroidViewModel(application)
             newValue,
             save
         )
+    }
+
+    fun benchmarkKdf() {
+        mDatabaseTaskProvider.startDatabaseBenchmarkKdf()
     }
 
     /*

@@ -119,7 +119,7 @@ class Entry : Node, EntryVersionedInterface<Group> {
             entryKDBX?.icon = value
         }
 
-    var tags: Tags
+    override var tags: Tags
         get() = entryKDBX?.tags ?: Tags()
         set(value) {
             entryKDBX?.tags = value
@@ -226,8 +226,8 @@ class Entry : Node, EntryVersionedInterface<Group> {
             entryKDBX?.username = value
         }
 
-    override var password: String
-        get() = entryKDB?.password ?: entryKDBX?.password ?: ""
+    override var password: CharArray
+        get() = entryKDB?.password ?: entryKDBX?.password ?: charArrayOf()
         set(value) {
             entryKDB?.password = value
             entryKDBX?.password = value
@@ -301,16 +301,11 @@ class Entry : Node, EntryVersionedInterface<Group> {
         return if (isTan()) {
             "$PMS_TAN_ENTRY $username"
         } else {
-            if (title.isEmpty())
-                if (url.isEmpty())
-                    if (username.isEmpty())
-                            nodeId.toString()
-                    else
-                        username
-                else
-                    url
-            else
-                title
+            title.ifEmpty {
+                url.ifEmpty {
+                    username.ifEmpty { nodeId.toString() }
+                }
+            }
         }
     }
 
@@ -325,7 +320,7 @@ class Entry : Node, EntryVersionedInterface<Group> {
      * @return Map of label/value
      */
     fun getExtraFields(): List<Field> {
-        val extraFields = ArrayList<Field>()
+        val extraFields = mutableListOf<Field>()
         entryKDBX?.let {
             it.doForEachDecodedCustomField { field ->
                 extraFields.add(field)
@@ -354,7 +349,7 @@ class Entry : Node, EntryVersionedInterface<Group> {
     fun getOtpElement(): OtpElement? {
         entryKDBX?.let {
             return OtpEntryFields.parseFields { key ->
-                it.getFieldValue(key)?.toString()
+                it.getFieldValue(key)?.charArrayValue
             }
         }
         return null
@@ -363,7 +358,7 @@ class Entry : Node, EntryVersionedInterface<Group> {
     fun getCreditCard(): CreditCard? {
         entryKDBX?.let {
             return CreditCardEntryFields.parseFields { key ->
-                it.getFieldValue(key)?.toString()
+                it.getFieldValue(key)?.charArrayValue
             }
         }
         return null
@@ -372,7 +367,7 @@ class Entry : Node, EntryVersionedInterface<Group> {
     fun getPasskey(): Passkey? {
         entryKDBX?.let {
             return PasskeyEntryFields.parseFields { key ->
-                it.getFieldValue(key)?.toString()
+                it.getFieldValue(key)?.charArrayValue
             }
         }
         return null
@@ -380,8 +375,8 @@ class Entry : Node, EntryVersionedInterface<Group> {
 
     fun getAppOrigin(): AppOrigin? {
         entryKDBX?.let {
-            return AppOriginEntryField.parseFields { key ->
-                it.getFieldValue(key)?.toString()
+            return AppOriginEntryField.parseFields(url) { key ->
+                it.getFieldValue(key)?.charArrayValue
             }
         }
         return null
@@ -396,7 +391,7 @@ class Entry : Node, EntryVersionedInterface<Group> {
     }
 
     fun getAttachments(attachmentPool: AttachmentPool, inHistory: Boolean = false): List<Attachment> {
-        val attachments = ArrayList<Attachment>()
+        val attachments = mutableListOf<Attachment>()
         entryKDB?.getAttachment(attachmentPool)?.let {
             attachments.add(it)
         }
@@ -426,9 +421,9 @@ class Entry : Node, EntryVersionedInterface<Group> {
         entryKDBX?.putAttachment(attachment, attachmentPool)
     }
 
-    fun getHistory(): ArrayList<Entry> {
-        val history = ArrayList<Entry>()
-        val entryKDBXHistory = entryKDBX?.history ?: ArrayList()
+    fun getHistory(): List<Entry> {
+        val history = mutableListOf<Entry>()
+        val entryKDBXHistory = entryKDBX?.history ?: listOf()
         for (entryHistory in entryKDBXHistory) {
             history.add(Entry(entryHistory))
         }
@@ -453,6 +448,10 @@ class Entry : Node, EntryVersionedInterface<Group> {
             return Entry(it)
         }
         return null
+    }
+
+    fun clearHistory() {
+        entryKDBX?.clearHistory()
     }
 
     fun getSize(attachmentPool: AttachmentPool): Long {

@@ -734,8 +734,6 @@
     <string name="user_verification">Kullanıcı Doğrulaması</string>
     <string name="user_verification_device_credential_title">Kullanıcı Doğrulama kimlik bilgisi</string>
     <string name="user_verification_device_credential_summary">Eğer varsa kimlik bilgilerini kullanıcı doğrulaması için kullan</string>
-    <string name="user_verification_mode_title">Kullanıcı Doğrulama Modu</string>
-    <string name="user_verification_mode_summary">Veritabanı açarken varsayılan olarak Kullanıcı Doğrulama modunu etkinleştirir</string>
     <string name="menu_user_verification_enabled">Kullanıcı Doğrulama etkinleştirildi</string>
     <string name="menu_user_verification_disabled">Kullanıcı Doğrulama devre dışı bırakıldı</string>
     <string name="user_verification_preferred_summary">Güvenilen taraf \"tercih edilen\" yöntemi talep ettiğinde kullanıcı doğrulamasını gerçekleştir</string>
@@ -756,4 +754,10 @@
     <string name="user_verification_database_credential">Veritabanı şifrenizin ilk dört karakterini girin</string>
     <string name="first_chars">İlk karakterler</string>
     <string name="check">Kontrol et</string>
+    <string name="content_description_share_url">URL\'yi paylaş</string>
+    <string name="show_tags_title">Etiketleri Göster</string>
+    <string name="show_tags_summary">Girdiler listesinde etiketleri gösterir</string>
+    <string name="benchmark_calculation">%1$s s için hesapla</string>
+    <string name="benchmarking">Sınanıyor…</string>
+    <string name="keyboard_share_browser">%1$s\'den KeePassDX\'e paylaş</string>
 </resources>

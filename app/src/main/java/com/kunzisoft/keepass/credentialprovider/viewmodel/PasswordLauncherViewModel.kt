@@ -37,6 +37,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -55,7 +56,7 @@ class PasswordLauncherViewModel(application: Application): CredentialLauncherVie
     private var mLockDatabaseAfterSelection: Boolean = false
 
     private val mUiState = MutableStateFlow<UIState>(UIState.Loading)
-    val uiState: StateFlow<UIState> = mUiState
+    val uiState: StateFlow<UIState> = mUiState.asStateFlow()
 
     fun initialize() {
         mLockDatabaseAfterSelection = PreferencesUtil.isPasskeyCloseDatabaseEnable(getApplication())
@@ -166,12 +167,13 @@ class PasswordLauncherViewModel(application: Application): CredentialLauncherVie
     ) {
         withContext(Dispatchers.IO) {
             // Check AppOrigin
-            if (passwordInfo.appOrigin != mAppOrigin)
+            val origin = passwordInfo.appOrigin
+            if (origin == null || origin.isTheSameOriginThan(mAppOrigin).not())
                 throw SecurityException("Password origin do not match")
             else {
                 val passwordCredential = PasswordCredential(
                     id = passwordInfo.username,
-                    password = passwordInfo.password
+                    password = String(passwordInfo.password)
                 )
                 // Build the response
                 val result = Intent()

@@ -99,6 +99,7 @@ import com.kunzisoft.keepass.model.GroupInfo
 import com.kunzisoft.keepass.model.RegisterInfo
 import com.kunzisoft.keepass.model.SearchInfo
 import com.kunzisoft.keepass.services.DatabaseTaskNotificationService.Companion.ACTION_DATABASE_UPDATE_ENTRY_TASK
+import com.kunzisoft.keepass.services.DatabaseTaskNotificationService.Companion.ACTION_DATABASE_UPDATE_GROUP_TASK
 import com.kunzisoft.keepass.services.DatabaseTaskNotificationService.Companion.getNewEntry
 import com.kunzisoft.keepass.settings.PreferencesUtil
 import com.kunzisoft.keepass.settings.SettingsActivity
@@ -124,7 +125,7 @@ import com.kunzisoft.keepass.view.setTransparentNavigationBar
 import com.kunzisoft.keepass.view.showActionErrorIfNeeded
 import com.kunzisoft.keepass.view.showError
 import com.kunzisoft.keepass.view.toastError
-import com.kunzisoft.keepass.view.updateLockPaddingStart
+import com.kunzisoft.keepass.view.updateButtonPaddingStart
 import com.kunzisoft.keepass.viewmodels.GroupEditViewModel
 import com.kunzisoft.keepass.viewmodels.GroupViewModel
 import com.kunzisoft.keepass.viewmodels.MainCredentialViewModel
@@ -226,7 +227,7 @@ class GroupActivity : DatabaseLockActivity(),
     private val mOnSearchActionExpandListener = object : MenuItem.OnActionExpandListener {
         override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
             searchFiltersView?.visibility = View.VISIBLE
-            searchFiltersView?.showSearchExpandButton(!mTempSearchInfo)
+            searchFiltersView?.allowAdvancedSearch(!mTempSearchInfo)
             searchView?.setOnQueryTextListener(mOnSearchQueryTextListener)
             searchFiltersView?.onParametersChangeListener = mOnSearchFiltersChangeListener
 
@@ -792,6 +793,11 @@ class GroupActivity : DatabaseLockActivity(),
                         }
                     )
                 }
+            }
+        }
+        if (actionTask == ACTION_DATABASE_UPDATE_GROUP_TASK
+            || actionTask == ACTION_DATABASE_UPDATE_ENTRY_TASK) {
+            if (result.isSuccess) {
                 coordinatorError?.showActionErrorIfNeeded(result)
                 // Reload the group
                 loadGroup()
@@ -860,15 +866,19 @@ class GroupActivity : DatabaseLockActivity(),
         val group = mCurrentGroup
         // Assign title
         if (group?.isVirtual == true) {
-            searchFiltersView?.setNumbers(group.numberOfChildEntries)
-            searchFiltersView?.setCurrentGroupText(mMainGroup?.title ?: getString(R.string.search))
-            searchFiltersView?.availableOther(mDatabase?.allowEntryCustomFields() ?: false)
-            searchFiltersView?.availableApplicationIds(mDatabase?.allowEntryCustomFields() ?: false)
-            searchFiltersView?.availableTags(mDatabase?.allowTags() ?: false)
-            searchFiltersView?.enableTags(mDatabase?.tagPool?.isNotEmpty() ?: false)
-            searchFiltersView?.availableSearchableGroup(mDatabase?.allowCustomSearchableGroup() ?: false)
-            searchFiltersView?.availableTemplates(mDatabase?.allowTemplatesGroup ?: false)
-            searchFiltersView?.enableTemplates(mDatabase?.templatesGroup != null)
+            val tags = mDatabase?.tagPoolWithoutHistory
+            searchFiltersView?.apply {
+                setNumbers(group.numberOfChildEntries)
+                setSelectableTags(tags)
+                setCurrentGroupText(mMainGroup?.title ?: getString(R.string.search))
+                availableOther(mDatabase?.allowEntryCustomFields() ?: false)
+                availableApplicationIds(mDatabase?.allowEntryCustomFields() ?: false)
+                availableTags(mDatabase?.allowTags() ?: false)
+                enableTags(tags?.isNotEmpty() ?: false)
+                availableSearchableGroup(mDatabase?.allowCustomSearchableGroup() ?: false)
+                availableTemplates(mDatabase?.allowTemplatesGroup ?: false)
+                enableTemplates(mDatabase?.templatesGroup != null)
+            }
         } else {
             // Add breadcrumb
             setBreadcrumbNode(group)
@@ -1251,7 +1261,7 @@ class GroupActivity : DatabaseLockActivity(),
             View.GONE
         }
         // Padding if lock button visible
-        toolbarAction?.updateLockPaddingStart()
+        toolbarAction?.updateButtonPaddingStart()
 
         loadGroup()
     }

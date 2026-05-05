@@ -40,7 +40,6 @@ import com.kunzisoft.keepass.adapters.EntryAttachmentsItemsAdapter
 import com.kunzisoft.keepass.adapters.TagsProposalAdapter
 import com.kunzisoft.keepass.database.ContextualDatabase
 import com.kunzisoft.keepass.database.element.Attachment
-import com.kunzisoft.keepass.database.element.template.Template
 import com.kunzisoft.keepass.model.AttachmentState
 import com.kunzisoft.keepass.model.EntryAttachmentState
 import com.kunzisoft.keepass.model.EntryInfo
@@ -70,8 +69,6 @@ class EntryEditFragment: DatabaseFragment() {
     private lateinit var tagsContainerView: TextInputLayout
     private lateinit var tagsCompletionView: TagsCompletionView
     private var tagsAdapter: FilteredArrayAdapter<String>? = null
-
-    private var mTemplate: Template? = null
     private var mAllowMultipleAttachments: Boolean = false
 
     private var mIconColor: Int = 0
@@ -82,15 +79,17 @@ class EntryEditFragment: DatabaseFragment() {
         super.onCreateView(inflater, container, savedInstanceState)
 
         // Retrieve the textColor to tint the icon
-        val taIconColor = context?.obtainStyledAttributes(intArrayOf(android.R.attr.textColor))
-        mIconColor = taIconColor?.getColor(0, Color.BLACK) ?: Color.BLACK
-        taIconColor?.recycle()
+        context?.obtainStyledAttributes(intArrayOf(android.R.attr.textColor)).also { taIconColor ->
+            mIconColor = taIconColor?.getColor(0, Color.BLACK) ?: Color.BLACK
+        }?.recycle()
 
         return inflater.inflate(R.layout.fragment_entry_edit, container, false)
     }
 
-    override fun onViewCreated(view: View,
-                               savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         rootView = view
@@ -142,16 +141,12 @@ class EntryEditFragment: DatabaseFragment() {
         }
 
         mEntryEditViewModel.onTemplateChanged.observe(viewLifecycleOwner) { template ->
-            this.mTemplate = template
             templateView.setTemplate(template)
         }
 
         mEntryEditViewModel.templatesEntry.observe(viewLifecycleOwner) { templateEntry ->
             if (templateEntry != null) {
-                val selectedTemplate = if (mTemplate != null)
-                    mTemplate
-                else
-                    templateEntry.defaultTemplate
+                val selectedTemplate = templateEntry.template ?: templateEntry.defaultTemplate
                 templateView.setTemplate(selectedTemplate)
                 // Load entry info only the first time to keep change locally
                 if (savedInstanceState == null) {
@@ -165,8 +160,7 @@ class EntryEditFragment: DatabaseFragment() {
         }
 
         mEntryEditViewModel.requestEntryInfoUpdate.observe(viewLifecycleOwner) {
-            val entryInfo = retrieveEntryInfo()
-            mEntryEditViewModel.saveEntryInfo(it.database, it.entry, it.parent, entryInfo)
+            mEntryEditViewModel.saveEntryInfo(retrieveEntryInfo())
         }
 
         mEntryEditViewModel.onIconSelected.observe(viewLifecycleOwner) { iconImage ->
@@ -291,6 +285,18 @@ class EntryEditFragment: DatabaseFragment() {
                             updateFieldProtection(entryEditState.fieldProtection)
                             mEntryEditViewModel.actionPerformed()
                         }
+                        is EntryEditViewModel.EntryEditState.CloseEntry -> {
+                            // Managed in entry edit activity
+                        }
+                        is EntryEditViewModel.EntryEditState.RetrieveEntryInfoForClosing -> {
+                            mEntryEditViewModel.askToCloseEntry(
+                                currentEntryInfo = retrieveEntryInfo(),
+                                closeType = entryEditState.closeType
+                            )
+                        }
+                        is EntryEditViewModel.EntryEditState.AskToDiscardChanges -> {
+                            // Dialog in activity
+                        }
                     }
                 }
             }
@@ -314,7 +320,10 @@ class EntryEditFragment: DatabaseFragment() {
             }
         }
 
-        tagsAdapter = TagsProposalAdapter(requireContext(), database.tagPool)
+        tagsAdapter = TagsProposalAdapter(
+            requireContext(),
+            database.tagPoolWithoutHistory
+        )
         tagsCompletionView.apply {
             threshold = 1
             setAdapter(tagsAdapter)
@@ -330,7 +339,7 @@ class EntryEditFragment: DatabaseFragment() {
         entryInfo?.tags?.let { tags ->
             tagsCompletionView.setText("")
             for (i in 0 until tags.size()) {
-                tagsCompletionView.addObjectSync(tags.get(i))
+                tagsCompletionView.addObjectSync(tags.get(i).name)
             }
         }
 
