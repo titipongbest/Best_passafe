@@ -146,7 +146,7 @@ class MainCredentialView @JvmOverloads constructor(context: Context,
             if (checkboxPasswordView.isChecked)
                 checkboxPasswordView.isChecked = false
         } else {
-            passwordTextView.setText(text, 0, text.size)
+            passwordTextView.setCharArray(text)
             if (checkboxPasswordView.isChecked)
                 checkboxPasswordView.isChecked = true
         }
