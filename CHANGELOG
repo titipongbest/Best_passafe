@@ -1,3 +1,6 @@
+KeePassDX(4.4.1)
+ * Fixed a bug that prevents protected fields from being displayed on some OS with poorly implemented TextView #2524
+
 KeePassDX(4.4.0)
  * Tags in list view #1539 #2144
  * Search by Tags #1338 #2280
