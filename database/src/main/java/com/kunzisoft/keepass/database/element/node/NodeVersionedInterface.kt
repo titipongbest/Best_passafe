@@ -26,7 +26,7 @@ interface NodeVersionedInterface<ParentGroup> : NodeTimeInterface, Parcelable {
 
     var title: String
     var icon: IconImage
-    val type: Type
+    val type: NodeType
 
     /**
      * Retrieve the parent node
