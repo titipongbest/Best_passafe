@@ -711,7 +711,7 @@
     <string name="passkeys_backup_eligibility_summary">Determine no tempo de criação se é permitido que seja feito o backup da fonte da credencial de chaves públicas</string>
     <string name="passkeys_backup_state_title">Estado do Backup</string>
     <string name="passkey">Chave de acesso</string>
-    <string name="credential_provider_service_name">Provedor de Credenciais Best Passsafe</string>
+    <string name="credential_provider_service_name">Provedor de Credenciais Best Passafe</string>
     <string name="passkeys">Chaves de acesso</string>
     <string name="passkeys_explanation_summary">Configure Chaves de Acesso para um login sem senha rápido e seguro</string>
     <string name="passkeys_preference_title">Configurações de chaves de acesso</string>
@@ -724,7 +724,7 @@
     <string name="passkey_update_description">Atualizar chave de acesso em %1$s</string>
     <string name="passkey_selection_username">Nenhuma chave de acesso encontrada</string>
     <string name="passkey_selection_description">Selecione uma chave de acesso existente</string>
-    <string name="credential_provider_database_username">Banco de dados Best Passsafe</string>
+    <string name="credential_provider_database_username">Banco de dados Best Passafe</string>
     <string name="credential_provider_locked_database_description">Selecione para desbloquear</string>
     <string name="passkey_username">Nome de usuário da chave de acesso</string>
     <string name="passkey_private_key">Chave privada da chave de acesso</string>

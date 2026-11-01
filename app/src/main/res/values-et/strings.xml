@@ -678,12 +678,12 @@
     <string name="passkeys_backup_state_summary">Anna märku, kas autentimisandmed on varundatud ja kaitstud üksiku seadme kaotsimineku puhul</string>
     <string name="credential_provider_service_subtitle">Pääsuvõtmed - automaattäite teenusepakkuja</string>
     <string name="passkey">WebAuthn pääsuvõti</string>
-    <string name="credential_provider_service_name">Best Passsafe autentimisteenusepakkuja</string>
+    <string name="credential_provider_service_name">Best Passafe autentimisteenusepakkuja</string>
     <string name="passkey_creation_description">Salvesta pääsuvõti uue kirjena</string>
     <string name="passkey_update_description">Uuenda pääsuvõtit: %1$s</string>
     <string name="passkey_selection_username">Pääsuvõtit ei leidu</string>
     <string name="passkey_selection_description">Vali olemasolev pääsuvõti</string>
-    <string name="credential_provider_database_username">Best Passsafe-i andmebaas</string>
+    <string name="credential_provider_database_username">Best Passafe-i andmebaas</string>
     <string name="credential_provider_locked_database_description">Vali lukustuse eemaldamiseks</string>
     <string name="passkey_username">Pääsuvõtme kasutajanimi</string>
     <string name="passkey_private_key">Pääsuvõtme privaatvõti</string>

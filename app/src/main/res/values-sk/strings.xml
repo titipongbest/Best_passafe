@@ -747,8 +747,8 @@
     <string name="education_user_verification_title">Overovanie citlivých akcií</string>
     <string name="education_user_verification_summary">Zmeňte režim overovania používateľa pre danú reláciu.\n\nPri nastavení „Overovanie používateľa zapnuté“ sa overujú akcie vykonávané v chránených poliach a nastaveniach databázy. \nPri nastavení „Overovanie používateľa vypnuté“ môžete meniť akékoľvek údaje v databáze bez overovania.</string>
     <string name="passkey">Prístupový kľúč</string>
-    <string name="credential_provider_service_name">Poskytovateľ overovacích údajov Best Passsafe</string>
-    <string name="credential_provider_database_username">Databáza Best Passsafe</string>
+    <string name="credential_provider_service_name">Poskytovateľ overovacích údajov Best Passafe</string>
+    <string name="credential_provider_database_username">Databáza Best Passafe</string>
     <string name="credential_provider_locked_database_description">Kliknite na odomknutie</string>
     <string name="passkey_creation_description">Uložiť prístupový kľúč do nového záznamu</string>
     <string name="passkey_relying_party">Strana, ktorá sa spolieha na prístupový kľúč</string>
