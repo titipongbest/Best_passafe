@@ -1,0 +1,127 @@
+KeePassDroid (0.9.6)
+  * Add Russian translations
+  * Revamp settings
+  * Fix comment field in entries
+  * Fix loading after creating new dbs
+  * Fix opening from file on initial run
+
+KeePassDroid (0.9.5)
+  * Add notification based username and password copy
+  * Add German translations
+  * Try to create parent directory when creating database
+
+KeePassdroid (0.9.4)
+  * Add French translation 
+  * Fix crash on timeout.
+  
+KeePassdroid (0.9.3)
+  * Fix up translations
+  * Fix up timeouts.
+  * Display expiration time.
+
+KeePassDroid (0.9.2)
+  * Add Italian translations
+  * Multiple screen sizes
+  
+KeePassDroid (0.9.1)
+  * Add donate link
+  * Sort case insensitive
+  * Add show password checkbox
+
+KeePassDroid (0.9)
+  * Allow the creation of new databases on the device
+  * Sort entries and groups when adding or renaming.
+
+KeePassDroid (0.6)
+  * Add database settings
+  * Add password changing
+
+KeePassDroid (0.5)
+  * Correct group output logic
+  * Fix search
+  * Implement group and entry delete.
+
+KeePassDroid (0.4.1)
+  * Fix timeout locking crashes
+  * Fix lock from search screen.
+  * Increase clipboard timeout
+
+KeePassDroid (0.4)
+  * Support adding groups
+  
+KeePassDroid (0.3.4)
+  * Add context menus
+  * Deal with crash when resuming activity after the process has been killed
+  * Increase clipboard clear time as a stopgap until I come add a configurable setting.
+  * Pass upwards potentially more helpful error messages
+
+KeePassDroid (0.3.3)
+  * Add new icon and UI enhancements from Francis Jacquerye
+  * Fix crash on goto URL with no ://
+
+KeePassDroid (0.3.2)
+  * Fix the way passwords are stored
+
+KeePassDroid (0.3.1)
+  * Fix for non-ascii characters in password
+  * Add hints to fields
+
+KeePassDroid (0.3)
+  * Switch to native encryption for key preparation.  Seems to take better than half as long as bouncycastle in the emulator,
+    10 sec vs 25 sec.
+  * Implement search feature
+  * Require Android 1.5
+
+KeePassDroid (0.2.1)
+
+  * Support adding password entries
+  * Prevent crash on orientation change while loading or saving database.
+  * Fix most entries in the entry editor to be single line
+
+KeePassDroid (0.2.0)
+
+  * Support editing password entries
+  * Wrap long lines properly in entries
+
+KeePassDroid (0.1.8)
+
+  * Move database decryption into background thread
+  * Add about dialog
+
+KeePassDroid (0.1.7)
+
+  * Clear usernames and passwords from the clipboard after 30 seconds.
+
+KeePassDroid (0.1.6)
+
+  * Implement 5 minute timeout when the application is inactive.
+  * Scroll comment field when the text overflows.
+
+KeePassDroid (0.1.5)
+
+  * Improve file selection
+  * UI enhancements
+
+KeePassDroid (0.1.4)
+
+  * Add key file support
+
+KeePassDroid (0.1.3)
+
+  * Hide Meta-Info entries
+  * Change "Copy URL" to "Go to URL"
+  * Support "Go to Homepage"
+  * Support Lock menu option
+  * Fix blank password crash
+
+KeePassDroid (0.1.2)
+
+  * Fix crash when accessing the first root level group.
+
+KeePassDroid (0.1.1)
+
+  * Minor tweaks to layout.
+
+KeePassdroid (0.0.1)
+
+  * Initial Release

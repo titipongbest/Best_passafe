@@ -27,7 +27,11 @@ package org.phoneid.keepassj2me;
 // PhoneID
 import org.phoneid.*;
 
+import com.keepassdroid.Database;
+
+
 // Java
+import java.lang.ref.WeakReference;
 import java.util.*;
 
 
@@ -53,13 +57,67 @@ import java.util.*;
  */
 public class PwEntry {
 
-    // for tree traversing
-    public PwGroup parent = null;
+	public static final Date NEVER_EXPIRE = getNeverExpire();
+	
+	private static Date getNeverExpire() {
+	  Calendar cal = Calendar.getInstance();
+	  cal.set(Calendar.YEAR, 2999);
+	  cal.set(Calendar.MONTH, 11);
+	  cal.set(Calendar.DAY_OF_MONTH, 28);
+	  cal.set(Calendar.HOUR, 23);
+	  cal.set(Calendar.MINUTE, 59);
+	  cal.set(Calendar.SECOND, 59);
+
+	  return cal.getTime();
+	}
+	
+	public static boolean IsNever(Date date) {
+		Calendar never = Calendar.getInstance();
+		never.setTime(NEVER_EXPIRE);
+		never.set(Calendar.MILLISECOND, 0);
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.MILLISECOND, 0);
+		
+		return (never.get(Calendar.YEAR) == cal.get(Calendar.YEAR)) && 
+			(never.get(Calendar.MONTH) == cal.get(Calendar.MONTH)) &&
+			(never.get(Calendar.DAY_OF_MONTH) == cal.get(Calendar.DAY_OF_MONTH)) &&
+			(never.get(Calendar.HOUR) == cal.get(Calendar.HOUR)) &&
+			(never.get(Calendar.MINUTE) == cal.get(Calendar.MINUTE)) &&
+			(never.get(Calendar.SECOND) == cal.get(Calendar.SECOND));
+		
+	}
+	
+	// for tree traversing
+	public PwGroup parent = null;
     
   public PwEntry() {
   }
+  
+  public PwEntry(PwEntry source) {
+	  assign(source);
+  }
 
+	public PwEntry(Database db, int parentId) {
+		
+		WeakReference<PwGroup> wPw = db.gGroups.get(parentId);
+	
+		parent = wPw.get();
+		groupId = parentId;
+	
+		Random random = new Random();
+		uuid = new byte[16];
+		random.nextBytes(uuid);
+		
+		Calendar cal = Calendar.getInstance();
+		Date now = cal.getTime();
+		tCreation = now;
+		tLastAccess = now;
+		tLastMod = now;
+		tExpire = NEVER_EXPIRE;
 
+	}
 
   /**
    * @return the actual password byte array.
@@ -101,9 +159,57 @@ public class PwEntry {
     System.arraycopy( buf, offset, binaryData, 0, len );
   }
 
+  // Determine if this is a MetaStream entrie
+  public boolean isMetaStream() {
+	  if ( binaryData == null ) return false;
+	  if ( additional == null || additional.length() == 0 ) return false;
+	  if ( ! binaryDesc.equals(PMS_ID_BINDESC) ) return false;
+	  if ( title == null ) return false;
+	  if ( ! title.equals(PMS_ID_TITLE) ) return false;
+	  if ( username == null ) return false;
+	  if ( ! username.equals(PMS_ID_USER) ) return false;
+	  if ( url == null ) return false;
+	  if ( ! url.equals(PMS_ID_URL)) return false;
+	  if ( imageId != 0 ) return false;
+	  
+	  return true;
+  }
+  
+  public void assign(PwEntry source) {
+	  System.arraycopy(source.uuid, 0, uuid, 0, source.uuid.length);
+	  groupId = source.groupId;
+	  imageId = source.imageId;
+	  title = source.title;
+	  url = source.url;
+	  username = source.username;
+
+	  int passLen = source.password.length;
+	  password = new byte[passLen]; 
+	  System.arraycopy(source.password, 0, password, 0, passLen);
+	  
+	  additional = source.additional;
+	  tCreation = new Date(source.tCreation.getTime());
+	  tLastMod = new Date(source.tLastMod.getTime());
+	  tLastAccess = new Date(source.tLastAccess.getTime());
+	  tExpire = new Date(source.tExpire.getTime());
+
+	  binaryDesc = source.binaryDesc;
+	  
+	  int descLen = source.binaryData.length;
+	  binaryData = new byte[descLen]; 
+	  System.arraycopy(source.binaryData, 0, binaryData, 0, descLen);
+	  
+	  parent = source.parent;
+	  
+  }
 
   /** Size of byte buffer needed to hold this struct. */
   public static final int BUF_SIZE = 124;
+
+  public static final String PMS_ID_BINDESC = "bin-stream";
+  public static final String PMS_ID_TITLE   = "Meta-Info";
+  public static final String PMS_ID_USER    = "SYSTEM";
+  public static final String PMS_ID_URL     = "$";
 
 
   public byte             uuid[]   = new byte[16];
