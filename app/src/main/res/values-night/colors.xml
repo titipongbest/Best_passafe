@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Best Passafe redesign: card border on dark backgrounds -->
+    <color name="bp_card_stroke">#33403A</color>
+</resources>

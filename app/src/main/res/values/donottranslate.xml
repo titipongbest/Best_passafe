@@ -394,7 +394,7 @@
     <string name="timeout_screen_off" translatable="false">1500</string>
 
     <!-- Text Size -->
-    <dimen name="list_icon_size_default" translatable="false">32dp</dimen>
+    <dimen name="list_icon_size_default" translatable="false">44dp</dimen>
     <string name="list_size_string_small" translatable="false">small</string>
     <string name="list_size_string_medium" translatable="false">medium</string>
     <string name="list_size_string_large" translatable="false">large</string>

@@ -25,8 +25,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="?attr/colorSurface"
-    android:paddingBottom="8dp"
+    android:background="@android:color/transparent"
+    android:paddingBottom="10dp"
     tools:targetApi="lollipop">
 
     <ViewSwitcher
@@ -38,14 +38,28 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/KeepassDXStyle.Cardview.SurfaceContainer.Small">
+            style="@style/BestPassafe.Card">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/file_container_basic_info"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:minHeight="76dp"
                 android:background="?android:attr/selectableItemBackground"
                 app:layout_constraintTop_toTopOf="parent">
+                <ImageView
+                    android:id="@+id/file_icon_tile"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:padding="11dp"
+                    android:background="@drawable/bp_icon_tile"
+                    android:src="@drawable/ic_bp_lock"
+                    android:contentDescription="@null"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/file_alias"
                     android:layout_width="0dp"
@@ -58,8 +72,9 @@
                     android:layout_marginRight="@dimen/default_margin"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/file_icon_tile"
                     app:layout_constraintEnd_toStartOf="@+id/default_file_button"
+                    android:textStyle="bold"
                     style="@style/KeepassDXStyle.Text.Large.OnSurface"
                     tools:text="DatabaseAlias" />
                 <androidx.appcompat.widget.AppCompatCheckBox
@@ -91,7 +106,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/KeepassDXStyle.Cardview.Surface"
+            style="@style/BestPassafe.Card"
             android:layout_marginHorizontal="@dimen/card_view_margin_horizontal">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/file_container_alias_register"
@@ -140,7 +155,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            style="@style/KeepassDXStyle.Cardview.SurfaceContainer.High"
+            style="@style/BestPassafe.Card"
             android:layout_marginHorizontal="@dimen/card_view_margin_horizontal">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:orientation="vertical"

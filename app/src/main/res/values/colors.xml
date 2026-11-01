@@ -74,6 +74,10 @@
     <color name="bp_green_dark">#006B31</color>
     <color name="bp_green_on">#FFFFFF</color>
     <color name="bp_green_on_variant">#D7F5E1</color>
+    <color name="bp_title_dark">#0B1F12</color>
+    <color name="bp_green_soft">#E6F5EC</color>
+    <color name="bp_card">#FFFFFF</color>
+    <color name="bp_card_stroke">#E3E8E5</color>
     <color name="green">#43a047</color>
     <color name="green_dark">#388e3c</color>
     <color name="green_darker">#2e7d32</color>
@@ -132,10 +136,10 @@
     <color name="forest_theme_light_onPrimary">@color/white</color>
     <color name="forest_theme_light_primaryContainer">@color/bp_green</color>
     <color name="forest_theme_light_onPrimaryContainer">@color/white</color>
-    <color name="forest_theme_light_secondary">@color/orange_dark</color>
+    <color name="forest_theme_light_secondary">#00733A</color>
     <color name="forest_theme_light_onSecondary">@color/white</color>
-    <color name="forest_theme_light_secondaryContainer">@color/orange_dark</color>
-    <color name="forest_theme_light_onSecondaryContainer">@color/white</color>
+    <color name="forest_theme_light_secondaryContainer">#E6F5EC</color>
+    <color name="forest_theme_light_onSecondaryContainer">#00733A</color>
     <color name="forest_theme_light_tertiary">#835500</color>
     <color name="forest_theme_light_onTertiary">#FFFFFF</color>
     <color name="forest_theme_light_tertiaryContainer">#FFDDB4</color>
@@ -144,7 +148,7 @@
     <color name="forest_theme_light_errorContainer">#FFDAD6</color>
     <color name="forest_theme_light_onError">#FFFFFF</color>
     <color name="forest_theme_light_onErrorContainer">#410002</color>
-    <color name="forest_theme_light_background">#FFFFFF</color>
+    <color name="forest_theme_light_background">#F6F8F7</color>
     <color name="forest_theme_light_onBackground">#1A1C19</color>
     <color name="forest_theme_light_surface">#FFFFFF</color>
     <color name="forest_theme_light_onSurface">#1F2421</color>

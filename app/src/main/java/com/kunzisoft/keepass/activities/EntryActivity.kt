@@ -22,6 +22,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -38,7 +39,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
-import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -279,8 +279,19 @@ class EntryActivity : DatabaseLockActivity() {
                         // Toolbar customization
                         val toolbarColor = entryState.toolbarColor
                         val onToolbarColor = entryState.onToolbarColor
-                        collapsingToolbarLayout?.setBackgroundColor(toolbarColor)
-                        collapsingToolbarLayout?.contentScrim = (toolbarColor).toDrawable()
+                        // Best Passafe: header with rounded bottom corners
+                        val headerRadius = resources.getDimension(R.dimen.bp_header_radius)
+                        val headerRadii = floatArrayOf(0f, 0f, 0f, 0f,
+                            headerRadius, headerRadius, headerRadius, headerRadius)
+                        appBarLayout?.background = GradientDrawable().apply {
+                            setColor(toolbarColor)
+                            cornerRadii = headerRadii
+                        }
+                        collapsingToolbarLayout?.setBackgroundColor(Color.TRANSPARENT)
+                        collapsingToolbarLayout?.contentScrim = GradientDrawable().apply {
+                            setColor(toolbarColor)
+                            cornerRadii = headerRadii
+                        }
                         toolbar?.changeControlColor(onToolbarColor)
                         collapsingToolbarLayout?.changeTitleColor(onToolbarColor)
                         // Manage FAB visibility

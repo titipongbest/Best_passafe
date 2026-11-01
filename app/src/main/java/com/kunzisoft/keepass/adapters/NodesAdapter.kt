@@ -463,6 +463,17 @@ class NodesAdapter(
     }
 
     private fun assignBackgroundColor(view: View?, entry: EntryInfo) {
+        // Best Passafe: the item card drawable handles normal / selected states,
+        // only a custom entry color tints it
+        if (view?.id == R.id.node_container) {
+            val customColor = if (mShowEntryColors) entry.backgroundColor else null
+            ViewCompat.setBackgroundTintList(
+                view,
+                if (!view.isSelected && customColor != null)
+                    ColorStateList.valueOf(customColor) else null
+            )
+            return
+        }
         view?.let {
             ViewCompat.setBackgroundTintList(
                 view,

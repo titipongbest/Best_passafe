@@ -816,4 +816,6 @@
     <string name="user_verification_database_credential">Enter the first four characters of your database password</string>
     <string name="first_chars">First chars</string>
     <string name="check">Check</string>
+    <string name="bp_tagline">Your personal password safe</string>
+    <string name="bp_offline_badge">100% offline. Your data stays on this device</string>
 </resources>
