@@ -510,8 +510,6 @@
         <item translatable="false">@string/extended_ASCII</item>
     </string-array>
 
-    <!-- Best Passafe project links -->
-    <string name="bp_repo_url" translatable="false">https://github.com/titipongbest/Best_passafe</string>
-    <string name="bp_issues_url" translatable="false">https://github.com/titipongbest/Best_passafe/issues</string>
+    <!-- Best Passafe: upstream project link (GPL-3.0 attribution) -->
     <string name="bp_upstream_url" translatable="false">https://github.com/Kunzisoft/KeePassDX</string>
 </resources>

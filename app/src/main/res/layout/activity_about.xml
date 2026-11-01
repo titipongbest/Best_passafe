@@ -252,50 +252,10 @@
                             android:orientation="vertical"
                             android:padding="16dp">
                             <TextView
-                                android:id="@+id/activity_about_homepage_subtitle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="0dp"
-                                android:textSize="13sp"
-                                android:textStyle="bold"
-                                android:textColor="?attr/colorOnSurfaceVariant"
-                                android:text="@string/bp_about_source_code"/>
-                            <TextView
-                                android:id="@+id/activity_about_homepage_link"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:lineSpacingMultiplier="1.2"
-                                android:textSize="14sp"
-                                android:textColor="?attr/colorOnSurface"
-                                android:text="@string/bp_repo_url"
-                                android:autoLink="web"
-                                android:textColorLink="?attr/colorPrimary"/>
-                            <TextView
-                                android:id="@+id/activity_about_feedback_subtitle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
-                                android:textSize="13sp"
-                                android:textStyle="bold"
-                                android:textColor="?attr/colorOnSurfaceVariant"
-                                android:text="@string/feedback"/>
-                            <TextView
-                                android:id="@+id/activity_about_feedback_link"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:lineSpacingMultiplier="1.2"
-                                android:textSize="14sp"
-                                android:textColor="?attr/colorOnSurface"
-                                android:text="@string/bp_issues_url"
-                                android:autoLink="web"
-                                android:textColorLink="?attr/colorPrimary"/>
-                            <TextView
                                 android:id="@+id/activity_about_upstream_link_label"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="0dp"
                                 android:lineSpacingMultiplier="1.2"
                                 android:text="@string/bp_about_upstream_source"
                                 android:textSize="13sp"
