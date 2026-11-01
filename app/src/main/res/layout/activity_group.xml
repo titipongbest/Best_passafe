@@ -143,14 +143,13 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/activity_group_footer"
-            android:theme="@style/ThemeOverlay.BestPassafe.Bar"
-            android:background="?attr/colorSurface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/screenshot_mode_banner">
 
             <com.kunzisoft.keepass.view.ToolbarAction
                 android:id="@+id/toolbar_action"
+                android:theme="@style/ThemeOverlay.BestPassafe.Bar"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 app:layout_constraintBottom_toBottomOf="parent"
