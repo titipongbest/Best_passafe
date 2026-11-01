@@ -509,7 +509,4 @@
         <item translatable="false">@string/brackets</item>
         <item translatable="false">@string/extended_ASCII</item>
     </string-array>
-
-    <!-- Best Passafe: upstream project link (GPL-3.0 attribution) -->
-    <string name="bp_upstream_url" translatable="false">https://github.com/Kunzisoft/KeePassDX</string>
 </resources>
