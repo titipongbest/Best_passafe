@@ -721,4 +721,15 @@
     <string name="education_user_verification_summary">การสลับโหมดการยืนยันผู้ใช้สำหรับเซสชั่นนี้. \n \n\"เปิดใช้งานการยืนยันผู้ใช้\" สำหรับการกระทำกับเขตข้อมูลที่ถูกป้องกันไว้และการตั้งค่าฐานข้อมูลต่างๆ\n\"เปิดใช้งานการยืนยันผู้ใช้\" ให้คุณเปลื่ยนแปลงข้อมูลต่างๆในฐานข้อมูลได้โดยไม่ต้องยืนยัน</string>
     <string name="bp_tagline">ตู้เซฟรหัสผ่านส่วนตัวของคุณ</string>
     <string name="bp_offline_badge">ออฟไลน์ 100% ข้อมูลอยู่ในเครื่องคุณเท่านั้น</string>
+    <!-- Best Passafe: About screen -->
+    <string name="bp_about_description">แอปจัดการรหัสผ่านแบบออฟไลน์และโอเพนซอร์สสำหรับ Android รองรับไฟล์ฐานข้อมูลมาตรฐาน KeePass (.kdbx)</string>
+    <string name="bp_about_credits_title">ผู้พัฒนาและที่มา</string>
+    <string name="html_bp_about_credits">Best Passafe © %1$d titipongbest&lt;br/&gt;&lt;br/&gt;Best Passafe เป็นรุ่นดัดแปลง (fork) ของ &lt;a href="https://github.com/Kunzisoft/KeePassDX"&gt;&lt;strong&gt;KeePassDX&lt;/strong&gt;&lt;/a&gt; ลิขสิทธิ์ © 2009–%1$d Jeremy Jamet / Kunzisoft ซึ่งพัฒนาต่อมาจาก &lt;a href="https://github.com/bpellin/keepassdroid"&gt;KeePassDroid&lt;/a&gt; ของ Brian Pellin ขอขอบคุณผู้พัฒนาต้นฉบับและผู้ร่วมพัฒนา KeePassDX ทุกท่าน</string>
+    <string name="bp_about_trademark">KeePass และ KeePassDX เป็นชื่อของเจ้าของแต่ละราย Best Passafe เป็นโครงการอิสระ ไม่มีส่วนเกี่ยวข้องและไม่ได้รับการรับรองจาก Kunzisoft หรือโครงการ KeePass</string>
+    <string name="bp_about_license_title">สัญญาอนุญาต</string>
+    <string name="html_bp_about_license">โปรแกรมนี้เป็นซอฟต์แวร์เสรี คุณสามารถแจกจ่ายต่อและ/หรือแก้ไขได้ภายใต้เงื่อนไขของ &lt;a href="https://www.gnu.org/licenses/gpl-3.0.html"&gt;GNU General Public License&lt;/a&gt; ที่เผยแพร่โดย Free Software Foundation &lt;strong&gt;รุ่นที่ 3&lt;/strong&gt; หรือรุ่นที่ใหม่กว่า (ตามที่คุณเลือก)&lt;br/&gt;&lt;br/&gt;โปรแกรมนี้แจกจ่ายด้วยความหวังว่าจะเป็นประโยชน์ แต่&lt;strong&gt;ไม่มีการรับประกันใดๆ&lt;/strong&gt; รวมถึงการรับประกันโดยนัยด้านความเหมาะสมในการค้าหรือความเหมาะสมสำหรับวัตถุประสงค์เฉพาะ</string>
+    <string name="bp_about_privacy_title">ความเป็นส่วนตัว</string>
+    <string name="bp_about_source_title">ซอร์สโค้ดและการติดต่อ</string>
+    <string name="bp_about_source_code">ซอร์สโค้ด (Best Passafe)</string>
+    <string name="bp_about_upstream_source">โครงการต้นฉบับ (KeePassDX)</string>
 </resources>

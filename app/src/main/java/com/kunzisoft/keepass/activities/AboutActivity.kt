@@ -76,25 +76,27 @@ class AboutActivity : StylishActivity() {
         val buildTextView = findViewById<TextView>(R.id.activity_about_build)
         buildTextView.text = build
 
+        val currentYear = DateTime().year
+
+        // Best Passafe: credits to the upstream projects (GPL-3.0 attribution)
+        findViewById<TextView>(R.id.activity_about_credits_text).apply {
+            movementMethod = LinkMovementMethod.getInstance()
+            text = HtmlCompat.fromHtml(getString(R.string.html_bp_about_credits, currentYear),
+                HtmlCompat.FROM_HTML_MODE_LEGACY)
+            textDirection = View.TEXT_DIRECTION_ANY_RTL
+        }
+
         findViewById<TextView>(R.id.activity_about_licence_text).apply {
             movementMethod = LinkMovementMethod.getInstance()
-            text = HtmlCompat.fromHtml(getString(R.string.html_about_licence, DateTime().year),
+            text = HtmlCompat.fromHtml(getString(R.string.html_bp_about_license),
                     HtmlCompat.FROM_HTML_MODE_LEGACY)
             textDirection = View.TEXT_DIRECTION_ANY_RTL
-            
         }
 
         findViewById<TextView>(R.id.activity_about_privacy_text).apply {
             movementMethod = LinkMovementMethod.getInstance()
             text = HtmlCompat.fromHtml(getString(R.string.html_about_privacy),
                 HtmlCompat.FROM_HTML_MODE_LEGACY)
-        }
-
-        findViewById<TextView>(R.id.activity_about_homepage_subtitle).apply {
-            isVisible = !BuildConfig.CLOSED_STORE
-        }
-        findViewById<TextView>(R.id.activity_about_homepage_link).apply {
-            isVisible = !BuildConfig.CLOSED_STORE
         }
 
         findViewById<TextView>(R.id.activity_about_contribution_text).apply {

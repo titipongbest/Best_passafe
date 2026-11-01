@@ -192,10 +192,9 @@ object PreferencesUtil {
     }
 
     fun getStyle(context: Context): String {
-        val defaultStyleString = Stylish.defaultStyle(context)
-        val styleString = PreferenceManager.getDefaultSharedPreferences(context)
-            .getString(context.getString(R.string.setting_style_key), defaultStyleString)
-            ?: defaultStyleString
+        // Best Passafe: the theme chooser is removed, always use the default green theme
+        // (a style saved by an older version is ignored)
+        val styleString = Stylish.defaultStyle(context)
         // Return the system style
         return Stylish.retrieveEquivalentSystemStyle(context, styleString)
     }

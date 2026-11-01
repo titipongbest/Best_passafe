@@ -818,4 +818,15 @@
     <string name="check">Check</string>
     <string name="bp_tagline">Your personal password safe</string>
     <string name="bp_offline_badge">100% offline. Your data stays on this device</string>
+    <!-- Best Passafe: About screen -->
+    <string name="bp_about_description">An offline, open-source password manager for Android, compatible with the KeePass (.kdbx) database format.</string>
+    <string name="bp_about_credits_title">Credits</string>
+    <string name="html_bp_about_credits">Best Passafe © %1$d titipongbest.&lt;br/&gt;&lt;br/&gt;Best Passafe is a modified version (fork) of &lt;a href="https://github.com/Kunzisoft/KeePassDX"&gt;&lt;strong&gt;KeePassDX&lt;/strong&gt;&lt;/a&gt;, Copyright © 2009–%1$d Jeremy Jamet / Kunzisoft, which is itself derived from &lt;a href="https://github.com/bpellin/keepassdroid"&gt;KeePassDroid&lt;/a&gt; by Brian Pellin. We thank the original authors and all KeePassDX contributors.</string>
+    <string name="bp_about_trademark">KeePass and KeePassDX are names of their respective owners. Best Passafe is an independent project and is not affiliated with or endorsed by Kunzisoft or the KeePass project.</string>
+    <string name="bp_about_license_title">License</string>
+    <string name="html_bp_about_license">This program is free software: you can redistribute it and/or modify it under the terms of the &lt;a href="https://www.gnu.org/licenses/gpl-3.0.html"&gt;GNU General Public License&lt;/a&gt; as published by the Free Software Foundation, either &lt;strong&gt;version 3&lt;/strong&gt; of the License, or (at your option) any later version.&lt;br/&gt;&lt;br/&gt;This program is distributed in the hope that it will be useful, but &lt;strong&gt;WITHOUT ANY WARRANTY&lt;/strong&gt;; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</string>
+    <string name="bp_about_privacy_title">Privacy</string>
+    <string name="bp_about_source_title">Source code and contact</string>
+    <string name="bp_about_source_code">Source code (Best Passafe)</string>
+    <string name="bp_about_upstream_source">Original project (KeePassDX)</string>
 </resources>
