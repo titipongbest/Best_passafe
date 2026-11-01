@@ -69,6 +69,11 @@
     <color name="green_lightest">#a5d6a7</color>
     <color name="green_lighter">#66BB6A</color>
     <color name="green_light">#4caf50</color>
+    <!-- Best Passafe brand: vivid dark green used for app bars and the launcher icon -->
+    <color name="bp_green">#00873E</color>
+    <color name="bp_green_dark">#006B31</color>
+    <color name="bp_green_on">#FFFFFF</color>
+    <color name="bp_green_on_variant">#D7F5E1</color>
     <color name="green">#43a047</color>
     <color name="green_dark">#388e3c</color>
     <color name="green_darker">#2e7d32</color>
@@ -122,10 +127,10 @@
     <!-- Themes colors -->
     <!-- Forest -->
 
-    <color name="forest_theme_light_primary">@color/green</color>
+    <color name="forest_theme_light_primary">@color/bp_green</color>
     <color name="forest_theme_light_primaryDark">@color/green_whitest</color>
     <color name="forest_theme_light_onPrimary">@color/white</color>
-    <color name="forest_theme_light_primaryContainer">@color/green</color>
+    <color name="forest_theme_light_primaryContainer">@color/bp_green</color>
     <color name="forest_theme_light_onPrimaryContainer">@color/white</color>
     <color name="forest_theme_light_secondary">@color/orange_dark</color>
     <color name="forest_theme_light_onSecondary">@color/white</color>
@@ -139,16 +144,16 @@
     <color name="forest_theme_light_errorContainer">#FFDAD6</color>
     <color name="forest_theme_light_onError">#FFFFFF</color>
     <color name="forest_theme_light_onErrorContainer">#410002</color>
-    <color name="forest_theme_light_background">#F8FFF8</color>
+    <color name="forest_theme_light_background">#FFFFFF</color>
     <color name="forest_theme_light_onBackground">#1A1C19</color>
-    <color name="forest_theme_light_surface">#E5F6E4</color>
-    <color name="forest_theme_light_onSurface">#3C423A</color>
-    <color name="forest_theme_light_surfaceContainerLowest">#E3F3E2</color>
-    <color name="forest_theme_light_surfaceContainerLow">#E2F4E1</color>
-    <color name="forest_theme_light_surfaceContainer">#DCF1DB</color>
-    <color name="forest_theme_light_surfaceContainerHigh">#D7EFD6</color>
-    <color name="forest_theme_light_surfaceContainerHighest">#D2ECD1</color>
-    <color name="forest_theme_light_surfaceVariant">#DEE5D8</color>
+    <color name="forest_theme_light_surface">#FFFFFF</color>
+    <color name="forest_theme_light_onSurface">#1F2421</color>
+    <color name="forest_theme_light_surfaceContainerLowest">#FFFFFF</color>
+    <color name="forest_theme_light_surfaceContainerLow">#F7F8F7</color>
+    <color name="forest_theme_light_surfaceContainer">#F1F3F1</color>
+    <color name="forest_theme_light_surfaceContainerHigh">#EBEEEB</color>
+    <color name="forest_theme_light_surfaceContainerHighest">#E5E8E5</color>
+    <color name="forest_theme_light_surfaceVariant">#E3E6E3</color>
     <color name="forest_theme_light_onSurfaceVariant">#424940</color>
     <color name="forest_theme_light_outline">#72796F</color>
     <color name="forest_theme_light_inverseOnSurface">#F0F1EB</color>

@@ -346,7 +346,6 @@ class GroupActivity : DatabaseLockActivity() {
             inflateMenu(R.menu.settings)
             inflateMenu(R.menu.database_extra)
             inflateMenu(R.menu.about)
-            inflateMenu(R.menu.contribute)
             setNavigationItemSelectedListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.menu_app_settings -> {

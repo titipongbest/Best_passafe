@@ -28,6 +28,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -187,10 +188,12 @@ class EntryActivity : DatabaseLockActivity() {
         theme.obtainStyledAttributes(intArrayOf(R.attr.colorSecondary)).also { taColorSecondary ->
             mEntryViewModel.colorSecondary = taColorSecondary.getColor(0, Color.BLACK)
         }.recycle()
-        theme.obtainStyledAttributes(intArrayOf(R.attr.colorSurface)).also { taColorSurface ->
+        // Best Passafe: the entry toolbar uses the green app bar colors
+        val barTheme = ContextThemeWrapper(this, R.style.ThemeOverlay_BestPassafe_Bar).theme
+        barTheme.obtainStyledAttributes(intArrayOf(R.attr.colorSurface)).also { taColorSurface ->
             mEntryViewModel.colorSurface = taColorSurface.getColor(0, Color.BLACK)
         }.recycle()
-        theme.obtainStyledAttributes(intArrayOf(R.attr.colorOnSurface)).also { taColorOnSurface ->
+        barTheme.obtainStyledAttributes(intArrayOf(R.attr.colorOnSurface)).also { taColorOnSurface ->
             mEntryViewModel.colorOnSurface = taColorOnSurface.getColor(0, Color.BLACK)
         }.recycle()
         theme.obtainStyledAttributes(intArrayOf(android.R.attr.windowBackground)).also { taColorBackground ->

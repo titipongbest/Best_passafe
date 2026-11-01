@@ -34,7 +34,6 @@ import com.kunzisoft.keepass.BuildConfig
 import com.kunzisoft.keepass.R
 import com.kunzisoft.keepass.activities.stylish.StylishActivity
 import com.kunzisoft.keepass.utils.AppUtil.isContributingUser
-import com.kunzisoft.keepass.utils.AppUtil.isKeeProAppInstalled
 import com.kunzisoft.keepass.utils.AppUtil.openContributionLink
 import com.kunzisoft.keepass.utils.getPackageInfoCompat
 import org.joda.time.DateTime
@@ -99,6 +98,8 @@ class AboutActivity : StylishActivity() {
         }
 
         findViewById<TextView>(R.id.activity_about_contribution_text).apply {
+            // Best Passafe: no contribution / donation section
+            isVisible = false
             movementMethod = LinkMovementMethod.getInstance()
             text = HtmlCompat.fromHtml(getString(
                         if (BuildConfig.CLOSED_STORE) {
@@ -115,7 +116,8 @@ class AboutActivity : StylishActivity() {
             } else {
                 R.string.contribute
             })
-            isVisible = !BuildConfig.CLOSED_STORE || !isKeeProAppInstalled()
+            // Best Passafe: contribute button removed
+            isVisible = false
             setOnClickListener {
                 openContributionLink()
             }

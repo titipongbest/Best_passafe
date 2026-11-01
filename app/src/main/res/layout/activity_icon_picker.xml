@@ -45,6 +45,7 @@
 
         <com.kunzisoft.keepass.view.ToolbarAction
             android:id="@+id/toolbar"
+            android:theme="@style/ThemeOverlay.BestPassafe.Bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

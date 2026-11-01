@@ -211,6 +211,28 @@
         <item name="snackbarStyle">@style/KeepassDXStyle.SnackBar</item>
     </style>
 
+    <!-- Best Passafe: vivid green app bars (header / footer) with white content -->
+    <style name="ThemeOverlay.BestPassafe.Bar" parent="">
+        <item name="colorSurface">@color/bp_green</item>
+        <item name="colorOnSurface">@color/bp_green_on</item>
+        <item name="colorOnSurfaceVariant">@color/bp_green_on_variant</item>
+        <item name="colorSurfaceContainerLowest">@color/bp_green</item>
+        <item name="colorSurfaceContainerLow">@color/bp_green</item>
+        <item name="colorSurfaceContainer">@color/bp_green</item>
+        <item name="colorSurfaceContainerHigh">@color/bp_green_dark</item>
+        <item name="colorSurfaceContainerHighest">@color/bp_green_dark</item>
+        <item name="colorPrimary">@color/bp_green_on</item>
+        <item name="colorOnPrimary">@color/bp_green</item>
+        <item name="colorSecondary">@color/bp_green_on_variant</item>
+        <item name="colorOnSecondary">@color/bp_green</item>
+        <item name="colorControlNormal">@color/bp_green_on</item>
+        <item name="colorControlActivated">@color/bp_green_on</item>
+        <item name="colorOnBackground">@color/bp_green_on</item>
+        <item name="android:textColor">@color/bp_green_on</item>
+        <item name="android:textColorPrimary">@color/bp_green_on</item>
+        <item name="android:textColorSecondary">@color/bp_green_on_variant</item>
+    </style>
+
     <!-- Toolbar Style -->
     <style name="KeepassDXStyle.Toolbar.Base" parent="Widget.Material3.Toolbar.Surface" />
     <style name="KeepassDXStyle.Toolbar.v21" parent="KeepassDXStyle.Toolbar.Base" />
