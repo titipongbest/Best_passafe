@@ -675,8 +675,8 @@
     <string name="style_name_divine">Hyjnor</string>
     <string name="style_name_kunzite">Kuncit</string>
     <string name="passkey">Kyçkalim</string>
-    <string name="credential_provider_service_name">Furnizues Kredencialesh KeePassDX</string>
-    <string name="credential_provider_database_username">Bazë të dhënash KeePassDX</string>
+    <string name="credential_provider_service_name">Furnizues Kredencialesh Best Passsafe</string>
+    <string name="credential_provider_database_username">Bazë të dhënash Best Passsafe</string>
     <string name="credential_provider_locked_database_description">Përzgjidhni për shkyçje</string>
     <string name="passkey_creation_description">Ruaje kyçkalimin në një zë të ri</string>
     <string name="passkey_update_description">Përditëso kyçkalimin te %1$s</string>

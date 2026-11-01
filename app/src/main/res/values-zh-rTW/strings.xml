@@ -722,8 +722,8 @@
     <string name="education_user_verification_title">敏感操作驗證</string>
     <string name="education_user_verification_summary">更改會話的用戶驗證模式。\n\n“啟用用戶驗證”會對受保護的欄位和資料庫設定的操作進行驗證。\n“禁用用戶驗證”允許您在不進行驗證的情況下更改資料庫中的任何資料。</string>
     <string name="passkey">通行密鑰</string>
-    <string name="credential_provider_service_name">KeePassDX 憑證提供程式</string>
-    <string name="credential_provider_database_username">KeePassDX 資料庫</string>
+    <string name="credential_provider_service_name">Best Passsafe 憑證提供程式</string>
+    <string name="credential_provider_database_username">Best Passsafe 資料庫</string>
     <string name="credential_provider_locked_database_description">選擇以解鎖</string>
     <string name="passkey_credential_id">通行密鑰憑證 ID</string>
     <string name="passkey_user_handle">通行密鑰使用者句柄</string>

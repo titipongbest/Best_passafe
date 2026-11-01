@@ -16,14 +16,14 @@ android {
     val gmsPackage = "com.google.android.gms"
 
     defaultConfig {
-        applicationId = "com.kunzisoft.keepass"
+        applicationId = "com.titipongbest.bestpassafe"
         minSdk = 19
         targetSdk = 36
         versionCode = 45700
         versionName = "4.5.7"
         multiDexEnabled = true
 
-        testApplicationId = "com.kunzisoft.keepass.tests"
+        testApplicationId = "com.titipongbest.bestpassafe.tests"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "GOOGLE_PLAY_SERVICES_PACKAGE", "\"$gmsPackage\"")

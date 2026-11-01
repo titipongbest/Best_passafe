@@ -712,8 +712,8 @@
     <string name="education_user_verification_title">Verifikasi untuk tindakan sensitif</string>
     <string name="education_user_verification_summary">Ubah mode verifikasi pengguna untuk sesi ini. \\\n \\\n\\\"Verifikasi Pengguna Diaktifkan\\\" memverifikasi tindakan pada field yang dilindungi dan pengaturan basis data. \\\n\\\"Verifikasi Pengguna Dinonaktifkan\\\" memungkinkan Anda mengubah data apa pun di basis data Anda tanpa verifikasi.</string>
     <string name="passkey">Passkey</string>
-    <string name="credential_provider_service_name">Penyedia Kredensial KeePassDX</string>
-    <string name="credential_provider_database_username">Basis Data KeePassDX</string>
+    <string name="credential_provider_service_name">Penyedia Kredensial Best Passsafe</string>
+    <string name="credential_provider_database_username">Basis Data Best Passsafe</string>
     <string name="credential_provider_locked_database_description">Pilih untuk membuka kunci</string>
     <string name="passkey_creation_description">Simpan passkey di entri baru</string>
     <string name="passkey_update_description">Perbarui passkey di %1$s</string>

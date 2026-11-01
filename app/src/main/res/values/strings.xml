@@ -789,8 +789,8 @@
     <string name="hide_templates_title">Hide templates</string>
     <string name="hide_templates_summary">Templates are not shown</string>
     <string name="passkey">Passkey</string>
-    <string name="credential_provider_service_name">KeePassDX Credential Provider</string>
-    <string name="credential_provider_database_username">KeePassDX Database</string>
+    <string name="credential_provider_service_name">Best Passsafe Credential Provider</string>
+    <string name="credential_provider_database_username">Best Passsafe Database</string>
     <string name="credential_provider_locked_database_description">Select to unlock</string>
     <string name="passkey_creation_description">Save passkey in new entry</string>
     <string name="passkey_update_description">Update passkey in "%1$s"</string>
