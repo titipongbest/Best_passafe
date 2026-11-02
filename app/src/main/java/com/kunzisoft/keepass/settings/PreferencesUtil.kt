@@ -460,22 +460,53 @@ object PreferencesUtil {
      * App timeout selected in milliseconds
      */
     fun getAppTimeout(context: Context): Long {
-        return try {
-            val timeout = PreferenceManager.getDefaultSharedPreferences(context)
+        val timeout = try {
+            PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(context.getString(R.string.app_timeout_key),
                 context.getString(R.string.timeout_default)
                 )?.toLong() ?: TimeoutHelper.DEFAULT_TIMEOUT
-            if (timeout <= NEVER) NEVER else timeout
         } catch (_: NumberFormatException) {
             TimeoutHelper.DEFAULT_TIMEOUT
         }
+        // Best Passafe: never more than 5 minutes, and "never" is not allowed
+        return snapTimeout(timeout, context.resources.getStringArray(R.array.bp_lock_timeout_values))
     }
 
     fun getClipboardTimeout(context: Context): Long {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        return prefs.getString(context.getString(R.string.clipboard_timeout_key),
-            context.getString(R.string.clipboard_timeout_default))?.toLong()
-            ?: TimeoutHelper.DEFAULT_TIMEOUT
+        val timeout = try {
+            prefs.getString(context.getString(R.string.clipboard_timeout_key),
+                context.getString(R.string.clipboard_timeout_default))?.toLong()
+                ?: TimeoutHelper.DEFAULT_TIMEOUT
+        } catch (_: NumberFormatException) {
+            TimeoutHelper.DEFAULT_TIMEOUT
+        }
+        // Best Passafe: the clipboard is always cleared, after 5 minutes at most
+        return snapTimeout(timeout, context.resources.getStringArray(R.array.bp_clipboard_timeout_values))
+    }
+
+    /**
+     * Best Passafe: map a stored timeout to one of the allowed choices.
+     * Values that are disabled (<= 0) or above the maximum become the maximum (5 minutes),
+     * other values become the largest choice not above them (or the smallest choice).
+     */
+    private fun snapTimeout(timeout: Long, allowedValues: Array<String>): Long {
+        val allowed = allowedValues.map { it.toLong() }.sorted()
+        val max = allowed.last()
+        if (timeout <= 0 || timeout >= max) return max
+        return allowed.lastOrNull { it <= timeout } ?: allowed.first()
+    }
+
+    /**
+     * Best Passafe: rewrite stored lock and clipboard timeouts so they match an allowed choice.
+     */
+    fun normalizeTimeouts(context: Context) {
+        val appTimeout = getAppTimeout(context)
+        val clipboardTimeout = getClipboardTimeout(context)
+        PreferenceManager.getDefaultSharedPreferences(context).edit {
+            putString(context.getString(R.string.app_timeout_key), appTimeout.toString())
+            putString(context.getString(R.string.clipboard_timeout_key), clipboardTimeout.toString())
+        }
     }
 
     fun isOtpNotificationEnable(context: Context): Boolean {

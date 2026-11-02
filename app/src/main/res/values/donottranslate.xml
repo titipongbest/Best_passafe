@@ -391,6 +391,23 @@
     <!-- TimeOut -->
     <string name="timeout_backup_key" translatable="false">timeout_backup_key</string>
     <string name="timeout_default" translatable="false">300000</string>
+    <!-- Best Passafe: timeouts are limited to 5 minutes at most -->
+    <string-array name="bp_lock_timeout_values" translatable="false">
+        <item>15000</item>
+        <item>30000</item>
+        <item>60000</item>
+        <item>120000</item>
+        <item>180000</item>
+        <item>300000</item>
+    </string-array>
+    <string-array name="bp_clipboard_timeout_values" translatable="false">
+        <item>10000</item>
+        <item>20000</item>
+        <item>30000</item>
+        <item>60000</item>
+        <item>120000</item>
+        <item>300000</item>
+    </string-array>
     <string name="timeout_screen_off" translatable="false">1500</string>
 
     <!-- Text Size -->

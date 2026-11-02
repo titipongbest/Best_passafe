@@ -826,4 +826,20 @@
     <string name="bp_about_license_title">License</string>
     <string name="html_bp_about_license">This program is free software: you can redistribute it and/or modify it under the terms of the &lt;a href="https://www.gnu.org/licenses/gpl-3.0.html"&gt;GNU General Public License&lt;/a&gt; as published by the Free Software Foundation, either &lt;strong&gt;version 3&lt;/strong&gt; of the License, or (at your option) any later version.&lt;br/&gt;&lt;br/&gt;This program is distributed in the hope that it will be useful, but &lt;strong&gt;WITHOUT ANY WARRANTY&lt;/strong&gt;; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</string>
     <string name="bp_about_privacy_title">Privacy</string>
+    <string-array name="bp_lock_timeout_names">
+        <item>15 seconds</item>
+        <item>30 seconds</item>
+        <item>1 minute</item>
+        <item>2 minutes</item>
+        <item>3 minutes</item>
+        <item>5 minutes</item>
+    </string-array>
+    <string-array name="bp_clipboard_timeout_names">
+        <item>10 seconds</item>
+        <item>20 seconds</item>
+        <item>30 seconds</item>
+        <item>1 minute</item>
+        <item>2 minutes</item>
+        <item>5 minutes</item>
+    </string-array>
 </resources>

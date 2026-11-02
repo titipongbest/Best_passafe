@@ -729,4 +729,20 @@
     <string name="bp_about_license_title">สัญญาอนุญาต</string>
     <string name="html_bp_about_license">โปรแกรมนี้เป็นซอฟต์แวร์เสรี คุณสามารถแจกจ่ายต่อและ/หรือแก้ไขได้ภายใต้เงื่อนไขของ &lt;a href="https://www.gnu.org/licenses/gpl-3.0.html"&gt;GNU General Public License&lt;/a&gt; ที่เผยแพร่โดย Free Software Foundation &lt;strong&gt;รุ่นที่ 3&lt;/strong&gt; หรือรุ่นที่ใหม่กว่า (ตามที่คุณเลือก)&lt;br/&gt;&lt;br/&gt;โปรแกรมนี้แจกจ่ายด้วยความหวังว่าจะเป็นประโยชน์ แต่&lt;strong&gt;ไม่มีการรับประกันใดๆ&lt;/strong&gt; รวมถึงการรับประกันโดยนัยด้านความเหมาะสมในการค้าหรือความเหมาะสมสำหรับวัตถุประสงค์เฉพาะ</string>
     <string name="bp_about_privacy_title">ความเป็นส่วนตัว</string>
+    <string-array name="bp_lock_timeout_names">
+        <item>15 วินาที</item>
+        <item>30 วินาที</item>
+        <item>1 นาที</item>
+        <item>2 นาที</item>
+        <item>3 นาที</item>
+        <item>5 นาที</item>
+    </string-array>
+    <string-array name="bp_clipboard_timeout_names">
+        <item>10 วินาที</item>
+        <item>20 วินาที</item>
+        <item>30 วินาที</item>
+        <item>1 นาที</item>
+        <item>2 นาที</item>
+        <item>5 นาที</item>
+    </string-array>
 </resources>
