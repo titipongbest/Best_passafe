@@ -40,9 +40,13 @@ android {
         if (!releaseKeystore.isNullOrEmpty()) {
             create("release") {
                 storeFile = file(releaseKeystore)
-                storePassword = System.getenv("SIGNING_STORE_PASSWORD")
-                keyAlias = System.getenv("SIGNING_KEY_ALIAS")
-                keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
+                val releaseStorePassword = System.getenv("SIGNING_STORE_PASSWORD")
+                storePassword = releaseStorePassword
+                // Alias defaults to "bestpassafe" and key password to the store password
+                keyAlias = System.getenv("SIGNING_KEY_ALIAS")?.trim()?.takeIf { it.isNotEmpty() }
+                    ?: "bestpassafe"
+                keyPassword = System.getenv("SIGNING_KEY_PASSWORD")?.takeIf { it.isNotEmpty() }
+                    ?: releaseStorePassword
             }
         }
     }
