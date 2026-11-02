@@ -40,13 +40,14 @@ android {
         if (!releaseKeystore.isNullOrEmpty()) {
             create("release") {
                 storeFile = file(releaseKeystore)
-                val releaseStorePassword = System.getenv("SIGNING_STORE_PASSWORD")
-                storePassword = releaseStorePassword
-                // Alias defaults to "bestpassafe" and key password to the store password
+                // The generated keystore uses the same password for the store and the key,
+                // so either secret is enough; the alias defaults to "bestpassafe"
+                val envStorePassword = System.getenv("SIGNING_STORE_PASSWORD")?.takeIf { it.isNotEmpty() }
+                val envKeyPassword = System.getenv("SIGNING_KEY_PASSWORD")?.takeIf { it.isNotEmpty() }
+                storePassword = envStorePassword ?: envKeyPassword
+                keyPassword = envKeyPassword ?: envStorePassword
                 keyAlias = System.getenv("SIGNING_KEY_ALIAS")?.trim()?.takeIf { it.isNotEmpty() }
                     ?: "bestpassafe"
-                keyPassword = System.getenv("SIGNING_KEY_PASSWORD")?.takeIf { it.isNotEmpty() }
-                    ?: releaseStorePassword
             }
         }
     }
