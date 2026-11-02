@@ -18,6 +18,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    env:
+      HAS_SIGNING_KEY: ${{ secrets.SIGNING_KEYSTORE_BASE64 != '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,3 +45,34 @@ jobs:
           name: best-passafe-libre-debug
           path: app/build/outputs/apk/libre/debug/*.apk
           if-no-files-found: error
+
+      # Signed release APK: runs only when the signing secrets are set in the repository
+      - name: Decode release keystore
+        id: keystore
+        env:
+          SIGNING_KEYSTORE_BASE64: ${{ secrets.SIGNING_KEYSTORE_BASE64 }}
+        if: ${{ env.HAS_SIGNING_KEY == 'true' && github.event_name != 'pull_request' }}
+        run: |
+          echo "$SIGNING_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+          echo "file=$RUNNER_TEMP/release.jks" >> "$GITHUB_OUTPUT"
+
+      - name: Build libre release APK (signed)
+        if: ${{ steps.keystore.outputs.file != '' }}
+        env:
+          SIGNING_KEYSTORE_FILE: ${{ steps.keystore.outputs.file }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        run: ./gradlew --no-daemon :app:assembleLibreRelease
+
+      - name: Upload signed release APK
+        if: ${{ steps.keystore.outputs.file != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: best-passafe-libre-release
+          path: app/build/outputs/apk/libre/release/*.apk
+          if-no-files-found: error
+
+      - name: Remove keystore
+        if: ${{ always() && steps.keystore.outputs.file != '' }}
+        run: rm -f "${{ steps.keystore.outputs.file }}"

@@ -33,8 +33,25 @@ android {
         manifestPlaceholders["googlePlayServicesPackage"] = gmsPackage
     }
 
+    // Best Passafe: release signing from environment variables (set by GitHub Actions secrets).
+    // Without them, release builds stay unsigned.
+    val releaseKeystore = System.getenv("SIGNING_KEYSTORE_FILE")
+    signingConfigs {
+        if (!releaseKeystore.isNullOrEmpty()) {
+            create("release") {
+                storeFile = file(releaseKeystore)
+                storePassword = System.getenv("SIGNING_STORE_PASSWORD")
+                keyAlias = System.getenv("SIGNING_KEY_ALIAS")
+                keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
+            if (!releaseKeystore.isNullOrEmpty()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
