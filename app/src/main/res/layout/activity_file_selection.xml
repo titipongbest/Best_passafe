@@ -197,6 +197,16 @@
                 app:iconPadding="10dp"
                 android:focusable="true"
                 style="@style/KeepassDXStyle.Button.Secondary"/>
+
+            <TextView
+                android:id="@+id/file_selection_app_version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                tools:text="Version 4.5.7"/>
         </LinearLayout>
 
         <include layout="@layout/view_screenshot_mode_banner" />

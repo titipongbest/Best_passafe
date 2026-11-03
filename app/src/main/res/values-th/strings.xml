@@ -745,4 +745,5 @@
         <item>2 นาที</item>
         <item>5 นาที</item>
     </string-array>
+    <string name="bp_version_label">เวอร์ชัน %1$s</string>
 </resources>

@@ -842,4 +842,5 @@
         <item>2 minutes</item>
         <item>5 minutes</item>
     </string-array>
+    <string name="bp_version_label">Version %1$s</string>
 </resources>

@@ -30,6 +30,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
@@ -42,6 +43,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.snackbar.Snackbar
+import com.kunzisoft.keepass.BuildConfig
 import com.kunzisoft.keepass.R
 import com.kunzisoft.keepass.activities.dialogs.SetMainCredentialDialogFragment
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper
@@ -140,6 +142,10 @@ class FileDatabaseSelectActivity : DatabaseModeActivity() {
 
         // Special title
         specialTitle = findViewById(R.id.file_selection_title_part_3)
+
+        // Best Passafe: app version under the buttons
+        findViewById<TextView>(R.id.file_selection_app_version)?.text =
+            getString(R.string.bp_version_label, BuildConfig.VERSION_NAME)
 
         // Create database button
         createDatabaseButtonView = findViewById(R.id.create_database_button)
