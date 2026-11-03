@@ -36,6 +36,9 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Unit tests (database save safety)
+        run: ./gradlew --no-daemon :database:testDebugUnitTest --tests "com.kunzisoft.keepass.database.file.DatabaseBackupManagerTest"
+
       - name: Build libre debug APK
         run: ./gradlew --no-daemon :app:assembleLibreDebug
 

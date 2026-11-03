@@ -141,3 +141,16 @@ open class DatabaseOutputException : DatabaseException {
     constructor(string: String, e: Exception) : super(string, e)
     constructor(e: Exception) : super(e)
 }
+
+/**
+ * The freshly encrypted database could not be decrypted again, the original file was not touched.
+ */
+class SaveVerificationDatabaseException(e: Exception) : DatabaseOutputException(e)
+
+/**
+ * The file read back after writing does not match what was written.
+ * [restoredFromBackup] is true if the previous version was put back in place.
+ */
+class WriteVerificationDatabaseException(
+    val restoredFromBackup: Boolean
+) : DatabaseOutputException("Database file read back does not match written data")

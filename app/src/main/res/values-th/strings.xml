@@ -746,4 +746,12 @@
         <item>5 นาที</item>
     </string-array>
     <string name="bp_version_label">เวอร์ชัน %1$s</string>
+    <string name="error_save_database_verification">บันทึกฐานข้อมูลไม่สำเร็จ ไฟล์ที่เข้ารหัสแล้วตรวจสอบไม่ผ่าน ไฟล์เดิมของคุณไม่ถูกแก้ไข</string>
+    <string name="error_save_database_write">ยืนยันไม่ได้ว่าบันทึกฐานข้อมูลสำเร็จ อย่าเพิ่งปิดแอป ลองบันทึกอีกครั้ง</string>
+    <string name="error_save_database_write_restored">บันทึกฐานข้อมูลไม่สมบูรณ์ แอปกู้คืนเวอร์ชันก่อนหน้าให้แล้ว การแก้ไขของคุณยังอยู่ ลองบันทึกอีกครั้ง</string>
+    <string name="menu_database_backups">สำเนาสำรองฐานข้อมูล</string>
+    <string name="database_backups_empty">ยังไม่มีสำเนาสำรอง แอปจะเก็บเวอร์ชันก่อนหน้าไว้ทุกครั้งที่บันทึก</string>
+    <string name="database_backups_explanation">เลือกเวอร์ชันเพื่อบันทึกเป็นไฟล์ใหม่ เปิดได้ด้วยรหัสผ่านหลักที่ใช้ในตอนนั้น</string>
+    <string name="database_backup_exported">บันทึกสำเนาแล้ว</string>
+    <string name="database_backup_export_error">บันทึกสำเนาไม่สำเร็จ</string>
 </resources>

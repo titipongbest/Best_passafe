@@ -41,9 +41,12 @@ import com.kunzisoft.keepass.database.element.template.TemplateEngine
 import com.kunzisoft.keepass.database.exception.DatabaseException
 import com.kunzisoft.keepass.database.exception.DatabaseInputException
 import com.kunzisoft.keepass.database.exception.DatabaseOutputException
+import com.kunzisoft.keepass.database.exception.SaveVerificationDatabaseException
+import com.kunzisoft.keepass.database.exception.WriteVerificationDatabaseException
 import com.kunzisoft.keepass.database.exception.FileNotFoundDatabaseException
 import com.kunzisoft.keepass.database.exception.MergeDatabaseKDBException
 import com.kunzisoft.keepass.database.exception.SignatureDatabaseException
+import com.kunzisoft.keepass.database.file.DatabaseBackupManager
 import com.kunzisoft.keepass.database.file.DatabaseHeaderKDB
 import com.kunzisoft.keepass.database.file.DatabaseHeaderKDBX
 import com.kunzisoft.keepass.database.file.DatabaseHeaderKDBX.Companion.FILE_VERSION_40
@@ -62,6 +65,8 @@ import com.kunzisoft.keepass.utils.readBytes4ToUInt
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.nio.charset.Charset
@@ -782,13 +787,26 @@ open class Database {
         }
     }
 
+    /**
+     * Save the database:
+     * 1. encrypt it in [cacheFile] (the destination is not touched if this fails),
+     * 2. decrypt [cacheFile] again to verify it opens with the current key,
+     * 3. call [backupCurrentDatabase] so the version on disk can be restored later,
+     * 4. copy [cacheFile] to [databaseOutputStream],
+     * 5. if [databaseInputStream] is given, read the destination back and compare its SHA-256
+     *    with [cacheFile]. On mismatch, write once more; if it still does not match and the
+     *    destination does not open, [restoreBackup] puts the previous version back.
+     */
     @Throws(DatabaseOutputException::class)
     fun saveData(
         cacheFile: File,
         databaseOutputStream: () -> OutputStream?,
         masterCredential: MasterCredential?,
         challengeResponseRetriever: (HardwareKey, ByteArray?) -> ByteArray,
-        limits: Limits
+        limits: Limits,
+        databaseInputStream: (() -> InputStream?)? = null,
+        backupCurrentDatabase: (() -> Unit)? = null,
+        restoreBackup: (() -> Boolean)? = null
     ) {
         try {
             kdfEngine?.checkLimits(limits)
@@ -826,12 +844,34 @@ open class Database {
                     }
                 }
             }
+            // Make sure the encrypted file can be opened before replacing anything
+            try {
+                verifyDatabaseFile(cacheFile, limits)
+            } catch (e: Exception) {
+                Log.e(TAG, "Encrypted database cannot be decrypted, save aborted", e)
+                throw SaveVerificationDatabaseException(e)
+            }
+            // Keep the version currently on disk
+            try {
+                backupCurrentDatabase?.invoke()
+            } catch (e: Exception) {
+                Log.e(TAG, "Unable to backup the current database", e)
+            }
+            val expectedHash = DatabaseBackupManager.sha256(cacheFile)
             // Copy from the cache to the final stream
-            databaseOutputStream.invoke()?.use { outputStream ->
-                cacheFile.inputStream().use { inputStream ->
-                    inputStream.readAllBytes { buffer ->
-                        outputStream.write(buffer)
-                    }
+            writeCacheFile(cacheFile, databaseOutputStream)
+            if (databaseInputStream != null
+                && !destinationMatches(databaseInputStream, expectedHash)) {
+                Log.w(TAG, "Database read back does not match, write again")
+                writeCacheFile(cacheFile, databaseOutputStream)
+                if (!destinationMatches(databaseInputStream, expectedHash)) {
+                    val destinationOpens = destinationOpens(
+                        databaseInputStream, cacheFile, limits
+                    )
+                    val restored = !destinationOpens && restoreBackup?.invoke() == true
+                    Log.e(TAG, "Database read back does not match after retry, " +
+                            "destination opens: $destinationOpens, backup restored: $restored")
+                    throw WriteVerificationDatabaseException(restored)
                 }
             }
         } catch (e: Exception) {
@@ -846,6 +886,108 @@ open class Database {
             } catch (e: Exception) {
                 Log.e(TAG, "Cache file $cacheFile cannot be deleted", e)
             }
+        }
+    }
+
+    private fun writeCacheFile(cacheFile: File, databaseOutputStream: () -> OutputStream?) {
+        val outputStream = databaseOutputStream.invoke()
+            ?: throw IOException("Unable to open the database output stream")
+        outputStream.use { output ->
+            cacheFile.inputStream().use { inputStream ->
+                inputStream.readAllBytes { buffer ->
+                    output.write(buffer)
+                }
+            }
+            output.flush()
+            if (output is FileOutputStream) {
+                output.fd.sync()
+            }
+        }
+    }
+
+    /**
+     * True if the destination content has [expectedHash], or if it cannot be read back at all
+     * (some providers are write only, the check is then skipped).
+     */
+    private fun destinationMatches(
+        databaseInputStream: () -> InputStream?,
+        expectedHash: ByteArray
+    ): Boolean {
+        val inputStream = try {
+            databaseInputStream.invoke()
+        } catch (e: Exception) {
+            Log.w(TAG, "Unable to read the database back, verification skipped", e)
+            null
+        } ?: return true
+        return inputStream.use {
+            DatabaseBackupManager.sha256(it).contentEquals(expectedHash)
+        }
+    }
+
+    private fun destinationOpens(
+        databaseInputStream: () -> InputStream?,
+        cacheFile: File,
+        limits: Limits
+    ): Boolean {
+        val readBackFile = File(cacheFile.parentFile, cacheFile.name + ".check")
+        return try {
+            val inputStream = databaseInputStream.invoke() ?: return false
+            inputStream.use { input ->
+                readBackFile.outputStream().use { output -> input.copyTo(output) }
+            }
+            verifyDatabaseFile(readBackFile, limits)
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Database on disk cannot be opened", e)
+            false
+        } finally {
+            readBackFile.delete()
+        }
+    }
+
+    /**
+     * Decrypt and parse [file] with the master key currently in memory,
+     * throws if the file is not a valid database for this key.
+     */
+    @Throws(Exception::class)
+    fun verifyDatabaseFile(file: File, limits: Limits) {
+        val databaseToVerify = Database()
+        // Own directory so attachments of the verified copy never touch the open database cache
+        val binaryDirectory = File(file.parentFile, file.name + ".bin").apply { mkdirs() }
+        try {
+            readDatabaseStream(file.inputStream(),
+                { databaseInputStream ->
+                    val databaseKDB = DatabaseKDB().apply {
+                        binaryCache.cacheDirectory = binaryDirectory
+                    }
+                    DatabaseInputKDB(databaseKDB)
+                        .openDatabase(databaseInputStream, null) {
+                            this@Database.mDatabaseKDB?.let { thisDatabaseKDB ->
+                                databaseKDB.copyMasterKeyFrom(thisDatabaseKDB)
+                            } ?: throw IOException("Database type changed")
+                        }
+                    databaseToVerify.setDatabaseKDB(databaseKDB)
+                },
+                { databaseInputStream ->
+                    val databaseKDBX = DatabaseKDBX().apply {
+                        binaryCache.cacheDirectory = binaryDirectory
+                    }
+                    DatabaseInputKDBX(databaseKDBX).apply {
+                        setMethodToCheckMemoryForBinary { memoryWanted ->
+                            limits.isMemorySufficientForBinary(memoryWanted)
+                        }
+                        openDatabase(databaseInputStream, null) {
+                            this@Database.mDatabaseKDBX?.let { thisDatabaseKDBX ->
+                                databaseKDBX.copyMasterKeyFrom(thisDatabaseKDBX)
+                            } ?: throw IOException("Database type changed")
+                        }
+                    }
+                    databaseToVerify.setDatabaseKDBX(databaseKDBX)
+                }
+            )
+        } finally {
+            databaseToVerify.clearAndClose()
+            binaryDirectory.deleteRecursively()
         }
     }
 

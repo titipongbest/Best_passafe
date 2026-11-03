@@ -843,4 +843,12 @@
         <item>5 minutes</item>
     </string-array>
     <string name="bp_version_label">Version %1$s</string>
+    <string name="error_save_database_verification">Could not save the database: the encrypted file failed verification. Your file was not changed.</string>
+    <string name="error_save_database_write">Could not confirm the database was written correctly. Do not close the app, try saving again.</string>
+    <string name="error_save_database_write_restored">The database was not written correctly, the previous version was restored. Your changes are still open, try saving again.</string>
+    <string name="menu_database_backups">Database backups</string>
+    <string name="database_backups_empty">No backup yet. A backup of the previous version is kept each time a database is saved.</string>
+    <string name="database_backups_explanation">Pick a version to save it as a new file. It opens with the master key that was valid at that time.</string>
+    <string name="database_backup_exported">Backup saved</string>
+    <string name="database_backup_export_error">Could not save the backup</string>
 </resources>
