@@ -758,4 +758,7 @@
     <string name="overwrite_existing_file_message">“%1$s” มีข้อมูลอยู่แล้ว ถ้าทำต่อ ไฟล์นี้จะถูกแทนที่ และกู้ข้อมูลเดิมคืนไม่ได้ถ้าไม่มีสำเนาไว้ ถ้าต้องการเก็บไว้ทั้งสองไฟล์ ให้ยกเลิกแล้วเลือกชื่อหรือโฟลเดอร์อื่น</string>
     <string name="overwrite_existing_file_confirm">เขียนทับ</string>
     <string name="overwrite_existing_file_cancelled">ยกเลิกแล้ว ไฟล์เดิมไม่ถูกแก้ไข</string>
+    <string name="folder_color">สีโฟลเดอร์</string>
+    <string name="folder_color_none">ไม่มีสี</string>
+    <string name="folder_color_custom">สีอื่น…</string>
 </resources>

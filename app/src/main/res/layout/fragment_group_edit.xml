@@ -20,6 +20,7 @@
 <androidx.core.widget.NestedScrollView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 	<LinearLayout
@@ -36,6 +37,39 @@
 			android:layout_gravity="center"
 			android:layout_margin="@dimen/default_margin"
 			android:src="@drawable/ic_blank_32dp"/>
+		<!-- Best Passafe: folder color -->
+		<LinearLayout
+			android:id="@+id/group_edit_color_container"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/default_margin"
+			android:orientation="vertical">
+			<TextView
+				android:id="@+id/group_edit_color_label"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="4dp"
+				android:text="@string/folder_color"
+				android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+			<HorizontalScrollView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:scrollbars="none">
+				<LinearLayout
+					android:id="@+id/group_edit_color_swatches"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:gravity="center_vertical"
+					android:orientation="horizontal" />
+			</HorizontalScrollView>
+			<com.google.android.material.button.MaterialButton
+				android:id="@+id/group_edit_color_custom_button"
+				style="@style/Widget.Material3.Button.TextButton.Icon"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/folder_color_custom"
+				app:icon="@drawable/ic_color_background_white_24dp" />
+		</LinearLayout>
 		<com.google.android.material.textfield.TextInputLayout
 			android:id="@+id/group_edit_name_container"
 			android:layout_width="match_parent"

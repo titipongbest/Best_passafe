@@ -21,6 +21,8 @@ package com.kunzisoft.keepass.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.kunzisoft.keepass.database.element.CustomData
+import com.kunzisoft.keepass.database.element.CustomDataItem
 import com.kunzisoft.keepass.database.element.Database
 import com.kunzisoft.keepass.database.element.GroupId
 import com.kunzisoft.keepass.database.element.icon.IconImageStandard
@@ -41,6 +43,31 @@ open class GroupInfo : NodeInfo {
     var searchable: Boolean? = null
     var enableAutoType: Boolean? = null
     var defaultAutoTypeSequence: String = ""
+
+    /**
+     * Best Passafe: color chosen for the folder, stored in the group CustomData
+     * as "#RRGGBB" so the database stays a standard .kdbx file
+     * (other KeePass apps keep the value and simply ignore it).
+     * null means no custom color.
+     */
+    var color: Int?
+        get() = parseColor(customData.get(CUSTOM_DATA_COLOR_KEY)?.value)
+        set(value) {
+            // Work on a copy, the current CustomData can be shared with the database group
+            customData = CustomData(customData).apply {
+                if (value == null) {
+                    remove(CUSTOM_DATA_COLOR_KEY)
+                } else {
+                    put(
+                        CustomDataItem(
+                            CUSTOM_DATA_COLOR_KEY,
+                            "#" + Integer.toHexString(0xFFFFFF and value)
+                                .uppercase().padStart(6, '0')
+                        )
+                    )
+                }
+            }
+        }
 
     /**
      * Default constructor.
@@ -137,6 +164,23 @@ open class GroupInfo : NodeInfo {
     }
 
     companion object CREATOR : Parcelable.Creator<GroupInfo> {
+
+        const val CUSTOM_DATA_COLOR_KEY = "BestPassafe.FolderColor"
+
+        /**
+         * Read a "#RRGGBB" (or "#AARRGGBB") string, null if absent or invalid.
+         */
+        private fun parseColor(value: String?): Int? {
+            val hex = value?.trim()?.removePrefix("#") ?: return null
+            if (hex.length != 6 && hex.length != 8)
+                return null
+            val parsed = hex.toLongOrNull(16) ?: return null
+            return if (hex.length == 6)
+                (0xFF000000L or parsed).toInt()
+            else
+                parsed.toInt()
+        }
+
         override fun createFromParcel(parcel: Parcel): GroupInfo {
             return GroupInfo(parcel)
         }
