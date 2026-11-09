@@ -851,4 +851,8 @@
     <string name="database_backups_explanation">Pick a version to save it as a new file. It opens with the master key that was valid at that time.</string>
     <string name="database_backup_exported">Backup saved</string>
     <string name="database_backup_export_error">Could not save the backup</string>
+    <string name="overwrite_existing_file_title">Replace existing file?</string>
+    <string name="overwrite_existing_file_message">“%1$s” already has content. Continuing replaces it and the old data cannot be recovered unless you have a copy. To keep both, cancel and pick a different name or folder.</string>
+    <string name="overwrite_existing_file_confirm">Replace</string>
+    <string name="overwrite_existing_file_cancelled">Cancelled, the existing file was not changed</string>
 </resources>

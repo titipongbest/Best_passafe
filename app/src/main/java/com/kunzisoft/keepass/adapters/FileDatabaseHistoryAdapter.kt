@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.SortedList
 import androidx.recyclerview.widget.SortedListAdapterCallback
 import com.kunzisoft.keepass.R
 import com.kunzisoft.keepass.model.DatabaseFile
+import com.kunzisoft.keepass.utils.DatabaseLocationHint
 import com.kunzisoft.keepass.view.collapse
 import com.kunzisoft.keepass.view.expand
 
@@ -112,6 +113,22 @@ class FileDatabaseHistoryAdapter(context: Context)
         // File alias
         holder.fileAlias.text = databaseFile.databaseAlias
 
+        // Same name as another database: show where this one is, to avoid opening the wrong one
+        val nameShared = DatabaseLocationHint.isNameShared(
+            databaseFile.databaseAlias,
+            mListPosition.map { it.databaseFile.databaseAlias }
+        )
+        val locationHint = if (nameShared) {
+            DatabaseLocationHint.describe(
+                databaseFile.databaseDecodedPath,
+                databaseFile.databaseLastModified
+            )
+        } else null
+        holder.fileLocationHint.apply {
+            text = locationHint
+            visibility = if (locationHint.isNullOrEmpty()) View.GONE else View.VISIBLE
+        }
+
         // File path
         holder.filePath.text = databaseFile.databaseDecodedPath
 
@@ -159,8 +176,8 @@ class FileDatabaseHistoryAdapter(context: Context)
 
             // Finish save mode
             holder.fileMainSwitcher.showPrevious()
-            // Refresh current position to show alias
-            notifyItemChanged(position)
+            // Refresh all items, the new alias can make names shared or unique
+            refreshSharedNameHints()
         }
 
         // Open alias modification
@@ -198,6 +215,14 @@ class FileDatabaseHistoryAdapter(context: Context)
         return mSortedListDatabaseFiles.size()
     }
 
+    /**
+     * A change to one item can change which names are shared by other items
+     */
+    private fun refreshSharedNameHints() {
+        if (itemCount > 0)
+            notifyItemRangeChanged(0, itemCount)
+    }
+
     fun clearDatabaseFileHistoryList() {
         mListPosition.clear()
         mSortedListDatabaseFiles.clear()
@@ -207,6 +232,7 @@ class FileDatabaseHistoryAdapter(context: Context)
         val superToAdd = SuperDatabaseFile(fileDatabaseHistoryToAdd)
         mListPosition.add(0, superToAdd)
         mSortedListDatabaseFiles.add(superToAdd)
+        refreshSharedNameHints()
     }
 
     fun updateDatabaseFileHistory(fileDatabaseHistoryToUpdate: DatabaseFile) {
@@ -216,6 +242,7 @@ class FileDatabaseHistoryAdapter(context: Context)
             mListPosition.add(index, superToUpdate)
         }
         mSortedListDatabaseFiles.updateItemAt(index, superToUpdate)
+        refreshSharedNameHints()
     }
 
     fun deleteDatabaseFileHistory(fileDatabaseHistoryToDelete: DatabaseFile) {
@@ -223,6 +250,7 @@ class FileDatabaseHistoryAdapter(context: Context)
         val index = mListPosition.indexOf(superToDelete)
         mListPosition.remove(superToDelete)
         mSortedListDatabaseFiles.removeItemAt(index)
+        refreshSharedNameHints()
     }
 
     fun replaceAllDatabaseFileHistoryList(listFileDatabaseHistoryToAdd: List<DatabaseFile>) {
@@ -232,6 +260,7 @@ class FileDatabaseHistoryAdapter(context: Context)
         mListPosition.clear()
         mListPosition.addAll(superMapToReplace)
         mSortedListDatabaseFiles.replaceAll(superMapToReplace)
+        refreshSharedNameHints()
     }
 
     fun setDefaultDatabase(databaseUri: Uri?) {
@@ -304,6 +333,7 @@ class FileDatabaseHistoryAdapter(context: Context)
 
         var defaultFileButton: CompoundButton = itemView.findViewById(R.id.default_file_button)
         var fileAlias: TextView = itemView.findViewById(R.id.file_alias)
+        var fileLocationHint: TextView = itemView.findViewById(R.id.file_location_hint)
         var fileInformationButton: ImageView = itemView.findViewById(R.id.file_information_button)
 
         var fileMainSwitcher: ViewSwitcher = itemView.findViewById(R.id.file_main_switcher)

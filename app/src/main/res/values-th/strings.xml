@@ -754,4 +754,8 @@
     <string name="database_backups_explanation">เลือกเวอร์ชันเพื่อบันทึกเป็นไฟล์ใหม่ เปิดได้ด้วยรหัสผ่านหลักที่ใช้ในตอนนั้น</string>
     <string name="database_backup_exported">บันทึกสำเนาแล้ว</string>
     <string name="database_backup_export_error">บันทึกสำเนาไม่สำเร็จ</string>
+    <string name="overwrite_existing_file_title">เขียนทับไฟล์เดิมหรือไม่</string>
+    <string name="overwrite_existing_file_message">“%1$s” มีข้อมูลอยู่แล้ว ถ้าทำต่อ ไฟล์นี้จะถูกแทนที่ และกู้ข้อมูลเดิมคืนไม่ได้ถ้าไม่มีสำเนาไว้ ถ้าต้องการเก็บไว้ทั้งสองไฟล์ ให้ยกเลิกแล้วเลือกชื่อหรือโฟลเดอร์อื่น</string>
+    <string name="overwrite_existing_file_confirm">เขียนทับ</string>
+    <string name="overwrite_existing_file_cancelled">ยกเลิกแล้ว ไฟล์เดิมไม่ถูกแก้ไข</string>
 </resources>
