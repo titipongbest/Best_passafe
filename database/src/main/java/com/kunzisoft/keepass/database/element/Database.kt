@@ -1431,6 +1431,13 @@ open class Database {
     }
 
     /**
+     * Best Passafe: folder colors are stored in the group CustomData, only available in KDBX
+     */
+    fun allowGroupColor(): Boolean {
+        return mDatabaseKDBX != null
+    }
+
+    /**
      * Remove oldest history for each entry if more than max items or max memory
      */
     fun removeOldestHistoryForEachEntry() {

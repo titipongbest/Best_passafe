@@ -20,18 +20,23 @@
 package com.kunzisoft.keepass.activities.dialogs
 
 import android.app.Dialog
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import com.kunzisoft.keepass.R
 import com.kunzisoft.keepass.activities.dialogs.GroupEditDialogFragment.EditGroupDialogAction.CREATION
@@ -46,6 +51,7 @@ import com.kunzisoft.keepass.utils.getParcelableCompat
 import com.kunzisoft.keepass.view.DateTimeEditFieldView
 import com.kunzisoft.keepass.view.InheritedCompletionView
 import com.kunzisoft.keepass.view.TagsCompletionView
+import com.kunzisoft.keepass.viewmodels.ColorPickerViewModel
 import com.kunzisoft.keepass.viewmodels.GroupEditViewModel
 import com.kunzisoft.keepass.viewmodels.NodeEditViewModel
 import com.tokenautocomplete.FilteredArrayAdapter
@@ -54,6 +60,7 @@ import kotlinx.coroutines.launch
 class GroupEditDialogFragment : DatabaseDialogFragment() {
 
     private val mGroupEditViewModel: GroupEditViewModel by activityViewModels()
+    private val mColorPickerViewModel: ColorPickerViewModel by activityViewModels()
 
     private var mPopulateIconMethod: ((ImageView, IconImage) -> Unit)? = null
     private var mEditGroupDialogAction = NONE
@@ -61,6 +68,9 @@ class GroupEditDialogFragment : DatabaseDialogFragment() {
 
     private lateinit var iconButtonView: ImageView
     private var mIconColor: Int = 0
+    private lateinit var colorContainerView: ViewGroup
+    private lateinit var colorSwatchesView: LinearLayout
+    private lateinit var colorCustomButton: MaterialButton
     private lateinit var nameTextLayoutView: TextInputLayout
     private lateinit var nameTextView: TextView
     private lateinit var notesTextLayoutView: TextInputLayout
@@ -117,6 +127,12 @@ class GroupEditDialogFragment : DatabaseDialogFragment() {
                         }
                     }
                 }
+                launch {
+                    mColorPickerViewModel.colorPicked.collect { color ->
+                        mGroupInfo.color = color
+                        refreshColorViews()
+                    }
+                }
             }
         }
     }
@@ -125,7 +141,7 @@ class GroupEditDialogFragment : DatabaseDialogFragment() {
         super.onDatabaseRetrieved(database)
 
         mPopulateIconMethod = { imageView, icon ->
-            database.iconDrawableFactory.assignDatabaseIcon(imageView, icon, mIconColor)
+            database.iconDrawableFactory.assignDatabaseIcon(imageView, icon, currentIconColor())
         }
         mPopulateIconMethod?.invoke(iconButtonView, mGroupInfo.icon)
 
@@ -150,12 +166,16 @@ class GroupEditDialogFragment : DatabaseDialogFragment() {
             setAdapter(tagsAdapter)
         }
         tagsContainerView.visibility = if (database.allowTags()) View.VISIBLE else View.GONE
+        colorContainerView.visibility = if (database.allowGroupColor()) View.VISIBLE else View.GONE
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let { activity ->
             val root = activity.layoutInflater.inflate(R.layout.fragment_group_edit, null)
             iconButtonView = root.findViewById(R.id.group_edit_icon_button)
+            colorContainerView = root.findViewById(R.id.group_edit_color_container)
+            colorSwatchesView = root.findViewById(R.id.group_edit_color_swatches)
+            colorCustomButton = root.findViewById(R.id.group_edit_color_custom_button)
             nameTextLayoutView = root.findViewById(R.id.group_edit_name_container)
             nameTextView = root.findViewById(R.id.group_edit_name)
             notesTextLayoutView = root.findViewById(R.id.group_edit_note_container)
@@ -195,6 +215,13 @@ class GroupEditDialogFragment : DatabaseDialogFragment() {
             iconButtonView.setOnClickListener { _ ->
                 mGroupEditViewModel.requestIconSelection(mGroupInfo.icon)
             }
+            buildColorSwatches()
+            colorCustomButton.setOnClickListener {
+                ColorPickerDialogFragment.newInstance(mGroupInfo.color)
+                    .show(parentFragmentManager, TAG_COLOR_PICKER)
+            }
+            refreshColorViews()
+
             expirationView.setOnDateClickListener = { dateInstant ->
                 mGroupEditViewModel.requestDateTimeSelection(dateInstant)
             }
@@ -232,6 +259,69 @@ class GroupEditDialogFragment : DatabaseDialogFragment() {
                 }
             }
         }
+    }
+
+    private fun currentIconColor(): Int {
+        return mGroupInfo.color ?: mIconColor
+    }
+
+    /**
+     * Best Passafe: quick color choices, the first one removes the folder color
+     */
+    private fun buildColorSwatches() {
+        colorSwatchesView.removeAllViews()
+        val size = resources.getDimensionPixelSize(R.dimen.group_color_swatch_size)
+        val margin = resources.getDimensionPixelSize(R.dimen.group_color_swatch_margin)
+        (listOf<Int?>(null) + PRESET_COLORS).forEach { color ->
+            val swatch = ImageView(requireContext()).apply {
+                layoutParams = LinearLayout.LayoutParams(size, size).apply {
+                    setMargins(margin, margin, margin, margin)
+                }
+                tag = color
+                isClickable = true
+                isFocusable = true
+                contentDescription = if (color == null)
+                    getString(R.string.folder_color_none)
+                else
+                    "#" + Integer.toHexString(0xFFFFFF and color).uppercase().padStart(6, '0')
+                if (color == null) {
+                    setImageResource(R.drawable.ic_block_white_24dp)
+                    scaleType = ImageView.ScaleType.CENTER_INSIDE
+                    ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(mIconColor))
+                }
+                setOnClickListener {
+                    mGroupInfo.color = color
+                    refreshColorViews()
+                }
+            }
+            colorSwatchesView.addView(swatch)
+        }
+    }
+
+    private fun refreshColorViews() {
+        if (!::colorSwatchesView.isInitialized)
+            return
+        val selectedColor = mGroupInfo.color
+        val strokeWidth = resources.getDimensionPixelSize(R.dimen.group_color_swatch_stroke)
+        for (i in 0 until colorSwatchesView.childCount) {
+            val swatch = colorSwatchesView.getChildAt(i)
+            val color = swatch.tag as Int?
+            val checked = color == selectedColor
+                    || (color != null && selectedColor != null
+                    && (0xFFFFFF and color) == (0xFFFFFF and selectedColor))
+            swatch.background = GradientDrawable().apply {
+                shape = GradientDrawable.OVAL
+                setColor(color ?: Color.TRANSPARENT)
+                if (checked) {
+                    setStroke(strokeWidth * 2, mIconColor)
+                } else if (color == null) {
+                    setStroke(strokeWidth, mIconColor)
+                }
+            }
+        }
+        colorCustomButton.iconTint = ColorStateList.valueOf(currentIconColor())
+        if (::iconButtonView.isInitialized)
+            mPopulateIconMethod?.invoke(iconButtonView, mGroupInfo.icon)
     }
 
     private fun populateInfoToViews(groupInfo: GroupInfo) {
@@ -305,6 +395,21 @@ class GroupEditDialogFragment : DatabaseDialogFragment() {
     companion object {
 
         const val TAG_CREATE_GROUP = "TAG_CREATE_GROUP"
+        private const val TAG_COLOR_PICKER = "TAG_GROUP_COLOR_PICKER"
+
+        // Best Passafe: folder colors offered in one tap
+        private val PRESET_COLORS = listOf(
+            0xFFE53935.toInt(), // red
+            0xFFFB8C00.toInt(), // orange
+            0xFFFDD835.toInt(), // yellow
+            0xFF43A047.toInt(), // green
+            0xFF00ACC1.toInt(), // teal
+            0xFF1E88E5.toInt(), // blue
+            0xFF8E24AA.toInt(), // purple
+            0xFFD81B60.toInt(), // pink
+            0xFF6D4C41.toInt(), // brown
+            0xFF757575.toInt(), // grey
+        )
         private const val KEY_ACTION_ID = "KEY_ACTION_ID"
         private const val KEY_GROUP_INFO = "KEY_GROUP_INFO"
 
