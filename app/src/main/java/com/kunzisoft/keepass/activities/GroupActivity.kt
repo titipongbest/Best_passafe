@@ -63,6 +63,7 @@ import com.kunzisoft.keepass.activities.fragments.SearchFragment
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper.createDatabaseFile
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper.openFile
+import com.kunzisoft.keepass.activities.helpers.ExistingFileOverwriteHelper.confirmOverwriteIfNotEmpty
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper.registerCreateDatabaseFile
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper.registerOpenFile
 import com.kunzisoft.keepass.activities.legacy.DatabaseLockActivity
@@ -171,7 +172,7 @@ class GroupActivity : DatabaseLockActivity() {
     }
     private var createDatabaseBackupFileResultLauncher: ActivityResultLauncher<String> = registerCreateDatabaseFile { uri ->
         uri?.let {
-            saveDatabaseTo(it)
+            confirmOverwriteIfNotEmpty(it, onConfirm = { saveDatabaseTo(it) })
         }
     }
 

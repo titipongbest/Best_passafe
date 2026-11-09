@@ -50,6 +50,7 @@ import com.kunzisoft.keepass.activities.dialogs.SetMainCredentialDialogFragment
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper.createDatabaseFile
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper.openFile
+import com.kunzisoft.keepass.activities.helpers.ExistingFileOverwriteHelper.confirmOverwriteIfNotEmpty
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper.registerCreateDatabaseFile
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper.registerCreateFile
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper.registerOpenFile
@@ -116,9 +117,19 @@ class FileDatabaseSelectActivity : DatabaseModeActivity() {
     }
     private var createDatabaseFileResultLauncher: ActivityResultLauncher<String> = registerCreateDatabaseFile { uri ->
         mDatabaseFileUri = uri
-        if (mDatabaseFileUri != null) {
-            SetMainCredentialDialogFragment.getInstance(true)
-                .show(supportFragmentManager, "passwordDialog")
+        if (uri != null) {
+            confirmOverwriteIfNotEmpty(
+                uri,
+                onConfirm = {
+                    SetMainCredentialDialogFragment.getInstance(true)
+                        .show(supportFragmentManager, "passwordDialog")
+                },
+                onCancel = {
+                    mDatabaseFileUri = null
+                    Snackbar.make(coordinatorLayout, R.string.overwrite_existing_file_cancelled,
+                        Snackbar.LENGTH_LONG).show()
+                }
+            )
         } else {
             val error = getString(R.string.error_create_database)
             Snackbar.make(coordinatorLayout, error, Snackbar.LENGTH_LONG).asError().show()
