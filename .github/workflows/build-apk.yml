@@ -79,3 +79,38 @@ jobs:
       - name: Remove keystore
         if: ${{ always() && steps.keystore.outputs.file != '' }}
         run: rm -f "${{ steps.keystore.outputs.file }}"
+
+  # Best Passafe: after a push to master, put the signed APK on the "app" release
+  # (best-passafe-lastest), replacing the APK that was there. Runs in its own job so
+  # that only this job, not the build, gets write access to the repository.
+  publish-release:
+    needs: build
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download signed release APK
+        uses: actions/download-artifact@v4
+        with:
+          name: best-passafe-libre-release
+          path: apk
+
+      - name: Replace the APK on the app release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          src=$(ls apk/*.apk | head -n 1)
+          version=$(grep -oE 'versionName = "[^"]+"' app/build.gradle.kts | head -n 1 | cut -d'"' -f2)
+          name="best-passafe-${version:-latest}-${GITHUB_SHA::7}-release.apk"
+          cp "$src" "$name"
+          for asset in $(gh release view app --json assets --jq '.assets[].name' | grep '\.apk$'); do
+            gh release delete-asset app "$asset" --yes
+          done
+          gh release upload app "$name" --clobber
+          echo "Uploaded $name"
