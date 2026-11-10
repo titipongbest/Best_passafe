@@ -263,6 +263,45 @@
     <style name="KeepassDXStyle.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox"/>
     <style name="KeepassDXStyle.TextInputLayout.ExposedMenu" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"/>
 
+    <!-- Best Passafe: form fields of the entry and folder editors.
+         Rounder boxes, a larger value text and a readable label. -->
+    <style name="BestPassafe.TextInputLayout.Form" parent="KeepassDXStyle.TextInputLayout">
+        <item name="boxCornerRadiusTopStart">@dimen/bp_field_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/bp_field_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/bp_field_radius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/bp_field_radius</item>
+        <item name="hintTextAppearance">@style/BestPassafe.TextAppearance.FieldLabel</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+    <style name="BestPassafe.TextInputLayout.Form.ExposedMenu" parent="KeepassDXStyle.TextInputLayout.ExposedMenu">
+        <item name="boxCornerRadiusTopStart">@dimen/bp_field_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/bp_field_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/bp_field_radius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/bp_field_radius</item>
+        <item name="hintTextAppearance">@style/BestPassafe.TextAppearance.FieldLabel</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+    <!-- Best Passafe: theme overlay for the field boxes built in code by the entry editor -->
+    <style name="ThemeOverlay.BestPassafe.EntryField" parent="">
+        <item name="textInputStyle">@style/BestPassafe.TextInputLayout.Form</item>
+    </style>
+    <style name="BestPassafe.TextInputEditText.Form" parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="android:textSize">@dimen/bp_field_text_size</item>
+        <item name="android:lineSpacingMultiplier">1.15</item>
+    </style>
+    <style name="BestPassafe.TextAppearance.FieldLabel" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">14sp</item>
+    </style>
+    <!-- Best Passafe: small colored heading above a group of fields -->
+    <style name="BestPassafe.Text.FormSection" parent="KeepassDXStyle.Text">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/bp_section_label</item>
+        <item name="android:layout_marginBottom">6dp</item>
+    </style>
+
     <!-- Tab -->
     <style name="KeepassDXStyle.TabLayout" parent="@style/Widget.Material3.TabLayout" />
 
@@ -497,6 +536,21 @@
         <item name="android:textColor">@color/text_primary_color</item>
         <item name="android:tint">@color/text_primary_color</item>
         <item name="android:textSize">16sp</item>
+        <!-- Best Passafe: folder names in medium weight so they stand apart from entries -->
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    <!-- Best Passafe: number of entries in a folder, shown as a pill at the row end -->
+    <style name="BestPassafe.Text.FolderCount" parent="KeepassDXStyle.Text">
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/bp_count_text</item>
+        <item name="android:background">@drawable/bp_folder_count</item>
+        <item name="android:minWidth">28dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">9dp</item>
+        <item name="android:paddingRight">9dp</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
     </style>
     <style name="KeepassDXStyle.SubTitle.Group" parent="KeepassDXStyle.Text">
         <item name="android:textColor">@color/text_secondary_color</item>

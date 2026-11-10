@@ -39,7 +39,10 @@ class TextSelectFieldView @JvmOverloads constructor(context: Context,
     private var actionImageButtonId = ViewCompat.generateViewId()
     private var mDefaultPosition = 0
 
-    private val labelView = TextInputLayout(context).apply {
+    // Best Passafe: same field look as the text fields of the editor
+    private val labelView = TextInputLayout(
+        ContextThemeWrapper(context, R.style.ThemeOverlay_BestPassafe_EntryField)
+    ).apply {
         layoutParams = LayoutParams(
             LayoutParams.MATCH_PARENT,
             LayoutParams.WRAP_CONTENT)
@@ -77,6 +80,8 @@ class TextSelectFieldView @JvmOverloads constructor(context: Context,
         isFocusable = false
         inputType = InputType.TYPE_NULL
         maxLines = 1
+        setTextSize(TypedValue.COMPLEX_UNIT_PX,
+            resources.getDimension(R.dimen.bp_field_text_size))
     }
     private val valueSpinnerView = Spinner(context).apply {
         layoutParams = LayoutParams(

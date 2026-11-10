@@ -69,7 +69,7 @@
 			android:layout_height="wrap_content"
 			android:layout_margin="@dimen/card_view_padding"
 			android:hint="@string/tags"
-			style="@style/KeepassDXStyle.TextInputLayout.ExposedMenu">
+			style="@style/BestPassafe.TextInputLayout.Form.ExposedMenu">
 			<com.kunzisoft.keepass.view.TagsCompletionView
 				android:id="@+id/entry_tags_completion_view"
 				android:layout_width="match_parent"

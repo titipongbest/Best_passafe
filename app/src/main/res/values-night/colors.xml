@@ -2,4 +2,9 @@
 <resources>
     <!-- Best Passafe redesign: card border on dark backgrounds -->
     <color name="bp_card_stroke">#33403A</color>
+    <color name="bp_folder_tile">#1F3328</color>
+    <color name="bp_count_pill">#2A332E</color>
+    <color name="bp_count_text">#C9D6CE</color>
+    <color name="bp_field_stroke">#4A5650</color>
+    <color name="bp_section_label">#7BD99B</color>
 </resources>

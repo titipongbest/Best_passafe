@@ -761,4 +761,7 @@
     <string name="folder_color">สีโฟลเดอร์</string>
     <string name="folder_color_none">ไม่มีสี</string>
     <string name="folder_color_custom">สีอื่น…</string>
+    <string name="folder_new">โฟลเดอร์ใหม่</string>
+    <string name="folder_edit">แก้ไขโฟลเดอร์</string>
+    <string name="change_icon_hint">แตะเพื่อเปลี่ยนไอคอน</string>
 </resources>

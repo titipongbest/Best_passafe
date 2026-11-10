@@ -858,4 +858,7 @@
     <string name="folder_color">Folder color</string>
     <string name="folder_color_none">No color</string>
     <string name="folder_color_custom">Other color…</string>
+    <string name="folder_new">New folder</string>
+    <string name="folder_edit">Edit folder</string>
+    <string name="change_icon_hint">Tap to change the icon</string>
 </resources>

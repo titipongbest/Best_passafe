@@ -78,6 +78,12 @@
     <color name="bp_green_soft">#E6F5EC</color>
     <color name="bp_card">#FFFFFF</color>
     <color name="bp_card_stroke">#E3E8E5</color>
+    <!-- Best Passafe: folder rows and the entry editor -->
+    <color name="bp_folder_tile">#E6F5EC</color>
+    <color name="bp_count_pill">#EEF2EF</color>
+    <color name="bp_count_text">#3E4A43</color>
+    <color name="bp_field_stroke">#C9D3CD</color>
+    <color name="bp_section_label">#00873E</color>
     <color name="green">#43a047</color>
     <color name="green_dark">#388e3c</color>
     <color name="green_darker">#2e7d32</color>

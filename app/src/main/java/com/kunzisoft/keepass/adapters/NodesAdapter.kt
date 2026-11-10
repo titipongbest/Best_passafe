@@ -19,6 +19,8 @@
  */
 package com.kunzisoft.keepass.adapters
 
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.graphics.ColorUtils
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -448,6 +450,17 @@ class NodesAdapter(
         holder.imageIdentifier?.setColorFilter(iconColor)
         holder.icon.apply {
             iconDrawableFactory.assignDatabaseIcon(this, node.icon, iconColor)
+            // Best Passafe: the tile behind a folder icon takes a soft shade of the folder color
+            if (node is GroupInfo) {
+                background?.mutate()?.let { tile ->
+                    val folderColor = node.color
+                    if (folderColor != null && !isSelected) {
+                        DrawableCompat.setTint(tile, ColorUtils.setAlphaComponent(folderColor, 0x30))
+                    } else {
+                        DrawableCompat.setTintList(tile, null)
+                    }
+                }
+            }
             // Relative size of the icon
             layoutParams?.apply {
                 height = (mIconDefaultDimension * mPrefSizeMultiplier).toInt()
