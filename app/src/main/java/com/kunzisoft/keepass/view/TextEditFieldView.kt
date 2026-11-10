@@ -31,7 +31,10 @@ open class TextEditFieldView @JvmOverloads constructor(
     private var valueViewId = ViewCompat.generateViewId()
     protected var actionImageButtonId = ViewCompat.generateViewId()
 
-    private val labelView = TextInputLayout(context).apply {
+    // Best Passafe: rounder field box and a larger, readable label
+    private val labelView = TextInputLayout(
+        ContextThemeWrapper(context, R.style.ThemeOverlay_BestPassafe_EntryField)
+    ).apply {
         layoutParams = LayoutParams(
                 LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT)
@@ -52,6 +55,10 @@ open class TextEditFieldView @JvmOverloads constructor(
         }
         importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
         maxLines = 1
+        // Best Passafe: larger value text with a little more line height
+        setTextSize(TypedValue.COMPLEX_UNIT_PX,
+            resources.getDimension(R.dimen.bp_field_text_size))
+        setLineSpacing(0f, 1.15f)
     }
     private var actionImageButton = AppCompatImageButton(
             ContextThemeWrapper(
@@ -74,6 +81,9 @@ open class TextEditFieldView @JvmOverloads constructor(
     }
 
     init {
+        // Best Passafe: breathing room between fields
+        val spacing = resources.getDimensionPixelSize(R.dimen.bp_field_spacing)
+        setPadding(paddingLeft, spacing, paddingRight, spacing)
         // Manually write view to avoid view id bugs
         buildViews()
         labelView.addView(valueView)
@@ -98,7 +108,10 @@ open class TextEditFieldView @JvmOverloads constructor(
     }
 
     override fun applyFontVisibility(fontInVisibility: Boolean) {
-        if (fontInVisibility)
+        // Best Passafe: in the editor the monospace font is kept for protected values
+        // (passwords), where telling 0/O and 1/l apart matters. Other fields keep the
+        // system font, which reads better and renders Thai text properly.
+        if (fontInVisibility && isProtected)
             valueView.applyFontVisibility()
     }
 

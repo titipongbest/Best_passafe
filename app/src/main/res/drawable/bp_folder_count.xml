@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Best Passafe: pill that holds the number of entries in a folder -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/bp_count_pill" />
+    <corners android:radius="12dp" />
+</shape>

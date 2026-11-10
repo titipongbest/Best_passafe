@@ -19,6 +19,8 @@
  */
 package com.kunzisoft.keepass.activities.dialogs
 
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.graphics.ColorUtils
 import android.app.Dialog
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -209,6 +211,11 @@ class GroupEditDialogFragment : DatabaseDialogFragment() {
                 }
             }
 
+            // Best Passafe: header names what the dialog does
+            root.findViewById<TextView>(R.id.group_edit_header)?.setText(
+                if (mEditGroupDialogAction == UPDATE) R.string.folder_edit else R.string.folder_new
+            )
+
             // populate info in views
             populateInfoToViews(mGroupInfo)
 
@@ -320,8 +327,18 @@ class GroupEditDialogFragment : DatabaseDialogFragment() {
             }
         }
         colorCustomButton.iconTint = ColorStateList.valueOf(currentIconColor())
-        if (::iconButtonView.isInitialized)
+        if (::iconButtonView.isInitialized) {
             mPopulateIconMethod?.invoke(iconButtonView, mGroupInfo.icon)
+            // Best Passafe: the icon tile takes a soft shade of the folder color
+            iconButtonView.background?.mutate()?.let { tile ->
+                val folderColor = mGroupInfo.color
+                if (folderColor != null) {
+                    DrawableCompat.setTint(tile, ColorUtils.setAlphaComponent(folderColor, 0x30))
+                } else {
+                    DrawableCompat.setTintList(tile, null)
+                }
+            }
+        }
     }
 
     private fun populateInfoToViews(groupInfo: GroupInfo) {

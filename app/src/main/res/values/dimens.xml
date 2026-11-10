@@ -50,8 +50,12 @@
     <dimen name="bp_button_height">56dp</dimen>
     <dimen name="bp_button_radius">16dp</dimen>
     <dimen name="bp_item_radius">16dp</dimen>
+    <!-- Best Passafe: entry and folder editor fields -->
+    <dimen name="bp_field_radius">12dp</dimen>
+    <dimen name="bp_field_text_size">17sp</dimen>
+    <dimen name="bp_field_spacing">6dp</dimen>
     <!-- Best Passafe: folder color swatches -->
-    <dimen name="group_color_swatch_size">36dp</dimen>
+    <dimen name="group_color_swatch_size">40dp</dimen>
     <dimen name="group_color_swatch_margin">4dp</dimen>
     <dimen name="group_color_swatch_stroke">1dp</dimen>
 </resources>

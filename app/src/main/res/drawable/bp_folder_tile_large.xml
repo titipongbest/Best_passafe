@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Best Passafe: large rounded tile behind the icon in the folder and entry editors -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/bp_folder_tile" />
+    <corners android:radius="22dp" />
+</shape>

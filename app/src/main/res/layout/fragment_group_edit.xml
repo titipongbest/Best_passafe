@@ -27,33 +27,78 @@
 		android:orientation="vertical"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:padding="@dimen/default_margin"
+		android:paddingTop="20dp"
+		android:paddingBottom="8dp"
+		android:paddingHorizontal="20dp"
 		android:importantForAutofill="noExcludeDescendants"
 		tools:targetApi="o">
+
+		<!-- Best Passafe: folder header. Title, a large icon tile tinted with the
+		     folder color, and a hint that the icon can be changed. -->
+		<TextView
+			android:id="@+id/group_edit_header"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:text="@string/folder_new"
+			android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
+
 		<androidx.appcompat.widget.AppCompatImageButton
 			android:id="@+id/group_edit_icon_button"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
+			android:layout_width="76dp"
+			android:layout_height="76dp"
 			android:layout_gravity="center"
-			android:layout_margin="@dimen/default_margin"
+			android:layout_marginTop="16dp"
+			android:padding="18dp"
+			android:scaleType="fitCenter"
+			android:background="@drawable/bp_folder_tile_large"
+			android:contentDescription="@string/change_icon_hint"
 			android:src="@drawable/ic_blank_32dp"/>
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="6dp"
+			android:layout_marginBottom="16dp"
+			android:gravity="center"
+			android:text="@string/change_icon_hint"
+			android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+			android:textColor="?attr/colorOnSurfaceVariant" />
+
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/group_edit_name_container"
+			style="@style/BestPassafe.TextInputLayout.Form"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/group_edit_name"
+				style="@style/BestPassafe.TextInputEditText.Form"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="text"
+				android:maxLines="1"
+				android:singleLine="true"
+				android:hint="@string/hint_group_name"/>
+		</com.google.android.material.textfield.TextInputLayout>
+
 		<!-- Best Passafe: folder color -->
 		<LinearLayout
 			android:id="@+id/group_edit_color_container"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="@dimen/default_margin"
+			android:layout_marginTop="8dp"
+			android:layout_marginBottom="8dp"
 			android:orientation="vertical">
 			<TextView
 				android:id="@+id/group_edit_color_label"
+				style="@style/BestPassafe.Text.FormSection"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginBottom="4dp"
-				android:text="@string/folder_color"
-				android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+				android:text="@string/folder_color" />
 			<HorizontalScrollView
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:layout_marginStart="-4dp"
+				android:layout_marginLeft="-4dp"
 				android:scrollbars="none">
 				<LinearLayout
 					android:id="@+id/group_edit_color_swatches"
@@ -64,31 +109,22 @@
 			</HorizontalScrollView>
 			<com.google.android.material.button.MaterialButton
 				android:id="@+id/group_edit_color_custom_button"
-				style="@style/Widget.Material3.Button.TextButton.Icon"
+				style="@style/Widget.Material3.Button.TonalButton.Icon"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:layout_marginTop="4dp"
 				android:text="@string/folder_color_custom"
 				app:icon="@drawable/ic_color_background_white_24dp" />
 		</LinearLayout>
-		<com.google.android.material.textfield.TextInputLayout
-			android:id="@+id/group_edit_name_container"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
-			<com.google.android.material.textfield.TextInputEditText
-				android:id="@+id/group_edit_name"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:inputType="text"
-				android:maxLines="1"
-				android:singleLine="true"
-				android:hint="@string/hint_group_name"/>
-		</com.google.android.material.textfield.TextInputLayout>
+
 		<com.google.android.material.textfield.TextInputLayout
 			android:id="@+id/group_edit_note_container"
+			style="@style/BestPassafe.TextInputLayout.Form"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content">
 			<com.google.android.material.textfield.TextInputEditText
 				android:id="@+id/group_edit_note"
+				style="@style/BestPassafe.TextInputEditText.Form"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:inputType="textMultiLine"
@@ -98,10 +134,11 @@
 		<com.kunzisoft.keepass.view.DateTimeEditFieldView
 			android:id="@+id/group_edit_expiration"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content" />
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="8dp" />
 		<com.google.android.material.textfield.TextInputLayout
 			android:id="@+id/group_edit_searchable_container"
-			style="@style/KeepassDXStyle.TextInputLayout.ExposedMenu"
+			style="@style/BestPassafe.TextInputLayout.Form.ExposedMenu"
 			android:hint="@string/searchable"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content">
@@ -119,7 +156,7 @@
 			android:orientation="vertical">
 			<com.google.android.material.textfield.TextInputLayout
 				android:id="@+id/group_edit_auto_type_inherited_container"
-				style="@style/KeepassDXStyle.TextInputLayout.ExposedMenu"
+				style="@style/BestPassafe.TextInputLayout.Form.ExposedMenu"
 				android:visibility="gone"
 				android:hint="@string/auto_type"
 				android:layout_width="match_parent"
@@ -132,12 +169,14 @@
 			</com.google.android.material.textfield.TextInputLayout>
 			<com.google.android.material.textfield.TextInputLayout
 				android:id="@+id/group_edit_auto_type_sequence_container"
+				style="@style/BestPassafe.TextInputLayout.Form"
 				android:visibility="gone"
 				android:hint="@string/auto_type_sequence"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content">
 				<com.google.android.material.textfield.TextInputEditText
 					android:id="@+id/group_edit_auto_type_sequence"
+					style="@style/BestPassafe.TextInputEditText.Form"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:inputType="text"
@@ -149,7 +188,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:hint="@string/tags"
-			style="@style/KeepassDXStyle.TextInputLayout.ExposedMenu">
+			style="@style/BestPassafe.TextInputLayout.Form.ExposedMenu">
 			<com.kunzisoft.keepass.view.TagsCompletionView
 				android:id="@+id/group_tags_completion_view"
 				android:layout_width="match_parent"
