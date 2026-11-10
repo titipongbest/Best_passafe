@@ -30,8 +30,10 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
@@ -42,12 +44,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.snackbar.Snackbar
+import com.kunzisoft.keepass.BuildConfig
 import com.kunzisoft.keepass.R
 import com.kunzisoft.keepass.activities.dialogs.SetMainCredentialDialogFragment
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper.createDatabaseFile
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper.openFile
+import com.kunzisoft.keepass.activities.helpers.ExistingFileOverwriteHelper.confirmOverwriteIfNotEmpty
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper.registerCreateDatabaseFile
+import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper.registerCreateFile
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper.registerOpenFile
 import com.kunzisoft.keepass.activities.helpers.ExternalFileHelper.setOpenFileClickListener
 import com.kunzisoft.keepass.activities.legacy.DatabaseModeActivity
@@ -67,6 +72,7 @@ import com.kunzisoft.keepass.services.DatabaseTaskNotificationService.Companion.
 import com.kunzisoft.keepass.settings.PreferencesUtil
 import com.kunzisoft.keepass.tasks.ActionRunnable
 import com.kunzisoft.keepass.utils.AppUtil.isContributingUser
+import com.kunzisoft.keepass.utils.DatabaseBackupUtil.databaseBackupManager
 import com.kunzisoft.keepass.utils.DexUtil
 import com.kunzisoft.keepass.utils.MagikeyboardUtil
 import com.kunzisoft.keepass.utils.MenuUtil
@@ -75,8 +81,15 @@ import com.kunzisoft.keepass.utils.getParcelableCompat
 import com.kunzisoft.keepass.view.asError
 import com.kunzisoft.keepass.viewmodels.DatabaseFilesViewModel
 import com.kunzisoft.keepass.viewmodels.SetMainCredentialViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 import java.io.FileNotFoundException
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class FileDatabaseSelectActivity : DatabaseModeActivity() {
 
@@ -104,9 +117,19 @@ class FileDatabaseSelectActivity : DatabaseModeActivity() {
     }
     private var createDatabaseFileResultLauncher: ActivityResultLauncher<String> = registerCreateDatabaseFile { uri ->
         mDatabaseFileUri = uri
-        if (mDatabaseFileUri != null) {
-            SetMainCredentialDialogFragment.getInstance(true)
-                .show(supportFragmentManager, "passwordDialog")
+        if (uri != null) {
+            confirmOverwriteIfNotEmpty(
+                uri,
+                onConfirm = {
+                    SetMainCredentialDialogFragment.getInstance(true)
+                        .show(supportFragmentManager, "passwordDialog")
+                },
+                onCancel = {
+                    mDatabaseFileUri = null
+                    Snackbar.make(coordinatorLayout, R.string.overwrite_existing_file_cancelled,
+                        Snackbar.LENGTH_LONG).show()
+                }
+            )
         } else {
             val error = getString(R.string.error_create_database)
             Snackbar.make(coordinatorLayout, error, Snackbar.LENGTH_LONG).asError().show()
@@ -115,6 +138,15 @@ class FileDatabaseSelectActivity : DatabaseModeActivity() {
     }
 
     private val mSetMainCredentialViewModel: SetMainCredentialViewModel by viewModels()
+
+    private var mBackupToExport: File? = null
+    private val exportBackupResultLauncher: ActivityResultLauncher<String> = registerCreateFile { uri ->
+        val backup = mBackupToExport
+        mBackupToExport = null
+        if (uri != null && backup != null) {
+            exportBackup(backup, uri)
+        }
+    }
 
     override fun manageDatabaseInfo(): Boolean  = false
 
@@ -140,6 +172,10 @@ class FileDatabaseSelectActivity : DatabaseModeActivity() {
 
         // Special title
         specialTitle = findViewById(R.id.file_selection_title_part_3)
+
+        // Best Passafe: app version under the buttons
+        findViewById<TextView>(R.id.file_selection_app_version)?.text =
+            getString(R.string.bp_version_label, BuildConfig.VERSION_NAME)
 
         // Create database button
         createDatabaseButtonView = findViewById(R.id.create_database_button)
@@ -184,6 +220,9 @@ class FileDatabaseSelectActivity : DatabaseModeActivity() {
         }
 
         // Retrieve the database URI provided by file manager after an orientation change
+        savedInstanceState?.getString(EXTRA_BACKUP_TO_EXPORT)?.let { path ->
+            mBackupToExport = File(path)
+        }
         if (savedInstanceState != null
                 && savedInstanceState.containsKey(EXTRA_DATABASE_URI)) {
             mDatabaseFileUri = savedInstanceState.getParcelableCompat(EXTRA_DATABASE_URI)
@@ -387,6 +426,7 @@ class FileDatabaseSelectActivity : DatabaseModeActivity() {
         super.onSaveInstanceState(outState)
         // to retrieve the URI of a created database after an orientation change
         outState.putParcelable(EXTRA_DATABASE_URI, mDatabaseFileUri)
+        mBackupToExport?.let { outState.putString(EXTRA_BACKUP_TO_EXPORT, it.absolutePath) }
     }
 
     private fun onAssignKeyDialogPositiveClick(mainCredential: MainCredential) {
@@ -407,6 +447,7 @@ class FileDatabaseSelectActivity : DatabaseModeActivity() {
 
         if (mSpecialMode == SpecialMode.DEFAULT) {
             MenuUtil.defaultMenuInflater(menuInflater, menu)
+            menuInflater.inflate(R.menu.database_backups, menu)
         }
 
         Handler(Looper.getMainLooper()).post {
@@ -449,15 +490,78 @@ class FileDatabaseSelectActivity : DatabaseModeActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> this.openUrl(R.string.file_manager_explanation_url)
+            R.id.menu_database_backups -> showDatabaseBackups()
         }
         MenuUtil.onDefaultMenuOptionsItemSelected(this, item)
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showDatabaseBackups() {
+        val backups = databaseBackupManager().listBackups()
+        if (backups.isEmpty()) {
+            AlertDialog.Builder(this)
+                .setTitle(R.string.menu_database_backups)
+                .setMessage(R.string.database_backups_empty)
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
+            return
+        }
+        val dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
+        val labels = backups.map { backup ->
+            "${backup.databaseName}\n${dateFormat.format(Date(backup.timestamp))}"
+        }.toTypedArray()
+        AlertDialog.Builder(this)
+            .setTitle(R.string.menu_database_backups)
+            .setItems(labels) { _, which ->
+                val backup = backups[which]
+                mBackupToExport = backup.file
+                val baseName = backup.databaseName.substringBeforeLast('.')
+                val extension = backup.databaseName.substringAfterLast('.', "kdbx")
+                val date = SimpleDateFormat("yyyyMMdd-HHmm", Locale.ENGLISH)
+                    .format(Date(backup.timestamp))
+                try {
+                    exportBackupResultLauncher.launch("${baseName}_backup_$date.$extension")
+                } catch (e: Exception) {
+                    mBackupToExport = null
+                    Log.e(TAG, "Unable to launch the file creation", e)
+                    Snackbar.make(coordinatorLayout, R.string.database_backup_export_error,
+                        Snackbar.LENGTH_LONG).asError().show()
+                }
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+        Snackbar.make(coordinatorLayout, R.string.database_backups_explanation,
+            Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun exportBackup(backup: File, uri: Uri) {
+        lifecycleScope.launch {
+            val success = withContext(Dispatchers.IO) {
+                try {
+                    contentResolver.openOutputStream(uri, "wt")?.use { output ->
+                        databaseBackupManager().copyBackupTo(backup, output)
+                        true
+                    } ?: false
+                } catch (e: Exception) {
+                    Log.e(TAG, "Unable to export the database backup", e)
+                    false
+                }
+            }
+            if (success) {
+                Snackbar.make(coordinatorLayout, R.string.database_backup_exported,
+                    Snackbar.LENGTH_LONG).show()
+            } else {
+                Snackbar.make(coordinatorLayout, R.string.database_backup_export_error,
+                    Snackbar.LENGTH_LONG).asError().show()
+            }
+        }
     }
 
     companion object {
 
         private const val TAG = "FileDbSelectActivity"
         private const val EXTRA_DATABASE_URI = "EXTRA_DATABASE_URI"
+        private const val EXTRA_BACKUP_TO_EXPORT = "EXTRA_BACKUP_TO_EXPORT"
 
         /*
          * -------------------------

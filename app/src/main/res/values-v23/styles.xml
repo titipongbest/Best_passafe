@@ -19,11 +19,11 @@
 -->
 <resources>
     <style name="KeepassDXStyle.Light.v23" parent="KeepassDXStyle.Light.v21" >
-        <item name="android:statusBarColor">?attr/colorSurface</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/bp_green</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
     <style name="KeepassDXStyle.Night.v23" parent="KeepassDXStyle.Night.v21" >
-        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:statusBarColor">@color/bp_green</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
 </resources>

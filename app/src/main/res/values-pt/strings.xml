@@ -713,8 +713,8 @@
     <string name="education_user_verification_title">Verificação para ações sensíveis</string>
     <string name="education_user_verification_summary">Alterar o modo de verificação do utilizador para a sessão.\n\n\"Verificação do Utilizador Ativada\" verifica ações em campos protegidos e nas configurações da base de dados.\n\"Verificação do Utilizador Desativada\" permite alterar qualquer dado na sua base de dados sem verificação.</string>
     <string name="passkey">Passkey</string>
-    <string name="credential_provider_service_name">Provedor de Credenciais KeePassDX</string>
-    <string name="credential_provider_database_username">Base de dados KeePassDX</string>
+    <string name="credential_provider_service_name">Provedor de Credenciais Best Passafe</string>
+    <string name="credential_provider_database_username">Base de dados Best Passafe</string>
     <string name="credential_provider_locked_database_description">Selecione para desbloquear</string>
     <string name="passkey_creation_description">Gravar passkey na entrada nova</string>
     <string name="passkey_update_description">Atualizar passkey em %1$s</string>

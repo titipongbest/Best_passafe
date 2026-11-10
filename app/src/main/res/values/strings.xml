@@ -789,8 +789,8 @@
     <string name="hide_templates_title">Hide templates</string>
     <string name="hide_templates_summary">Templates are not shown</string>
     <string name="passkey">Passkey</string>
-    <string name="credential_provider_service_name">KeePassDX Credential Provider</string>
-    <string name="credential_provider_database_username">KeePassDX Database</string>
+    <string name="credential_provider_service_name">Best Passafe Credential Provider</string>
+    <string name="credential_provider_database_username">Best Passafe Database</string>
     <string name="credential_provider_locked_database_description">Select to unlock</string>
     <string name="passkey_creation_description">Save passkey in new entry</string>
     <string name="passkey_update_description">Update passkey in "%1$s"</string>
@@ -816,4 +816,46 @@
     <string name="user_verification_database_credential">Enter the first four characters of your database password</string>
     <string name="first_chars">First chars</string>
     <string name="check">Check</string>
+    <string name="bp_tagline">Your personal password safe</string>
+    <string name="bp_offline_badge">100% offline. Your data stays on this device</string>
+    <!-- Best Passafe: About screen -->
+    <string name="bp_about_description">An offline, open-source password manager for Android, compatible with the KeePass (.kdbx) database format.</string>
+    <string name="bp_about_credits_title">Credits</string>
+    <string name="html_bp_about_credits">Best Passafe © %1$d.&lt;br/&gt;&lt;br/&gt;Best Passafe is a modified version (fork) of &lt;strong&gt;KeePassDX&lt;/strong&gt;, Copyright © 2009–%1$d Jeremy Jamet / Kunzisoft, which is itself derived from KeePassDroid by Brian Pellin. We thank the original authors and all KeePassDX contributors.</string>
+    <string name="bp_about_trademark">KeePass and KeePassDX are names of their respective owners. Best Passafe is an independent project and is not affiliated with or endorsed by Kunzisoft or the KeePass project.</string>
+    <string name="bp_about_license_title">License</string>
+    <string name="html_bp_about_license">This program is free software: you can redistribute it and/or modify it under the terms of the &lt;a href="https://www.gnu.org/licenses/gpl-3.0.html"&gt;GNU General Public License&lt;/a&gt; as published by the Free Software Foundation, either &lt;strong&gt;version 3&lt;/strong&gt; of the License, or (at your option) any later version.&lt;br/&gt;&lt;br/&gt;This program is distributed in the hope that it will be useful, but &lt;strong&gt;WITHOUT ANY WARRANTY&lt;/strong&gt;; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</string>
+    <string name="bp_about_privacy_title">Privacy</string>
+    <string-array name="bp_lock_timeout_names">
+        <item>15 seconds</item>
+        <item>30 seconds</item>
+        <item>1 minute</item>
+        <item>2 minutes</item>
+        <item>3 minutes</item>
+        <item>5 minutes</item>
+    </string-array>
+    <string-array name="bp_clipboard_timeout_names">
+        <item>10 seconds</item>
+        <item>20 seconds</item>
+        <item>30 seconds</item>
+        <item>1 minute</item>
+        <item>2 minutes</item>
+        <item>5 minutes</item>
+    </string-array>
+    <string name="bp_version_label">Version %1$s</string>
+    <string name="error_save_database_verification">Could not save the database: the encrypted file failed verification. Your file was not changed.</string>
+    <string name="error_save_database_write">Could not confirm the database was written correctly. Do not close the app, try saving again.</string>
+    <string name="error_save_database_write_restored">The database was not written correctly, the previous version was restored. Your changes are still open, try saving again.</string>
+    <string name="menu_database_backups">Database backups</string>
+    <string name="database_backups_empty">No backup yet. A backup of the previous version is kept each time a database is saved.</string>
+    <string name="database_backups_explanation">Pick a version to save it as a new file. It opens with the master key that was valid at that time.</string>
+    <string name="database_backup_exported">Backup saved</string>
+    <string name="database_backup_export_error">Could not save the backup</string>
+    <string name="overwrite_existing_file_title">Replace existing file?</string>
+    <string name="overwrite_existing_file_message">“%1$s” already has content. Continuing replaces it and the old data cannot be recovered unless you have a copy. To keep both, cancel and pick a different name or folder.</string>
+    <string name="overwrite_existing_file_confirm">Replace</string>
+    <string name="overwrite_existing_file_cancelled">Cancelled, the existing file was not changed</string>
+    <string name="folder_color">Folder color</string>
+    <string name="folder_color_none">No color</string>
+    <string name="folder_color_custom">Other color…</string>
 </resources>

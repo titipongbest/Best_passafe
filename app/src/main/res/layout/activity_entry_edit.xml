@@ -36,6 +36,7 @@
 
         <com.kunzisoft.keepass.view.ToolbarSpecial
             android:id="@+id/special_mode_view"
+            android:theme="@style/ThemeOverlay.BestPassafe.Bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent" />
@@ -80,6 +81,7 @@
 
             <com.kunzisoft.keepass.view.ToolbarAction
                 android:id="@+id/entry_edit_bottom_bar"
+                android:theme="@style/ThemeOverlay.BestPassafe.Bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"

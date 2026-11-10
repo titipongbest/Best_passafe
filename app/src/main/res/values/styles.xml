@@ -211,6 +211,28 @@
         <item name="snackbarStyle">@style/KeepassDXStyle.SnackBar</item>
     </style>
 
+    <!-- Best Passafe: vivid green app bars (header / footer) with white content -->
+    <style name="ThemeOverlay.BestPassafe.Bar" parent="">
+        <item name="colorSurface">@color/bp_green</item>
+        <item name="colorOnSurface">@color/bp_green_on</item>
+        <item name="colorOnSurfaceVariant">@color/bp_green_on_variant</item>
+        <item name="colorSurfaceContainerLowest">@color/bp_green</item>
+        <item name="colorSurfaceContainerLow">@color/bp_green</item>
+        <item name="colorSurfaceContainer">@color/bp_green</item>
+        <item name="colorSurfaceContainerHigh">@color/bp_green_dark</item>
+        <item name="colorSurfaceContainerHighest">@color/bp_green_dark</item>
+        <item name="colorPrimary">@color/bp_green_on</item>
+        <item name="colorOnPrimary">@color/bp_green</item>
+        <item name="colorSecondary">@color/bp_green_on_variant</item>
+        <item name="colorOnSecondary">@color/bp_green</item>
+        <item name="colorControlNormal">@color/bp_green_on</item>
+        <item name="colorControlActivated">@color/bp_green_on</item>
+        <item name="colorOnBackground">@color/bp_green_on</item>
+        <item name="android:textColor">@color/bp_green_on</item>
+        <item name="android:textColorPrimary">@color/bp_green_on</item>
+        <item name="android:textColorSecondary">@color/bp_green_on_variant</item>
+    </style>
+
     <!-- Toolbar Style -->
     <style name="KeepassDXStyle.Toolbar.Base" parent="Widget.Material3.Toolbar.Surface" />
     <style name="KeepassDXStyle.Toolbar.v21" parent="KeepassDXStyle.Toolbar.Base" />
@@ -325,9 +347,18 @@
         <item name="android:layout_marginEnd">@dimen/card_view_margin_horizontal</item>
         <item name="android:layout_marginLeft">@dimen/card_view_margin_horizontal</item>
         <item name="android:layout_marginRight">@dimen/card_view_margin_horizontal</item>
-        <item name="cardBackgroundColor">?attr/colorSurfaceContainer</item>
+        <item name="cardBackgroundColor">?attr/colorSurfaceContainerLowest</item>
         <item name="android:padding">@dimen/card_view_padding</item>
         <item name="cardCornerRadius">@dimen/card_radius</item>
+        <item name="strokeColor">@color/bp_card_stroke</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+    <!-- Best Passafe: white rounded card with a hairline border -->
+    <style name="BestPassafe.Card" parent="Widget.Material3.CardView.Filled">
+        <item name="cardBackgroundColor">?attr/colorSurfaceContainerLowest</item>
+        <item name="cardCornerRadius">@dimen/small_card_radius</item>
+        <item name="strokeColor">@color/bp_card_stroke</item>
+        <item name="strokeWidth">1dp</item>
     </style>
     <style name="KeepassDXStyle.Cardview.Surface" parent="KeepassDXStyle.Cardview">
         <item name="cardBackgroundColor">?attr/colorSurface</item>
@@ -481,9 +512,23 @@
     <!-- Button Style -->
     <style name="KeepassDXStyle.Button.Primary" parent="Widget.Material3.Button">
         <item name="android:layout_margin">8dp</item>
+        <item name="android:minHeight">@dimen/bp_button_height</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">@dimen/bp_button_radius</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="KeepassDXStyle.Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
         <item name="android:layout_margin">8dp</item>
+        <item name="android:minHeight">@dimen/bp_button_height</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">@dimen/bp_button_radius</item>
+        <item name="strokeColor">?attr/colorPrimary</item>
+        <item name="strokeWidth">1.5dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="KeepassDXStyle.Base.ImageButton" parent="Widget.AppCompat.ImageButton" />
     <style name="KeepassDXStyle.v21.ImageButton" parent="KeepassDXStyle.Base.ImageButton">

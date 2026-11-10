@@ -356,12 +356,10 @@ fun CollapsingToolbarLayout.changeTitleColor(color: Int) {
 fun Activity.setTransparentNavigationBar(applyToStatusBar: Boolean = false, applyWindowInsets: () -> Unit) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.surface_selector)
+        // Best Passafe: system bars match the green app bars
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.bp_green)
         if (applyToStatusBar) {
-            obtainStyledAttributes(intArrayOf(R.attr.colorSurface)).apply {
-                window.statusBarColor = getColor(0, Color.GRAY)
-                recycle()
-            }
+            window.statusBarColor = ContextCompat.getColor(this, R.color.bp_green)
         }
         applyWindowInsets.invoke()
     }

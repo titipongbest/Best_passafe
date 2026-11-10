@@ -183,6 +183,20 @@ class EntryEditViewModel: NodeEditViewModel() {
     }
 
     fun changeTemplate(template: Template) {
+        // The template selector re-applies its selection each time the screen comes back
+        // (app minimized then reopened, rotation...). Ignore it when nothing changes,
+        // otherwise the fields would be rebuilt and the tags removed and re-added.
+        val currentTemplates = _entryEditUIState.value.templates
+        if (currentTemplates?.defaultTemplate == template) {
+            return
+        }
+        // Remember the template chosen by the user, so the selector restores this one
+        // and not the template the entry was opened with.
+        currentTemplates?.let { templates ->
+            val selectedTemplates = templates.copy(defaultTemplate = template)
+            mTemplates = selectedTemplates
+            _entryEditUIState.update { it.copy(templates = selectedTemplates) }
+        }
         viewModelScope.launch {
             val tagsToRemove = mPreviousTemplateTags.toStringList()
             val tagsToAdd = template.tags.toStringList()

@@ -728,8 +728,8 @@
     <string name="education_user_verification_title">Verificare pentru acțiuni sensibile</string>
     <string name="education_user_verification_summary">Schimbă modul de verificare a utilizatorului pentru sesiune.\n\n„Verificarea utilizatorului activată” verifică acțiunea în câmpurile protejate și setările bazei de date.\n„Verificarea utilizatorului dezactivată” permite modificarea oricăror date din baza de date fără verificare.</string>
     <string name="passkey">Cheie de acces</string>
-    <string name="credential_provider_service_name">Furnizor de acreditări KeePassDX</string>
-    <string name="credential_provider_database_username">Baza de date KeePassDX</string>
+    <string name="credential_provider_service_name">Furnizor de acreditări Best Passafe</string>
+    <string name="credential_provider_database_username">Baza de date Best Passafe</string>
     <string name="passkey_creation_description">Salvează cheia de acces într-o nouă înregistrare</string>
     <string name="passkey_update_description">Actualizează cheia de acces în %1$s</string>
     <string name="passkey_selection_username">Nu a fost găsită nicio cheie de acces</string>

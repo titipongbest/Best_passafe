@@ -22,12 +22,14 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -37,7 +39,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
-import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -187,10 +188,12 @@ class EntryActivity : DatabaseLockActivity() {
         theme.obtainStyledAttributes(intArrayOf(R.attr.colorSecondary)).also { taColorSecondary ->
             mEntryViewModel.colorSecondary = taColorSecondary.getColor(0, Color.BLACK)
         }.recycle()
-        theme.obtainStyledAttributes(intArrayOf(R.attr.colorSurface)).also { taColorSurface ->
+        // Best Passafe: the entry toolbar uses the green app bar colors
+        val barTheme = ContextThemeWrapper(this, R.style.ThemeOverlay_BestPassafe_Bar).theme
+        barTheme.obtainStyledAttributes(intArrayOf(R.attr.colorSurface)).also { taColorSurface ->
             mEntryViewModel.colorSurface = taColorSurface.getColor(0, Color.BLACK)
         }.recycle()
-        theme.obtainStyledAttributes(intArrayOf(R.attr.colorOnSurface)).also { taColorOnSurface ->
+        barTheme.obtainStyledAttributes(intArrayOf(R.attr.colorOnSurface)).also { taColorOnSurface ->
             mEntryViewModel.colorOnSurface = taColorOnSurface.getColor(0, Color.BLACK)
         }.recycle()
         theme.obtainStyledAttributes(intArrayOf(android.R.attr.windowBackground)).also { taColorBackground ->
@@ -276,8 +279,19 @@ class EntryActivity : DatabaseLockActivity() {
                         // Toolbar customization
                         val toolbarColor = entryState.toolbarColor
                         val onToolbarColor = entryState.onToolbarColor
-                        collapsingToolbarLayout?.setBackgroundColor(toolbarColor)
-                        collapsingToolbarLayout?.contentScrim = (toolbarColor).toDrawable()
+                        // Best Passafe: header with rounded bottom corners
+                        val headerRadius = resources.getDimension(R.dimen.bp_header_radius)
+                        val headerRadii = floatArrayOf(0f, 0f, 0f, 0f,
+                            headerRadius, headerRadius, headerRadius, headerRadius)
+                        appBarLayout?.background = GradientDrawable().apply {
+                            setColor(toolbarColor)
+                            cornerRadii = headerRadii
+                        }
+                        collapsingToolbarLayout?.setBackgroundColor(Color.TRANSPARENT)
+                        collapsingToolbarLayout?.contentScrim = GradientDrawable().apply {
+                            setColor(toolbarColor)
+                            cornerRadii = headerRadii
+                        }
                         toolbar?.changeControlColor(onToolbarColor)
                         collapsingToolbarLayout?.changeTitleColor(onToolbarColor)
                         // Manage FAB visibility

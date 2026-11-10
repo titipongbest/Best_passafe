@@ -24,7 +24,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface"
+    android:background="?android:attr/colorBackground"
     android:filterTouchesWhenObscured="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,12 +34,17 @@
 
         <com.kunzisoft.keepass.view.ToolbarSpecial
             android:id="@+id/special_mode_view"
+            android:theme="@style/ThemeOverlay.BestPassafe.Bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/activity_group_header"
+            android:theme="@style/ThemeOverlay.BestPassafe.Bar"
+            android:background="@drawable/bp_header_background_small"
+            android:elevation="2dp"
+            android:paddingBottom="6dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/special_mode_view">
@@ -98,14 +103,16 @@
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/app_bar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:elevation="0dp">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/breadcrumb_list"
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
                     android:paddingHorizontal="12dp"
-                    android:background="?attr/colorSurface"
+                    android:background="@android:color/transparent"
                     app:layout_scrollFlags="scroll|snap|enterAlways"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:orientation="horizontal" />
@@ -146,6 +153,7 @@
 
             <com.kunzisoft.keepass.view.ToolbarAction
                 android:id="@+id/toolbar_action"
+                android:theme="@style/ThemeOverlay.BestPassafe.Bar"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 app:layout_constraintBottom_toBottomOf="parent"

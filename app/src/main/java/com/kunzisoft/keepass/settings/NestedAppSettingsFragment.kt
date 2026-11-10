@@ -74,6 +74,8 @@ class NestedAppSettingsFragment : NestedSettingsFragment() {
     }
 
     private fun onCreateApplicationPreferences(rootKey: String?) {
+        // Best Passafe: bring old timeout values into the allowed choices (5 minutes max)
+        PreferencesUtil.normalizeTimeouts(requireContext())
         setPreferencesFromResource(R.xml.preferences_application, rootKey)
 
         activity?.let { activity ->
@@ -112,6 +114,7 @@ class NestedAppSettingsFragment : NestedSettingsFragment() {
     }
 
     private fun onCreateFormFillingPreference(rootKey: String?) {
+        PreferencesUtil.normalizeTimeouts(requireContext())
         setPreferencesFromResource(R.xml.preferences_form_filling, rootKey)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -465,8 +468,6 @@ class NestedAppSettingsFragment : NestedSettingsFragment() {
         var dialogFragment: DialogFragment? = null
 
         when (preference.key) {
-            getString(R.string.app_timeout_key),
-            getString(R.string.clipboard_timeout_key),
             getString(R.string.temp_device_unlock_timeout_key) -> {
                 dialogFragment = DurationDialogFragmentCompat.newInstance(preference.key)
             }

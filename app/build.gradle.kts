@@ -16,14 +16,14 @@ android {
     val gmsPackage = "com.google.android.gms"
 
     defaultConfig {
-        applicationId = "com.kunzisoft.keepass"
+        applicationId = "com.titipongbest.bestpassafe"
         minSdk = 19
         targetSdk = 36
         versionCode = 45700
         versionName = "4.5.7"
         multiDexEnabled = true
 
-        testApplicationId = "com.kunzisoft.keepass.tests"
+        testApplicationId = "com.titipongbest.bestpassafe.tests"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "GOOGLE_PLAY_SERVICES_PACKAGE", "\"$gmsPackage\"")
@@ -33,10 +33,34 @@ android {
         manifestPlaceholders["googlePlayServicesPackage"] = gmsPackage
     }
 
+    // Best Passafe: release signing from environment variables (set by GitHub Actions secrets).
+    // Without them, release builds stay unsigned.
+    val releaseKeystore = System.getenv("SIGNING_KEYSTORE_FILE")
+    signingConfigs {
+        if (!releaseKeystore.isNullOrEmpty()) {
+            create("release") {
+                storeFile = file(releaseKeystore)
+                // The generated keystore uses the same password for the store and the key,
+                // so either secret is enough; the alias defaults to "bestpassafe"
+                val envStorePassword = System.getenv("SIGNING_STORE_PASSWORD")?.takeIf { it.isNotEmpty() }
+                val envKeyPassword = System.getenv("SIGNING_KEY_PASSWORD")?.takeIf { it.isNotEmpty() }
+                storePassword = envStorePassword ?: envKeyPassword
+                keyPassword = envKeyPassword ?: envStorePassword
+                keyAlias = System.getenv("SIGNING_KEY_ALIAS")?.trim()?.takeIf { it.isNotEmpty() }
+                    ?: "bestpassafe"
+            }
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            if (!releaseKeystore.isNullOrEmpty()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
+            // Best Passafe: R8 shrinking broke screens that look up resources and classes
+            // by name (icon picker stuck loading), so the release build is not minified
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

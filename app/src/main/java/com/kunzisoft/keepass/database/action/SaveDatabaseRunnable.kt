@@ -21,6 +21,7 @@ package com.kunzisoft.keepass.database.action
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import com.kunzisoft.keepass.database.ContextualDatabase
 import com.kunzisoft.keepass.database.MainCredential
 import com.kunzisoft.keepass.database.element.MasterCredential
@@ -30,6 +31,9 @@ import com.kunzisoft.keepass.tasks.ActionRunnable
 import com.kunzisoft.keepass.tasks.ProgressTaskUpdater
 import com.kunzisoft.keepass.utils.AppUtil.getLimits
 import com.kunzisoft.keepass.utils.clear
+import com.kunzisoft.keepass.utils.DatabaseBackupUtil.databaseBackupManager
+import com.kunzisoft.keepass.utils.UriUtil.getDocumentFile
+import com.kunzisoft.keepass.utils.getUriInputStream
 import com.kunzisoft.keepass.utils.getUriOutputStream
 import java.io.File
 
@@ -63,15 +67,23 @@ open class SaveDatabaseRunnable(
             try {
                 val contentResolver = context.contentResolver
                 mMasterCredential = mainCredential?.toMasterCredential(contentResolver)
+                val destinationUri = databaseCopyUri ?: database.fileUri
+                // Only the original database is backed up, a copy goes to a new location
+                val backupLocation = if (databaseCopyUri == null) destinationUri?.toString() else null
                 // Build temp database file to avoid file corruption if error
                 database.saveData(
                     cacheFile = File.createTempFile("db_", ".tmp", context.cacheDir),
                     databaseOutputStream = {
-                        contentResolver.getUriOutputStream(databaseCopyUri ?: database.fileUri)
+                        contentResolver.getUriOutputStream(destinationUri)
                     },
                     masterCredential = mMasterCredential,
                     challengeResponseRetriever = cachingRetriever,
-                    limits = context.getLimits()
+                    limits = context.getLimits(),
+                    databaseInputStream = {
+                        contentResolver.getUriInputStream(destinationUri)
+                    },
+                    backupCurrentDatabase = backupCurrentDatabase(backupLocation, destinationUri),
+                    restoreBackup = restoreBackup(backupLocation, destinationUri)
                 )
                 // Indicate data was saved only if it's not a new location
                 if (databaseCopyUri == null) {
@@ -85,10 +97,50 @@ open class SaveDatabaseRunnable(
         }
     }
 
+    private fun backupCurrentDatabase(location: String?, uri: Uri?): (() -> Unit)? {
+        if (location == null || uri == null)
+            return null
+        return {
+            context.contentResolver.getUriInputStream(uri)?.use { input ->
+                val name = uri.getDocumentFile(context)?.name
+                    ?: uri.lastPathSegment
+                    ?: location
+                context.databaseBackupManager().createBackup(location, name, input)
+            }
+        }
+    }
+
+    private fun restoreBackup(location: String?, uri: Uri?): (() -> Boolean)? {
+        if (location == null || uri == null)
+            return null
+        return {
+            val backupManager = context.databaseBackupManager()
+            val backup = backupManager.latestBackup(location)
+            if (backup == null) {
+                false
+            } else {
+                try {
+                    val outputStream = context.contentResolver.getUriOutputStream(uri)
+                    outputStream?.use { output ->
+                        backupManager.copyBackupTo(backup, output)
+                    }
+                    outputStream != null
+                } catch (e: Exception) {
+                    Log.e(TAG, "Unable to restore the database backup", e)
+                    false
+                }
+            }
+        }
+    }
+
     override fun onFinishRun() {
         // Need to call super.onFinishRun() in child class
         mMasterCredential?.clear()
         cachedHardwareResponse?.clear()
         afterSaveDatabase?.invoke(result)
+    }
+
+    companion object {
+        private const val TAG = "SaveDatabaseRunnable"
     }
 }

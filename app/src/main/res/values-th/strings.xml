@@ -719,4 +719,46 @@
     <string name="user_verification">การตรวจสอบผู้ใช้</string>
     <string name="education_user_verification_title">การยืนยันสำหรับการกระทำที่ละเอียดอ่อน</string>
     <string name="education_user_verification_summary">การสลับโหมดการยืนยันผู้ใช้สำหรับเซสชั่นนี้. \n \n\"เปิดใช้งานการยืนยันผู้ใช้\" สำหรับการกระทำกับเขตข้อมูลที่ถูกป้องกันไว้และการตั้งค่าฐานข้อมูลต่างๆ\n\"เปิดใช้งานการยืนยันผู้ใช้\" ให้คุณเปลื่ยนแปลงข้อมูลต่างๆในฐานข้อมูลได้โดยไม่ต้องยืนยัน</string>
+    <string name="bp_tagline">ตู้เซฟรหัสผ่านส่วนตัวของคุณ</string>
+    <string name="bp_offline_badge">ออฟไลน์ 100% ข้อมูลอยู่ในเครื่องคุณเท่านั้น</string>
+    <!-- Best Passafe: About screen -->
+    <string name="bp_about_description">แอปจัดการรหัสผ่านแบบออฟไลน์และโอเพนซอร์สสำหรับ Android รองรับไฟล์ฐานข้อมูลมาตรฐาน KeePass (.kdbx)</string>
+    <string name="bp_about_credits_title">ผู้พัฒนาและที่มา</string>
+    <string name="html_bp_about_credits">Best Passafe © %1$d&lt;br/&gt;&lt;br/&gt;Best Passafe เป็นรุ่นดัดแปลง (fork) ของ &lt;strong&gt;KeePassDX&lt;/strong&gt; ลิขสิทธิ์ © 2009–%1$d Jeremy Jamet / Kunzisoft ซึ่งพัฒนาต่อมาจาก KeePassDroid ของ Brian Pellin ขอขอบคุณผู้พัฒนาต้นฉบับและผู้ร่วมพัฒนา KeePassDX ทุกท่าน</string>
+    <string name="bp_about_trademark">KeePass และ KeePassDX เป็นชื่อของเจ้าของแต่ละราย Best Passafe เป็นโครงการอิสระ ไม่มีส่วนเกี่ยวข้องและไม่ได้รับการรับรองจาก Kunzisoft หรือโครงการ KeePass</string>
+    <string name="bp_about_license_title">สัญญาอนุญาต</string>
+    <string name="html_bp_about_license">โปรแกรมนี้เป็นซอฟต์แวร์เสรี คุณสามารถแจกจ่ายต่อและ/หรือแก้ไขได้ภายใต้เงื่อนไขของ &lt;a href="https://www.gnu.org/licenses/gpl-3.0.html"&gt;GNU General Public License&lt;/a&gt; ที่เผยแพร่โดย Free Software Foundation &lt;strong&gt;รุ่นที่ 3&lt;/strong&gt; หรือรุ่นที่ใหม่กว่า (ตามที่คุณเลือก)&lt;br/&gt;&lt;br/&gt;โปรแกรมนี้แจกจ่ายด้วยความหวังว่าจะเป็นประโยชน์ แต่&lt;strong&gt;ไม่มีการรับประกันใดๆ&lt;/strong&gt; รวมถึงการรับประกันโดยนัยด้านความเหมาะสมในการค้าหรือความเหมาะสมสำหรับวัตถุประสงค์เฉพาะ</string>
+    <string name="bp_about_privacy_title">ความเป็นส่วนตัว</string>
+    <string-array name="bp_lock_timeout_names">
+        <item>15 วินาที</item>
+        <item>30 วินาที</item>
+        <item>1 นาที</item>
+        <item>2 นาที</item>
+        <item>3 นาที</item>
+        <item>5 นาที</item>
+    </string-array>
+    <string-array name="bp_clipboard_timeout_names">
+        <item>10 วินาที</item>
+        <item>20 วินาที</item>
+        <item>30 วินาที</item>
+        <item>1 นาที</item>
+        <item>2 นาที</item>
+        <item>5 นาที</item>
+    </string-array>
+    <string name="bp_version_label">เวอร์ชัน %1$s</string>
+    <string name="error_save_database_verification">บันทึกฐานข้อมูลไม่สำเร็จ ไฟล์ที่เข้ารหัสแล้วตรวจสอบไม่ผ่าน ไฟล์เดิมของคุณไม่ถูกแก้ไข</string>
+    <string name="error_save_database_write">ยืนยันไม่ได้ว่าบันทึกฐานข้อมูลสำเร็จ อย่าเพิ่งปิดแอป ลองบันทึกอีกครั้ง</string>
+    <string name="error_save_database_write_restored">บันทึกฐานข้อมูลไม่สมบูรณ์ แอปกู้คืนเวอร์ชันก่อนหน้าให้แล้ว การแก้ไขของคุณยังอยู่ ลองบันทึกอีกครั้ง</string>
+    <string name="menu_database_backups">สำเนาสำรองฐานข้อมูล</string>
+    <string name="database_backups_empty">ยังไม่มีสำเนาสำรอง แอปจะเก็บเวอร์ชันก่อนหน้าไว้ทุกครั้งที่บันทึก</string>
+    <string name="database_backups_explanation">เลือกเวอร์ชันเพื่อบันทึกเป็นไฟล์ใหม่ เปิดได้ด้วยรหัสผ่านหลักที่ใช้ในตอนนั้น</string>
+    <string name="database_backup_exported">บันทึกสำเนาแล้ว</string>
+    <string name="database_backup_export_error">บันทึกสำเนาไม่สำเร็จ</string>
+    <string name="overwrite_existing_file_title">เขียนทับไฟล์เดิมหรือไม่</string>
+    <string name="overwrite_existing_file_message">“%1$s” มีข้อมูลอยู่แล้ว ถ้าทำต่อ ไฟล์นี้จะถูกแทนที่ และกู้ข้อมูลเดิมคืนไม่ได้ถ้าไม่มีสำเนาไว้ ถ้าต้องการเก็บไว้ทั้งสองไฟล์ ให้ยกเลิกแล้วเลือกชื่อหรือโฟลเดอร์อื่น</string>
+    <string name="overwrite_existing_file_confirm">เขียนทับ</string>
+    <string name="overwrite_existing_file_cancelled">ยกเลิกแล้ว ไฟล์เดิมไม่ถูกแก้ไข</string>
+    <string name="folder_color">สีโฟลเดอร์</string>
+    <string name="folder_color_none">ไม่มีสี</string>
+    <string name="folder_color_custom">สีอื่น…</string>
 </resources>

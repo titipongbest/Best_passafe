@@ -722,8 +722,8 @@
     <string name="hide_templates_title">Dölj mallar</string>
     <string name="hide_templates_summary">Mallar visas inte</string>
     <string name="passkey">Lösenordsnyckel</string>
-    <string name="credential_provider_service_name">KeePassDX-autentiseringsleverantör</string>
-    <string name="credential_provider_database_username">KeePassDX-databas</string>
+    <string name="credential_provider_service_name">Best Passafe-autentiseringsleverantör</string>
+    <string name="credential_provider_database_username">Best Passafe-databas</string>
     <string name="credential_provider_locked_database_description">Välj för att låsa upp</string>
     <string name="passkey_creation_description">Spara lösenordsnyckeln i en ny post</string>
     <string name="passkey_update_description">Uppdatera lösenordsnyckeln i posten \"%1$s\"</string>

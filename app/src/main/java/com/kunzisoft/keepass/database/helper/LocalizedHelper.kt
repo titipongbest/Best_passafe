@@ -29,6 +29,8 @@ import com.kunzisoft.keepass.database.exception.CopyGroupDatabaseException
 import com.kunzisoft.keepass.database.exception.CorruptedDatabaseException
 import com.kunzisoft.keepass.database.exception.DatabaseInputException
 import com.kunzisoft.keepass.database.exception.DatabaseOutputException
+import com.kunzisoft.keepass.database.exception.SaveVerificationDatabaseException
+import com.kunzisoft.keepass.database.exception.WriteVerificationDatabaseException
 import com.kunzisoft.keepass.database.exception.DuplicateUuidDatabaseException
 import com.kunzisoft.keepass.database.exception.EmptyKeyDatabaseException
 import com.kunzisoft.keepass.database.exception.FileNotFoundDatabaseException
@@ -87,6 +89,11 @@ fun LocalizedException.getLocalizedMessage(resources: Resources): String? =
         is CopyGroupDatabaseException -> resources.getString(R.string.error_copy_group_here)
         is MissingParentDatabaseException -> resources.getString(R.string.error_missing_parent)
         is DatabaseInputException -> resources.getString(R.string.error_load_database)
+        is SaveVerificationDatabaseException -> resources.getString(R.string.error_save_database_verification)
+        is WriteVerificationDatabaseException -> resources.getString(
+            if (restoredFromBackup) R.string.error_save_database_write_restored
+            else R.string.error_save_database_write
+        )
         is DatabaseOutputException -> resources.getString(R.string.error_save_database)
         else -> localizedMessage
     }

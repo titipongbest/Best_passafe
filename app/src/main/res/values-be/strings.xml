@@ -691,8 +691,8 @@
     <string name="education_user_verification_title">Праверка для далікатных дзеянняў</string>
     <string name="education_user_verification_summary">Змяніць рэжым праверкі карыстальніка для сеанса.\n\n\"Праверка карыстальніка ўключаная\" правярае дзеянні з ахаванымі палямі і наладамі базы даных.\n\"Праверка карыстальніка выключаная\" дазваляе вам змяняць любыя даныя ў вашай базе даных без праверкі.</string>
     <string name="passkey">Ключ доступу</string>
-    <string name="credential_provider_service_name">Пастаўшчык уліковых даных KeePassDX</string>
-    <string name="credential_provider_database_username">База даных KeePassDX</string>
+    <string name="credential_provider_service_name">Пастаўшчык уліковых даных Best Passafe</string>
+    <string name="credential_provider_database_username">База даных Best Passafe</string>
     <string name="credential_provider_locked_database_description">Абярыце для разблакіроўкі</string>
     <string name="passkey_creation_description">Захаваць ключ доступу ў новым запісе</string>
     <string name="passkey_update_description">Абнавіць ключ доступу ў %1$s</string>

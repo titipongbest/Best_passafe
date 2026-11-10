@@ -17,7 +17,8 @@
   You should have received a copy of the GNU General Public License
   along with KeePassDX.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         android:title="@string/general">
@@ -68,12 +69,14 @@
     <PreferenceCategory
         android:title="@string/lock">
 
-        <com.kunzisoft.keepass.settings.preference.DurationDialogPreference
+        <ListPreference
             android:key="@string/app_timeout_key"
             android:title="@string/app_timeout"
-            android:summary="@string/app_timeout_summary"
             android:dialogTitle="@string/app_timeout"
-            android:defaultValue="@string/timeout_default"/>
+            android:defaultValue="@string/timeout_default"
+            android:entries="@array/bp_lock_timeout_names"
+            android:entryValues="@array/bp_lock_timeout_values"
+            app:useSimpleSummaryProvider="true"/>
         <SwitchPreferenceCompat
             android:key="@string/lock_database_screen_off_key"
             android:title="@string/lock_database_screen_off_title"

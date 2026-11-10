@@ -695,12 +695,12 @@
     <string name="passkeys_backup_state_summary">أشر إلى أن بيانات الاعتماد نُسخت احتياطيًا ومحمية من فقدان جهاز واحد</string>
     <string name="credential_provider_service_subtitle">مفاتيح المرور، موفّر بيانات اعتماد الملء التلقائي</string>
     <string name="passkey">مفتاح المرور</string>
-    <string name="credential_provider_service_name">موفّر بيانات اعتماد KeePassDX</string>
+    <string name="credential_provider_service_name">موفّر بيانات اعتماد Best Passafe</string>
     <string name="passkey_creation_description">احفظ مفتاح المرور في مدخل جديد</string>
     <string name="passkey_update_description">قم بتحديث مفتاح المرور في %1$s</string>
     <string name="passkey_selection_username">لم يتم العثور على مفتاح المرور</string>
     <string name="passkey_selection_description">تحديد مفتاح مرور موجود</string>
-    <string name="credential_provider_database_username">قاعدة بيانات KeePassDX</string>
+    <string name="credential_provider_database_username">قاعدة بيانات Best Passafe</string>
     <string name="credential_provider_locked_database_description">تحديد لفتح القفل</string>
     <string name="passkey_username">اسم مستخدم مفتاح المرور</string>
     <string name="passkey_private_key">المفتاح الخاص لمفتاح المرور</string>

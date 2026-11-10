@@ -199,6 +199,7 @@ class NodesAdapter(
             } else if (oldItem is SortedGroupInfo && newItem is SortedGroupInfo) {
                 typeContentTheSame = oldItem.numberOfChildEntries == newItem.numberOfChildEntries
                         && oldItem.notes == newItem.notes
+                        && oldItem.color == newItem.color
             }
             return typeContentTheSame
                     && oldItem.nodeId == newItem.nodeId
@@ -360,7 +361,8 @@ class NodesAdapter(
         var iconColor = if (holder.container.isSelected)
             mColorOnSecondary
         else when (node) {
-            is GroupInfo -> mTextColor
+            // Best Passafe: a folder shows its own color when one was chosen
+            is GroupInfo -> node.color ?: mTextColor
             is EntryInfo -> mColorSecondary
             else -> mColorSecondary
         }
@@ -463,6 +465,17 @@ class NodesAdapter(
     }
 
     private fun assignBackgroundColor(view: View?, entry: EntryInfo) {
+        // Best Passafe: the item card drawable handles normal / selected states,
+        // only a custom entry color tints it
+        if (view?.id == R.id.node_container) {
+            val customColor = if (mShowEntryColors) entry.backgroundColor else null
+            ViewCompat.setBackgroundTintList(
+                view,
+                if (!view.isSelected && customColor != null)
+                    ColorStateList.valueOf(customColor) else null
+            )
+            return
+        }
         view?.let {
             ViewCompat.setBackgroundTintList(
                 view,

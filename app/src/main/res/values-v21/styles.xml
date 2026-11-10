@@ -21,13 +21,13 @@
     <!-- To encapsulate elevation & status bar color -->
     <style name="KeepassDXStyle.Light.v21" parent="KeepassDXStyle.Light.v14" >
         <item name="preferenceTheme">@style/KeepassDXStyle.Preference.Theme</item>
-        <item name="android:statusBarColor">@color/grey_dark</item>
-        <item name="android:navigationBarColor">@color/grey_dark</item>
+        <item name="android:statusBarColor">@color/bp_green</item>
+        <item name="android:navigationBarColor">@color/bp_green</item>
     </style>
     <style name="KeepassDXStyle.Night.v21" parent="KeepassDXStyle.Night.v14" >
         <item name="preferenceTheme">@style/KeepassDXStyle.Preference.Theme</item>
-        <item name="android:statusBarColor">?attr/colorSurface</item>
-        <item name="android:navigationBarColor">?attr/colorSurface</item>
+        <item name="android:statusBarColor">@color/bp_green</item>
+        <item name="android:navigationBarColor">@color/bp_green</item>
     </style>
 
     <!-- Toolbar -->

@@ -32,6 +32,7 @@
             app:layout_constraintEnd_toEndOf="parent"/>
         <com.kunzisoft.keepass.view.ToolbarAction
             android:id="@+id/toolbar"
+            android:theme="@style/ThemeOverlay.BestPassafe.Bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/screenshot_mode_banner" />
