@@ -54,7 +54,7 @@ class FileDatabaseHistoryAdapter(context: Context)
     private var mPreviousExpandedDatabaseFile: SuperDatabaseFile? = null
 
     private val mListPosition = mutableListOf<SuperDatabaseFile>()
-    private var mAllAliases: List<String> = emptyList()
+    private var mAllAliases: List<String?> = emptyList()
     private val mSortedListDatabaseFiles = SortedList(SuperDatabaseFile::class.java,
         object: SortedListAdapterCallback<SuperDatabaseFile>(this) {
             override fun compare(item1: SuperDatabaseFile, item2: SuperDatabaseFile): Int {
