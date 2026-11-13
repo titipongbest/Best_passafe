@@ -57,8 +57,10 @@ android {
             if (!releaseKeystore.isNullOrEmpty()) {
                 signingConfig = signingConfigs.getByName("release")
             }
-            isMinifyEnabled = true
-            isShrinkResources = true
+            // Best Passafe: R8 minification/shrinking re-enabled in v4.5.8 caused crashes on
+            // entry creation and icon selection; keep release unminified like v4.5.6/v4.5.7.
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
