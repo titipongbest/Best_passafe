@@ -44,6 +44,9 @@ open class GroupInfo : NodeInfo {
     var enableAutoType: Boolean? = null
     var defaultAutoTypeSequence: String = ""
 
+    private var cachedColorRaw: String? = null
+    private var cachedColorParsed: Int? = null
+
     /**
      * Best Passafe: color chosen for the folder, stored in the group CustomData
      * as "#RRGGBB" so the database stays a standard .kdbx file
@@ -51,20 +54,27 @@ open class GroupInfo : NodeInfo {
      * null means no custom color.
      */
     var color: Int?
-        get() = parseColor(customData.get(CUSTOM_DATA_COLOR_KEY)?.value)
+        get() {
+            val raw = customData.get(CUSTOM_DATA_COLOR_KEY)?.value
+            if (raw != cachedColorRaw) {
+                cachedColorRaw = raw
+                cachedColorParsed = parseColor(raw)
+            }
+            return cachedColorParsed
+        }
         set(value) {
             // Work on a copy, the current CustomData can be shared with the database group
             customData = CustomData(customData).apply {
                 if (value == null) {
                     remove(CUSTOM_DATA_COLOR_KEY)
+                    cachedColorRaw = null
+                    cachedColorParsed = null
                 } else {
-                    put(
-                        CustomDataItem(
-                            CUSTOM_DATA_COLOR_KEY,
-                            "#" + Integer.toHexString(0xFFFFFF and value)
-                                .uppercase().padStart(6, '0')
-                        )
-                    )
+                    val hex = "#" + Integer.toHexString(0xFFFFFF and value)
+                        .uppercase().padStart(6, '0')
+                    put(CustomDataItem(CUSTOM_DATA_COLOR_KEY, hex))
+                    cachedColorRaw = hex
+                    cachedColorParsed = (0xFF000000L or (0xFFFFFFL and value.toLong())).toInt()
                 }
             }
         }

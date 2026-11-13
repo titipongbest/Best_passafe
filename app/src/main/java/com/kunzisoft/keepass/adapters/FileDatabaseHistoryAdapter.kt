@@ -54,6 +54,7 @@ class FileDatabaseHistoryAdapter(context: Context)
     private var mPreviousExpandedDatabaseFile: SuperDatabaseFile? = null
 
     private val mListPosition = mutableListOf<SuperDatabaseFile>()
+    private var mAllAliases: List<String> = emptyList()
     private val mSortedListDatabaseFiles = SortedList(SuperDatabaseFile::class.java,
         object: SortedListAdapterCallback<SuperDatabaseFile>(this) {
             override fun compare(item1: SuperDatabaseFile, item2: SuperDatabaseFile): Int {
@@ -116,7 +117,7 @@ class FileDatabaseHistoryAdapter(context: Context)
         // Same name as another database: show where this one is, to avoid opening the wrong one
         val nameShared = DatabaseLocationHint.isNameShared(
             databaseFile.databaseAlias,
-            mListPosition.map { it.databaseFile.databaseAlias }
+            mAllAliases
         )
         val locationHint = if (nameShared) {
             DatabaseLocationHint.describe(
@@ -219,12 +220,14 @@ class FileDatabaseHistoryAdapter(context: Context)
      * A change to one item can change which names are shared by other items
      */
     private fun refreshSharedNameHints() {
+        mAllAliases = mListPosition.map { it.databaseFile.databaseAlias }
         if (itemCount > 0)
             notifyItemRangeChanged(0, itemCount)
     }
 
     fun clearDatabaseFileHistoryList() {
         mListPosition.clear()
+        mAllAliases = emptyList()
         mSortedListDatabaseFiles.clear()
     }
 

@@ -32,7 +32,6 @@ import com.kunzisoft.keepass.tasks.ProgressTaskUpdater
 import com.kunzisoft.keepass.utils.AppUtil.getLimits
 import com.kunzisoft.keepass.utils.clear
 import com.kunzisoft.keepass.utils.DatabaseBackupUtil.databaseBackupManager
-import com.kunzisoft.keepass.utils.UriUtil.getDocumentFile
 import com.kunzisoft.keepass.utils.getUriInputStream
 import com.kunzisoft.keepass.utils.getUriOutputStream
 import java.io.File
@@ -102,7 +101,7 @@ open class SaveDatabaseRunnable(
             return null
         return {
             context.contentResolver.getUriInputStream(uri)?.use { input ->
-                val name = uri.getDocumentFile(context)?.name
+                val name = database.name.takeIf { it.isNotBlank() }
                     ?: uri.lastPathSegment
                     ?: location
                 context.databaseBackupManager().createBackup(location, name, input)

@@ -289,6 +289,15 @@ class NodesAdapter(
             mInflater.inflate(R.layout.item_list_nodes_entry, parent, false)
         }
         val nodeViewHolder = NodeViewHolder(view)
+        nodeViewHolder.tagsAdapter = TagsAdapter(parent.context, TagsAdapter.TagViewType.SMALL).also {
+            nodeViewHolder.tags.layoutManager = LinearLayoutManager(
+                parent.context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            nodeViewHolder.tags.isNestedScrollingEnabled = false
+            nodeViewHolder.tags.adapter = it
+        }
         mTextDefaultDimension = nodeViewHolder.text.textSize
         mSubTextDefaultDimension = nodeViewHolder.subText?.textSize ?: mSubTextDefaultDimension
         mMetaTextDefaultDimension = nodeViewHolder.meta.textSize
@@ -315,28 +324,25 @@ class NodesAdapter(
         // Tags
         holder.tags.apply {
             val tags = node.tags
-            if (mShowTags) {
-                val tagsAdapter = TagsAdapter(this.context, TagsAdapter.TagViewType.SMALL)
-                layoutManager = LinearLayoutManager(
-                    context,
-                    LinearLayoutManager.HORIZONTAL,
-                    false
-                )
-                adapter = tagsAdapter
-                tagsAdapter.setTags(tags)
-                tagsAdapter.toggleSelection(isSelected)
-                tagsAdapter.onItemClickListener = object : TagsAdapter.OnItemClickListener {
-                    override fun onItemClick(item: Tag) {
-                        mNodeClickCallback?.onNodeClick(node)
-                    }
+            if (mShowTags && tags.isNotEmpty()) {
+                holder.tagsAdapter?.apply {
+                    setTags(tags)
+                    toggleSelection(isSelected)
+                    onItemClickListener = object : TagsAdapter.OnItemClickListener {
+                        override fun onItemClick(item: Tag) {
+                            mNodeClickCallback?.onNodeClick(node)
+                        }
 
-                    override fun onItemLongClick(item: Tag): Boolean {
-                        mNodeClickCallback?.onNodeLongClick(node)
-                        return true
+                        override fun onItemLongClick(item: Tag): Boolean {
+                            mNodeClickCallback?.onNodeLongClick(node)
+                            return true
+                        }
                     }
                 }
+                visibility = View.VISIBLE
+            } else {
+                visibility = View.GONE
             }
-            visibility = if (tags.isNotEmpty()) View.VISIBLE else View.GONE
         }
         // Add meta text to show UUID
         holder.meta.apply {
@@ -530,6 +536,7 @@ class NodesAdapter(
         var text: TextView = itemView.findViewById(R.id.node_text)
         var subText: TextView? = itemView.findViewById(R.id.node_subtext)
         var tags: RecyclerView = itemView.findViewById(R.id.node_tags_list_view)
+        var tagsAdapter: TagsAdapter? = null
         var meta: TextView = itemView.findViewById(R.id.node_meta)
         var path: TextView? = itemView.findViewById(R.id.node_path)
         var otpDisplay: OtpDisplayView? = itemView.findViewById(R.id.node_otp_display)

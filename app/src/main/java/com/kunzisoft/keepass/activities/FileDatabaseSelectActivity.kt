@@ -497,41 +497,46 @@ class FileDatabaseSelectActivity : DatabaseModeActivity() {
     }
 
     private fun showDatabaseBackups() {
-        val backups = databaseBackupManager().listBackups()
-        if (backups.isEmpty()) {
-            AlertDialog.Builder(this)
-                .setTitle(R.string.menu_database_backups)
-                .setMessage(R.string.database_backups_empty)
-                .setPositiveButton(android.R.string.ok, null)
-                .show()
-            return
-        }
-        val dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
-        val labels = backups.map { backup ->
-            "${backup.databaseName}\n${dateFormat.format(Date(backup.timestamp))}"
-        }.toTypedArray()
-        AlertDialog.Builder(this)
-            .setTitle(R.string.menu_database_backups)
-            .setItems(labels) { _, which ->
-                val backup = backups[which]
-                mBackupToExport = backup.file
-                val baseName = backup.databaseName.substringBeforeLast('.')
-                val extension = backup.databaseName.substringAfterLast('.', "kdbx")
-                val date = SimpleDateFormat("yyyyMMdd-HHmm", Locale.ENGLISH)
-                    .format(Date(backup.timestamp))
-                try {
-                    exportBackupResultLauncher.launch("${baseName}_backup_$date.$extension")
-                } catch (e: Exception) {
-                    mBackupToExport = null
-                    Log.e(TAG, "Unable to launch the file creation", e)
-                    Snackbar.make(coordinatorLayout, R.string.database_backup_export_error,
-                        Snackbar.LENGTH_LONG).asError().show()
-                }
+        lifecycleScope.launch {
+            val backups = withContext(Dispatchers.IO) {
+                databaseBackupManager().listBackups()
             }
-            .setNegativeButton(android.R.string.cancel, null)
-            .show()
-        Snackbar.make(coordinatorLayout, R.string.database_backups_explanation,
-            Snackbar.LENGTH_LONG).show()
+            if (isFinishing || isDestroyed) return@launch
+            if (backups.isEmpty()) {
+                AlertDialog.Builder(this@FileDatabaseSelectActivity)
+                    .setTitle(R.string.menu_database_backups)
+                    .setMessage(R.string.database_backups_empty)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show()
+                return@launch
+            }
+            val dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
+            val labels = backups.map { backup ->
+                "${backup.databaseName}\n${dateFormat.format(Date(backup.timestamp))}"
+            }.toTypedArray()
+            AlertDialog.Builder(this@FileDatabaseSelectActivity)
+                .setTitle(R.string.menu_database_backups)
+                .setItems(labels) { _, which ->
+                    val backup = backups[which]
+                    mBackupToExport = backup.file
+                    val baseName = backup.databaseName.substringBeforeLast('.')
+                    val extension = backup.databaseName.substringAfterLast('.', "kdbx")
+                    val date = SimpleDateFormat("yyyyMMdd-HHmm", Locale.ENGLISH)
+                        .format(Date(backup.timestamp))
+                    try {
+                        exportBackupResultLauncher.launch("${baseName}_backup_$date.$extension")
+                    } catch (e: Exception) {
+                        mBackupToExport = null
+                        Log.e(TAG, "Unable to launch the file creation", e)
+                        Snackbar.make(coordinatorLayout, R.string.database_backup_export_error,
+                            Snackbar.LENGTH_LONG).asError().show()
+                    }
+                }
+                .setNegativeButton(android.R.string.cancel, null)
+                .show()
+            Snackbar.make(coordinatorLayout, R.string.database_backups_explanation,
+                Snackbar.LENGTH_LONG).show()
+        }
     }
 
     private fun exportBackup(backup: File, uri: Uri) {
