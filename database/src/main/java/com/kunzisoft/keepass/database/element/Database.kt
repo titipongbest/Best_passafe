@@ -952,14 +952,11 @@ open class Database {
     @Throws(Exception::class)
     fun verifyDatabaseFile(file: File, limits: Limits) {
         val databaseToVerify = Database()
-        // Own directory so attachments of the verified copy never touch the open database cache
-        val binaryDirectory = File(file.parentFile, file.name + ".bin").apply { mkdirs() }
         try {
+            // Keep binaryCache.cacheDirectory null so attachments are verified in memory without disk I/O
             readDatabaseStream(file.inputStream(),
                 { databaseInputStream ->
-                    val databaseKDB = DatabaseKDB().apply {
-                        binaryCache.cacheDirectory = binaryDirectory
-                    }
+                    val databaseKDB = DatabaseKDB()
                     DatabaseInputKDB(databaseKDB)
                         .openDatabase(databaseInputStream, null) {
                             this@Database.mDatabaseKDB?.let { thisDatabaseKDB ->
@@ -969,9 +966,7 @@ open class Database {
                     databaseToVerify.setDatabaseKDB(databaseKDB)
                 },
                 { databaseInputStream ->
-                    val databaseKDBX = DatabaseKDBX().apply {
-                        binaryCache.cacheDirectory = binaryDirectory
-                    }
+                    val databaseKDBX = DatabaseKDBX()
                     DatabaseInputKDBX(databaseKDBX).apply {
                         setMethodToCheckMemoryForBinary { memoryWanted ->
                             limits.isMemorySufficientForBinary(memoryWanted)
@@ -987,7 +982,6 @@ open class Database {
             )
         } finally {
             databaseToVerify.clearAndClose()
-            binaryDirectory.deleteRecursively()
         }
     }
 

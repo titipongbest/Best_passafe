@@ -19,8 +19,8 @@ android {
         applicationId = "com.titipongbest.bestpassafe"
         minSdk = 19
         targetSdk = 36
-        versionCode = 45700
-        versionName = "4.5.7"
+        versionCode = 45800
+        versionName = "4.5.8"
         multiDexEnabled = true
 
         testApplicationId = "com.titipongbest.bestpassafe.tests"
@@ -57,10 +57,8 @@ android {
             if (!releaseKeystore.isNullOrEmpty()) {
                 signingConfig = signingConfigs.getByName("release")
             }
-            // Best Passafe: R8 shrinking broke screens that look up resources and classes
-            // by name (icon picker stuck loading), so the release build is not minified
-            isMinifyEnabled = false
-            isShrinkResources = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

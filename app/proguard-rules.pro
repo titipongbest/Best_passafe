@@ -40,3 +40,7 @@
 -keep class com.kunzisoft.keepass.settings.preference.** { *; }
 -keep class com.kunzisoft.keepass.view.** { *; }
 -keep class com.kunzisoft.keepass.credentialprovider.** { *; }
+
+# Keep icon pack classes
+-keep class com.kunzisoft.keepass.icon.** { *; }
+-keep class com.kunzisoft.keepass.icons.** { *; }

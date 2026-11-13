@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/classic_*,@drawable/material_*,@string/resource_id,@string/*_resource_id,@string/*_name,@bool/*_tintable" />
