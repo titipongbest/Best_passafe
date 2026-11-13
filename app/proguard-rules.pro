@@ -20,9 +20,9 @@
 -dontwarn org.joda.convert.FromString
 -dontwarn org.joda.convert.ToString
 
-# Keep TokenAutoComplete
--keep class com.splitwise.tokenautocomplete.** { *; }
--dontwarn com.splitwise.tokenautocomplete.**
+# Keep TokenAutoComplete (actual package is com.tokenautocomplete, not com.splitwise.tokenautocomplete)
+-keep class com.tokenautocomplete.** { *; }
+-dontwarn com.tokenautocomplete.**
 
 # Keep Chroma color picker
 -keep class com.kunzisoft.androidclearchroma.** { *; }
@@ -40,6 +40,12 @@
 -keep class com.kunzisoft.keepass.settings.preference.** { *; }
 -keep class com.kunzisoft.keepass.view.** { *; }
 -keep class com.kunzisoft.keepass.credentialprovider.** { *; }
+
+# Keep activities, fragments, adapters, viewmodels, and models
+-keep class com.kunzisoft.keepass.activities.** { *; }
+-keep class com.kunzisoft.keepass.adapters.** { *; }
+-keep class com.kunzisoft.keepass.viewmodels.** { *; }
+-keep class com.kunzisoft.keepass.model.** { *; }
 
 # Keep icon pack classes
 -keep class com.kunzisoft.keepass.icon.** { *; }
