@@ -1,0 +1,451 @@
+/*
+ * Copyright 2019 Jeremy Jamet / Kunzisoft.
+ *     
+ * This file is part of KeePassDX.
+ *
+ *  KeePassDX is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  KeePassDX is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with KeePassDX.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+package com.kunzisoft.keepass.activities.dialogs
+
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.graphics.ColorUtils
+import android.app.Dialog
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
+import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.ImageViewCompat
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputLayout
+import com.kunzisoft.keepass.R
+import com.kunzisoft.keepass.activities.dialogs.GroupEditDialogFragment.EditGroupDialogAction.CREATION
+import com.kunzisoft.keepass.activities.dialogs.GroupEditDialogFragment.EditGroupDialogAction.NONE
+import com.kunzisoft.keepass.activities.dialogs.GroupEditDialogFragment.EditGroupDialogAction.UPDATE
+import com.kunzisoft.keepass.adapters.TagsProposalAdapter
+import com.kunzisoft.keepass.database.ContextualDatabase
+import com.kunzisoft.keepass.database.element.DateInstant
+import com.kunzisoft.keepass.database.element.icon.IconImage
+import com.kunzisoft.keepass.model.GroupInfo
+import com.kunzisoft.keepass.utils.getParcelableCompat
+import com.kunzisoft.keepass.view.DateTimeEditFieldView
+import com.kunzisoft.keepass.view.InheritedCompletionView
+import com.kunzisoft.keepass.view.TagsCompletionView
+import com.kunzisoft.keepass.viewmodels.ColorPickerViewModel
+import com.kunzisoft.keepass.viewmodels.GroupEditViewModel
+import com.kunzisoft.keepass.viewmodels.NodeEditViewModel
+import com.tokenautocomplete.FilteredArrayAdapter
+import kotlinx.coroutines.launch
+
+class GroupEditDialogFragment : DatabaseDialogFragment() {
+
+    private val mGroupEditViewModel: GroupEditViewModel by activityViewModels()
+    private val mColorPickerViewModel: ColorPickerViewModel by activityViewModels()
+
+    private var mPopulateIconMethod: ((ImageView, IconImage) -> Unit)? = null
+    private var mEditGroupDialogAction = NONE
+    private var mGroupInfo = GroupInfo()
+
+    private lateinit var iconButtonView: ImageView
+    private var mIconColor: Int = 0
+    private lateinit var colorContainerView: ViewGroup
+    private lateinit var colorSwatchesView: LinearLayout
+    private lateinit var colorCustomButton: MaterialButton
+    private lateinit var nameTextLayoutView: TextInputLayout
+    private lateinit var nameTextView: TextView
+    private lateinit var notesTextLayoutView: TextInputLayout
+    private lateinit var notesTextView: TextView
+    private lateinit var expirationView: DateTimeEditFieldView
+    private lateinit var searchableContainerView: TextInputLayout
+    private lateinit var searchableView: InheritedCompletionView
+    private lateinit var autoTypeContainerView: ViewGroup
+    private lateinit var autoTypeInheritedView: InheritedCompletionView
+    private lateinit var autoTypeSequenceView: TextView
+    private lateinit var tagsContainerView: TextInputLayout
+    private lateinit var tagsCompletionView: TagsCompletionView
+    private var tagsAdapter: FilteredArrayAdapter<String>? = null
+
+    enum class EditGroupDialogAction {
+        CREATION, UPDATE, NONE;
+
+        companion object {
+            fun getActionFromOrdinal(ordinal: Int): EditGroupDialogAction {
+                return EditGroupDialogAction.entries[ordinal]
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    mGroupEditViewModel.nodeEditEvents.collect { event ->
+                        when (event) {
+                            is NodeEditViewModel.NodeEditEvent.OnIconSelected -> {
+                                mGroupInfo.icon = event.icon
+                                mPopulateIconMethod?.invoke(iconButtonView, mGroupInfo.icon)
+                            }
+                            is NodeEditViewModel.NodeEditEvent.OnDateSelected -> {
+                                // Save the date
+                                mGroupInfo.expiryTime.setDate(event.date.year, event.date.month, event.date.day)
+                                expirationView.dateTime = mGroupInfo.expiryTime
+                                if (expirationView.dateTime.type == DateInstant.Type.DATE_TIME) {
+                                    // Trick to recall selection with time
+                                    mGroupEditViewModel.requestDateTimeSelection(
+                                        DateInstant(mGroupInfo.expiryTime.instant, DateInstant.Type.TIME)
+                                    )
+                                }
+                            }
+                            is NodeEditViewModel.NodeEditEvent.OnTimeSelected -> {
+                                // Save the time
+                                mGroupInfo.expiryTime.setTime(event.time.hour, event.time.minute)
+                                expirationView.dateTime = mGroupInfo.expiryTime
+                            }
+                            else -> {}
+                        }
+                    }
+                }
+                launch {
+                    mColorPickerViewModel.colorPicked.collect { color ->
+                        mGroupInfo.color = color
+                        refreshColorViews()
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onDatabaseRetrieved(database: ContextualDatabase) {
+        super.onDatabaseRetrieved(database)
+
+        mPopulateIconMethod = { imageView, icon ->
+            database.iconDrawableFactory.assignDatabaseIcon(imageView, icon, currentIconColor())
+        }
+        mPopulateIconMethod?.invoke(iconButtonView, mGroupInfo.icon)
+
+        searchableContainerView.visibility = if (database.allowCustomSearchableGroup()) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+
+        if (database.allowAutoType()) {
+            autoTypeContainerView.visibility = View.VISIBLE
+        } else {
+            autoTypeContainerView.visibility = View.GONE
+        }
+
+        tagsAdapter = TagsProposalAdapter(
+            requireContext(),
+            database.tagPoolWithoutHistory
+        )
+        tagsCompletionView.apply {
+            threshold = 1
+            setAdapter(tagsAdapter)
+        }
+        tagsContainerView.visibility = if (database.allowTags()) View.VISIBLE else View.GONE
+        colorContainerView.visibility = if (database.allowGroupColor()) View.VISIBLE else View.GONE
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        activity?.let { activity ->
+            val root = activity.layoutInflater.inflate(R.layout.fragment_group_edit, null)
+            iconButtonView = root.findViewById(R.id.group_edit_icon_button)
+            colorContainerView = root.findViewById(R.id.group_edit_color_container)
+            colorSwatchesView = root.findViewById(R.id.group_edit_color_swatches)
+            colorCustomButton = root.findViewById(R.id.group_edit_color_custom_button)
+            nameTextLayoutView = root.findViewById(R.id.group_edit_name_container)
+            nameTextView = root.findViewById(R.id.group_edit_name)
+            notesTextLayoutView = root.findViewById(R.id.group_edit_note_container)
+            notesTextView = root.findViewById(R.id.group_edit_note)
+            expirationView = root.findViewById(R.id.group_edit_expiration)
+            searchableContainerView = root.findViewById(R.id.group_edit_searchable_container)
+            searchableView = root.findViewById(R.id.group_edit_searchable)
+            autoTypeContainerView = root.findViewById(R.id.group_edit_auto_type_container)
+            autoTypeInheritedView = root.findViewById(R.id.group_edit_auto_type_inherited)
+            autoTypeSequenceView = root.findViewById(R.id.group_edit_auto_type_sequence)
+            tagsContainerView = root.findViewById(R.id.group_tags_label)
+            tagsCompletionView = root.findViewById(R.id.group_tags_completion_view)
+
+            // Retrieve the textColor to tint the icon
+            val ta = activity.theme.obtainStyledAttributes(intArrayOf(android.R.attr.textColor))
+            mIconColor = ta.getColor(0, Color.WHITE)
+            ta.recycle()
+
+            if (savedInstanceState != null
+                    && savedInstanceState.containsKey(KEY_ACTION_ID)
+                    && savedInstanceState.containsKey(KEY_GROUP_INFO)) {
+                mEditGroupDialogAction = EditGroupDialogAction.getActionFromOrdinal(savedInstanceState.getInt(KEY_ACTION_ID))
+                mGroupInfo = savedInstanceState.getParcelableCompat(KEY_GROUP_INFO) ?: mGroupInfo
+            } else {
+                arguments?.apply {
+                    if (containsKey(KEY_ACTION_ID))
+                        mEditGroupDialogAction = EditGroupDialogAction.getActionFromOrdinal(getInt(KEY_ACTION_ID))
+                    if (containsKey(KEY_GROUP_INFO)) {
+                        mGroupInfo = getParcelableCompat(KEY_GROUP_INFO) ?: mGroupInfo
+                    }
+                }
+            }
+
+            // Best Passafe: header names what the dialog does
+            root.findViewById<TextView>(R.id.group_edit_header)?.setText(
+                if (mEditGroupDialogAction == UPDATE) R.string.folder_edit else R.string.folder_new
+            )
+
+            // populate info in views
+            populateInfoToViews(mGroupInfo)
+
+            iconButtonView.setOnClickListener { _ ->
+                mGroupEditViewModel.requestIconSelection(mGroupInfo.icon)
+            }
+            buildColorSwatches()
+            colorCustomButton.setOnClickListener {
+                ColorPickerDialogFragment.newInstance(mGroupInfo.color)
+                    .show(parentFragmentManager, TAG_COLOR_PICKER)
+            }
+            refreshColorViews()
+
+            expirationView.setOnDateClickListener = { dateInstant ->
+                mGroupEditViewModel.requestDateTimeSelection(dateInstant)
+            }
+
+            val builder = AlertDialog.Builder(activity)
+            builder.setView(root)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .setNegativeButton(android.R.string.cancel) { _, _ ->
+                        // Do nothing
+                    }
+
+            return builder.create()
+        }
+        return super.onCreateDialog(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // To prevent auto dismiss
+        val alertDialog = dialog as AlertDialog?
+        if (alertDialog != null) {
+            val positiveButton = alertDialog.getButton(Dialog.BUTTON_POSITIVE) as Button
+            positiveButton.setOnClickListener {
+                retrieveGroupInfoFromViews()
+                if (isValid()) {
+                    when (mEditGroupDialogAction) {
+                        CREATION ->
+                            mGroupEditViewModel.approveGroupCreation(mGroupInfo)
+                        UPDATE ->
+                            mGroupEditViewModel.approveGroupUpdate(mGroupInfo)
+                        NONE -> {}
+                    }
+                    alertDialog.dismiss()
+                }
+            }
+        }
+    }
+
+    private fun currentIconColor(): Int {
+        return mGroupInfo.color ?: mIconColor
+    }
+
+    /**
+     * Best Passafe: quick color choices, the first one removes the folder color
+     */
+    private fun buildColorSwatches() {
+        colorSwatchesView.removeAllViews()
+        val size = resources.getDimensionPixelSize(R.dimen.group_color_swatch_size)
+        val margin = resources.getDimensionPixelSize(R.dimen.group_color_swatch_margin)
+        (listOf<Int?>(null) + PRESET_COLORS).forEach { color ->
+            val swatch = ImageView(requireContext()).apply {
+                layoutParams = LinearLayout.LayoutParams(size, size).apply {
+                    setMargins(margin, margin, margin, margin)
+                }
+                tag = color
+                isClickable = true
+                isFocusable = true
+                contentDescription = if (color == null)
+                    getString(R.string.folder_color_none)
+                else
+                    "#" + Integer.toHexString(0xFFFFFF and color).uppercase().padStart(6, '0')
+                if (color == null) {
+                    setImageResource(R.drawable.ic_block_white_24dp)
+                    scaleType = ImageView.ScaleType.CENTER_INSIDE
+                    ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(mIconColor))
+                }
+                setOnClickListener {
+                    mGroupInfo.color = color
+                    refreshColorViews()
+                }
+            }
+            colorSwatchesView.addView(swatch)
+        }
+    }
+
+    private fun refreshColorViews() {
+        if (!::colorSwatchesView.isInitialized)
+            return
+        val selectedColor = mGroupInfo.color
+        val strokeWidth = resources.getDimensionPixelSize(R.dimen.group_color_swatch_stroke)
+        for (i in 0 until colorSwatchesView.childCount) {
+            val swatch = colorSwatchesView.getChildAt(i)
+            val color = swatch.tag as Int?
+            val checked = color == selectedColor
+                    || (color != null && selectedColor != null
+                    && (0xFFFFFF and color) == (0xFFFFFF and selectedColor))
+            swatch.background = GradientDrawable().apply {
+                shape = GradientDrawable.OVAL
+                setColor(color ?: Color.TRANSPARENT)
+                if (checked) {
+                    setStroke(strokeWidth * 2, mIconColor)
+                } else if (color == null) {
+                    setStroke(strokeWidth, mIconColor)
+                }
+            }
+        }
+        colorCustomButton.iconTint = ColorStateList.valueOf(currentIconColor())
+        if (::iconButtonView.isInitialized) {
+            mPopulateIconMethod?.invoke(iconButtonView, mGroupInfo.icon)
+            // Best Passafe: the icon tile takes a soft shade of the folder color
+            iconButtonView.background?.mutate()?.let { tile ->
+                val folderColor = mGroupInfo.color
+                if (folderColor != null) {
+                    DrawableCompat.setTint(tile, ColorUtils.setAlphaComponent(folderColor, 0x30))
+                } else {
+                    DrawableCompat.setTintList(tile, null)
+                }
+            }
+        }
+    }
+
+    private fun populateInfoToViews(groupInfo: GroupInfo) {
+        mGroupEditViewModel.selectIcon(groupInfo.icon)
+        nameTextView.text = groupInfo.title
+        notesTextLayoutView.visibility = if (groupInfo.notes == null) View.GONE else View.VISIBLE
+        groupInfo.notes?.let {
+            notesTextView.text = it
+        }
+        expirationView.activation = groupInfo.expires
+        expirationView.dateTime = groupInfo.expiryTime
+
+        // Set searchable
+        searchableView.setValue(groupInfo.searchable)
+        // Set auto-type
+        autoTypeInheritedView.setValue(groupInfo.enableAutoType)
+        autoTypeSequenceView.text = groupInfo.defaultAutoTypeSequence
+        // Set Tags
+        groupInfo.tags.let { tags ->
+            tagsCompletionView.setText("")
+            for (i in 0 until tags.size()) {
+                tagsCompletionView.addObjectSync(tags.get(i).name)
+            }
+        }
+    }
+
+    private fun retrieveGroupInfoFromViews() {
+        mGroupInfo.title = nameTextView.text.toString()
+        mGroupInfo.notes = notesTextView.text?.toString()
+        mGroupInfo.expires = expirationView.activation
+        mGroupInfo.expiryTime = expirationView.dateTime
+        mGroupInfo.searchable = searchableView.getValue()
+        mGroupInfo.enableAutoType = autoTypeInheritedView.getValue()
+        mGroupInfo.defaultAutoTypeSequence = autoTypeSequenceView.text.toString()
+        mGroupInfo.tags = tagsCompletionView.getTags()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        retrieveGroupInfoFromViews()
+        outState.putInt(KEY_ACTION_ID, mEditGroupDialogAction.ordinal)
+        outState.putParcelable(KEY_GROUP_INFO, mGroupInfo)
+        super.onSaveInstanceState(outState)
+    }
+
+    private fun isValid(): Boolean {
+        val name = nameTextView.text.toString()
+        val error = when {
+            name.isEmpty() -> {
+                Error(true, R.string.error_no_name)
+            }
+            mGroupEditViewModel.groupNamesNotAllowed == null -> {
+                Error(true, R.string.error_word_reserved)
+            }
+            mGroupEditViewModel.groupNamesNotAllowed?.find { it.equals(name, ignoreCase = true) } != null -> {
+                Error(true, R.string.error_word_reserved)
+            }
+            else -> {
+                Error(false, null)
+            }
+        }
+        error.messageId?.let { messageId ->
+            nameTextLayoutView.error = getString(messageId)
+        } ?: kotlin.run {
+            nameTextLayoutView.error = null
+        }
+        return !error.isError
+    }
+
+    data class Error(val isError: Boolean, val messageId: Int?)
+
+    companion object {
+
+        const val TAG_CREATE_GROUP = "TAG_CREATE_GROUP"
+        private const val TAG_COLOR_PICKER = "TAG_GROUP_COLOR_PICKER"
+
+        // Best Passafe: folder colors offered in one tap
+        private val PRESET_COLORS = listOf(
+            0xFFE53935.toInt(), // red
+            0xFFFB8C00.toInt(), // orange
+            0xFFFDD835.toInt(), // yellow
+            0xFF43A047.toInt(), // green
+            0xFF00ACC1.toInt(), // teal
+            0xFF1E88E5.toInt(), // blue
+            0xFF8E24AA.toInt(), // purple
+            0xFFD81B60.toInt(), // pink
+            0xFF6D4C41.toInt(), // brown
+            0xFF757575.toInt(), // grey
+        )
+        private const val KEY_ACTION_ID = "KEY_ACTION_ID"
+        private const val KEY_GROUP_INFO = "KEY_GROUP_INFO"
+
+        fun create(groupInfo: GroupInfo): GroupEditDialogFragment {
+            val bundle = Bundle()
+            bundle.putInt(KEY_ACTION_ID, CREATION.ordinal)
+            bundle.putParcelable(KEY_GROUP_INFO, groupInfo)
+            val fragment = GroupEditDialogFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
+
+        fun update(groupInfo: GroupInfo): GroupEditDialogFragment {
+            val bundle = Bundle()
+            bundle.putInt(KEY_ACTION_ID, UPDATE.ordinal)
+            bundle.putParcelable(KEY_GROUP_INFO, groupInfo)
+            val fragment = GroupEditDialogFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
+}
